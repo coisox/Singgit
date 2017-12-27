@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>Singgit</title>
+		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
+		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
+		<link rel="stylesheet" href="lib/framework7/css/app.css">
+		<link rel="stylesheet" href="lib/icomoon/style.css">
+	</head>
+	<body>
+		<div id="singgit" class="framework7-root" :class="{notcordova:notcordova}">
+			<div class="statusbar-overlay"></div>
+			<div class="views">
+				<div class="view view-main">
+				
+					<div class="navbar">
+					  <div class="navbar-inner">
+							<template v-if="activeTab=='new'">
+								<div class="center">
+									New Transaction
+								</div>
+							</template>
+							<template v-else-if="activeTab=='transactions' || activeTab=='statistic'">
+								<div class="searchbar-input" :class="{invisible:activeTab=='statistic'}">
+									<input type="search" placeholder="Search" v-model="search">
+								</div>
+								<select v-model="activeMonth" @change="activeTab=='transactions'?showTransactions():showStatistic()">
+									<option v-for="item in 12" :value="(item<10?'0':'')+item" :selected="(item<10?'0':'')+item==activeMonth">{{months[item-1]}}</option>
+								</select>
+								<select v-model="activeYear">
+									<option v-for="item in years" :value="item" :selected="item==activeYear">{{item}}</option>
+								</select>
+							</template>
+							<template v-else-if="activeTab=='config'">
+								<div class="center">
+									Configuration
+								</div>
+							</template>
+						</div>
+					</div>
+					
+					<div class="progressbar-infinite color-multi hide"></div>
+					
+					<div class="pages navbar-through toolbar-through">
+						<div class="page">
+							<div class="page-content">
+								<!--<div class="content-block-title">New Transaction</div>-->
+								<div class="tabs">
+								
+									<!-- ======================================================================================================= Tab New -->
+									<div id="tabNew" class="tab active">
+										<form class="list-block inset">
+											<ul>
+												<li class="">
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Amount</div>
+															<div class="item-input">
+																<input type="text" id="amount" @input="$('#amount').val($('#amount').val().replace(' ', ''))">
+															</div>
+														</div>
+													</div>
+												</li>
+												<li class="">
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Description</div>
+															<div class="item-input">
+																<input type="text" id="description" autosave="singgit_desc">
+															</div>
+														</div>
+													</div>
+												</li>
+												<li class="">
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Date</div>
+															<div class="item-input">
+																<input type="date" id="date">
+															</div>
+														</div>
+													</div>
+												</li>
+												<li class="">
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Repeat X-Times</div>
+															<div class="item-input">
+																<input type="number" id="repeat" value="1" min="1">
+															</div>
+														</div>
+													</div>
+												</li>
+												<li id="account">
+													<a href="#" data-back-on-select="true" class="item-link smart-select">
+														<div class="item-content">
+															<div class="item-inner">
+																<div class="item-title label">Account</div>
+																<div class="item-input">
+																	<select @change="$nextTick(function(){ $('#account .item-after').text($('#account select').val()) })">
+																		<option v-for="item in accounts" :value="item">{{item}}</option>
+																	</select>
+																</div>
+																<!--<div class="item-after">Wallet</div>-->
+															</div>
+														</div>
+													</a>
+												</li>
+												<li id="categories">
+													<a href="#" class="item-link smart-select">
+														<div class="item-content">
+															<div class="item-inner">
+																<div class="item-title label">Categories</div>
+																<div class="item-input">
+																	<select multiple="multiple">
+																		<option v-for="item in categories" :value="item">{{item}}</option>
+																	</select>
+																</div>
+																<!--<div class="item-after">Wallet</div>-->
+															</div>
+														</div>
+													</a>
+												</li>
+												<li id="transfer">
+													<a href="#" data-back-on-select="true" class="item-link smart-select">
+														<div class="item-content">
+															<div class="item-inner">
+																<div class="item-title label">Transfer To</div>
+																<div class="item-input">
+																	<select @change="$nextTick(function(){ $('#transfer .item-after').text($('#transfer select').val()) })">
+																		<option value=""></option>
+																		<option v-for="item in accounts" :value="item">{{item}}</option>
+																	</select>
+																</div>
+																<!--<div class="item-after">Wallet</div>-->
+															</div>
+														</div>
+													</a>
+												</li>
+											</ul>
+										</form>
+										<div class="content-block">
+											<div class="buttons-row">
+												<a href="#" class="disabled button-round button-fill button-big button" @click="deleteTransaction()">Delete</a>
+												<a href="#" class="button-round button-fill button-big button" @click="newTransaction()">Reset</a>
+												<a href="#" class="button-round button-fill button-big button" @click="saveTransaction()">Save</a>
+											</div>
+										</div>
+									</div>
+									
+									<!-- ======================================================================================================= Tab Transactions -->
+									<div id="tabTransactions" class="tab">
+										<div class="list-block inset">
+											<ul>
+												<li class="item-content" v-for="item in transactions" :key="item.id" v-if="item.description.indexOf(search)>-1 && item.description!='Reconcile'">
+													<div class="item-inner">
+														<div class="transactionDate">{{item.date}}</div>
+														<div class="transactionDescription">
+															{{item.description}}<br>
+															{{item.account[0]}} 
+															<span class="transactionCategories" v-if="item.account[1]==''">: {{item.categories.join(', ')}}</span>
+															<span v-else>to {{item.account[1]}} </span>
+														</div>
+														<div class="transactionAmount" :class="{negative:item.negative}">
+															{{item.amount}} 
+														</div>
+													</div>
+												</li>
+												<li v-else class="reconcile"></li>
+											</ul>
+										</div>
+									</div>
+									
+									<!-- ======================================================================================================= Tab Statistic -->
+									<div id="tabStatistic" class="tab">
+										<div class="list-block inset">
+											<ul>
+												<li class="item-content">
+													<div class="item-inner">
+														statistic
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+									
+									<!-- ======================================================================================================= Tab Statistic -->
+									<div id="tabConfig" class="tab">
+										<div class="list-block inset">
+											<ul>
+												<li class="item-content">
+													<div class="item-inner">
+														config
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="toolbar tabbar">
+						<div class="toolbar-inner">
+							<a href="#tabNew" class="tab-link active" @click="newTransaction()"><i class="icon-plus"></i></a>
+							<a href="#tabTransactions" class="tab-link" @click="showTransactions()"><i class="icon-list-ul"></i></a>
+							<a href="#tabStatistic" class="tab-link" @click="activeTab='statistic'"><i class="icon-line-chart"></i></a>
+							<a href="#tabConfig" class="tab-link" @click="showLog()"><i class="icon-sliders"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="lib/jquery/jquery-3.2.1.slim.min.js"></script>
+		<script src="lib/firebase/firebase.js"></script>
+		<script src="lib/firebase/firebase-firestore.js"></script>
+		<script src="lib/framework7/js/framework7.min.js"></script>
+		<script src="lib/framework7/js/vue.min.js"></script>
+		<script src="lib/moment/moment.min.js"></script>
+		<script src="lib/framework7/js/app.js"></script>
+
+		<!--
+		<script src="lib/framework7/js/framework7-vue.min.js"></script>
+		-->
+	</body>
+</html>
