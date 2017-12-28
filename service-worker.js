@@ -14,15 +14,15 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-v20171229b';
+const PRECACHE = 'precache-v20171229c';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-	'index.html?v20171229b',
-	'lib/framework7/css/app.css?v20171229b',
-	'lib/framework7/js/app.js?v20171229b',
-	'./', // Alias for index.html
+	'index.html?v20171229c',
+	'./?v20171229c', // Alias for index.html
+	'lib/framework7/css/app.css?v20171229c',
+	'lib/framework7/js/app.js?v20171229c',
 	'font/OpenSans-Regular.ttf',
 	'lib/firebase/firebase.js',
 	'lib/firebase/firebase-firestore.js',
