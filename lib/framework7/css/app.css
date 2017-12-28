@@ -56,7 +56,9 @@ label.label-checkbox input[type=checkbox]:checked+.item-media i.icon-form-checkb
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 50px white inset !important;
 }
-.tabbar a i {
+.tabbar a i,
+.swipeout-delete i
+{
     font-size: 20px !important;
 }
 .tabbar a.active i {
