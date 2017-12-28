@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
   src:
-    url('fonts/icomoon.ttf?ekafoj') format('truetype'),
-    url('fonts/icomoon.woff?ekafoj') format('woff'),
-    url('fonts/icomoon.svg?ekafoj#icomoon') format('svg');
+    url('fonts/icomoon.ttf?e0w5aj') format('truetype'),
+    url('fonts/icomoon.woff?e0w5aj') format('woff'),
+    url('fonts/icomoon.svg?e0w5aj#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -40,6 +40,9 @@ i {
 }
 .icon-pencil:before {
   content: "\f040";
+}
+.icon-retweet:before {
+  content: "\f079";
 }
 .icon-list-ul:before {
   content: "\f0ca";

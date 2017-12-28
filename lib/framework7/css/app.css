@@ -115,9 +115,6 @@ input:-webkit-autofill {
 	position: absolute;
     pointer-events: none;
 }
-.modal-title {
-	display: none;
-}
 .view > .progressbar-infinite {
 	top: 44px;
 }
@@ -146,6 +143,12 @@ input:-webkit-autofill {
 #toast.show {
 	opacity: 1;
 	bottom: 50px;
+}
+.swipeout-delete {
+	background: #E74C3C !important;
+}
+.swipeout-delete i {
+	color: white;
 }
 
 /*

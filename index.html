@@ -156,18 +156,23 @@
 									<div id="tabTransactions" class="tab">
 										<div class="list-block inset">
 											<ul>
-												<li class="item-content" v-for="item in transactions" :key="item.id" v-if="item.description.indexOf(search)>-1 && item.description!='Reconcile'">
-													<div class="item-inner">
-														<div class="transactionDate">{{item.date}}</div>
-														<div class="transactionDescription">
-															{{item.description}}<br>
-															{{item.account[0]}} 
-															<span class="transactionCategories" v-if="item.account[1]==''">: {{item.categories.join(', ')}}</span>
-															<span v-else>to {{item.account[1]}} </span>
+												<li class="swipeout" v-for="item in transactions" :key="item.id" v-if="item.description.indexOf(search)>-1 && item.description!='Reconcile'">
+													<div class="item-content swipeout-content">
+														<div class="item-inner">
+															<div class="transactionDate">{{item.date}}</div>
+															<div class="transactionDescription">
+																{{item.description}}<br>
+																{{item.account[0]}} 
+																<span class="transactionCategories" v-if="item.account[1]==''">: {{item.categories.join(', ')}}</span>
+																<span v-else>to {{item.account[1]}} </span>
+															</div>
+															<div class="transactionAmount" :class="{negative:item.negative}">
+																{{item.amount}} 
+															</div>
 														</div>
-														<div class="transactionAmount" :class="{negative:item.negative}">
-															{{item.amount}} 
-														</div>
+													</div>
+													<div class="swipeout-actions-left">
+														<a href="#" class="swipeout-delete" @click="deleteTransaction(item.id)"><i class="icon-trash"></i></a>
 													</div>
 												</li>
 												<li v-else class="reconcile"></li>
@@ -217,7 +222,7 @@
 			</div>
 		</div>
 		
-		<div id="toast">Saved</div>
+		<!--<div id="toast">Saved</div>-->
 
 		<script src="lib/jquery/jquery-3.2.1.slim.min.js"></script>
 		<script src="lib/firebase/firebase.js"></script>
