@@ -14,7 +14,7 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-20171229f';
+const PRECACHE = 'precache-20171229g';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
@@ -34,6 +34,8 @@ const PRECACHE_URLS = [
 	'lib/icomoon/fonts/icomoon.ttf',
 	'lib/icomoon/fonts/icomoon.woff',
 	'lib/icomoon/fonts/icomoon.svg',
+	'img/singgit-192.png',
+	'img/singgit-512.png',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js'
 ];
