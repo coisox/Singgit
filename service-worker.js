@@ -14,7 +14,7 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-20171229i';
+const PRECACHE = 'precache-20171229k';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
@@ -23,6 +23,10 @@ const PRECACHE_URLS = [
 	'index.html',
 	'./', // Alias for index.html
 	'font/OpenSans-Regular.ttf',
+	'img/singgit-48.png',
+	'img/singgit-72.png',
+	'img/singgit-96.png',
+	'img/singgit-144.png',
 	'img/singgit-192.png',
 	'img/singgit-512.png',
 	'lib/firebase/firebase.js',
