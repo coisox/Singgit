@@ -1,3 +1,6 @@
+.cssVersion {
+	content: '20171229b';
+}
 @font-face {
     font-family: OpenSans;
     src: url(../../../font/OpenSans-Regular.ttf);
