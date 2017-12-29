@@ -199,8 +199,6 @@
 											<ul>
 												<li class="item-content">
 													<div class="item-inner">
-														<input type="text" id="version">
-														<a onclick="install()">Install new version</a>
 													</div>
 												</li>
 											</ul>
@@ -223,7 +221,25 @@
 			</div>
 		</div>
 		
-		<!--<div id="toast">Saved</div>-->
+		<script type="text/javascript">
+			var log = [];
+
+			if (navigator.serviceWorker.controller) {
+				log.push('[PWA Builder] active service worker found, no need to register');
+			}
+			else {
+				//Register the ServiceWorker
+				navigator.serviceWorker.register('pwabuilder-sw.js', {
+					scope: './'
+				}).then(function(reg) {
+					log.push('Service worker has been registered for scope:'+ reg.scope);
+				});
+			}
+			
+			setTimeout(function(){
+				if($('#tabConfig').length) $('#tabConfig .item-inner').html(log.join('<br>'));
+			}, 1000);
+		</script>
 
 		<script src="lib/jquery/jquery-3.2.1.slim.min.js"></script>
 		<script src="lib/firebase/firebase.js"></script>
