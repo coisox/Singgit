@@ -19,9 +19,12 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
+	'manifest.json',
 	'index.html',
 	'./', // Alias for index.html
 	'font/OpenSans-Regular.ttf',
+	'img/singgit-192.png',
+	'img/singgit-512.png',
 	'lib/firebase/firebase.js',
 	'lib/firebase/firebase-firestore.js',
 	'lib/framework7/css/app.css',
@@ -34,8 +37,6 @@ const PRECACHE_URLS = [
 	'lib/icomoon/fonts/icomoon.ttf',
 	'lib/icomoon/fonts/icomoon.woff',
 	'lib/icomoon/fonts/icomoon.svg',
-	'img/singgit-192.png',
-	'img/singgit-512.png',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js'
 ];
