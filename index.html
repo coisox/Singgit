@@ -69,27 +69,7 @@
 														<div class="item-inner">
 															<div class="item-title label">Description</div>
 															<div class="item-input">
-																<input type="text" id="description" autosave="singgit_desc">
-															</div>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Date</div>
-															<div class="item-input">
-																<input type="text" id="date">
-															</div>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Repeat X-Times</div>
-															<div class="item-input">
-																<input type="number" id="repeat" value="1" min="1">
+																<input type="text" id="description">
 															</div>
 														</div>
 													</div>
@@ -140,6 +120,26 @@
 														</div>
 													</a>
 												</li>
+												<li>
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Date</div>
+															<div class="item-input">
+																<input type="text" id="date">
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Repeat X-Times</div>
+															<div class="item-input">
+																<input type="number" id="repeat" value="1" min="1">
+															</div>
+														</div>
+													</div>
+												</li>
 											</ul>
 										</form>
 										<div class="content-block">
@@ -156,7 +156,7 @@
 										<div class="list-block inset">
 											<ul>
 												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description.indexOf(search)>-1">
-													<div class="item-content swipeout-content" @click="editTransaction(item.id)">
+													<div class="item-content swipeout-content" zclick="editTransaction(item.id)">
 														<div class="item-inner">
 															<template v-if="item.description!='Reconcile'">
 																<div class="transactionDate">{{item.formatteddate}}</div>
@@ -175,6 +175,7 @@
 													</div>
 													<div class="swipeout-actions-left">
 														<a href="#" class="swipeout-delete" @click="deleteTransaction(item.id)"><i class="icon-trash"></i></a>
+														<a href="#" class="swipeout-edit" @click="editTransaction(item.id)"><i class="icon-pencil"></i></a>
 													</div>
 												</li>
 											</ul>
@@ -201,7 +202,7 @@
 												<li class="item-content">
 													<div class="item-inner">
 														<div class="item-title label">Index Version</div>
-														<div class="item-input">20171229k</div>
+														<div class="item-input">20171229l</div>
 													</div>
 												</li>
 												<li class="item-content">

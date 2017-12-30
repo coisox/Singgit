@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20171229k';
+	content: '20171229l';
 }
 @font-face {
     font-family: OpenSans;
@@ -60,7 +60,7 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 50px white inset !important;
 }
 .tabbar a i,
-.swipeout-delete i
+.swipeout-actions-left i,
 {
     font-size: 20px !important;
 }
@@ -156,7 +156,12 @@ input:-webkit-autofill {
 .swipeout-delete {
 	background: #E74C3C !important;
 }
-.swipeout-delete i {
+.swipeout-edit {
+	background: #34495E !important;
+}
+.swipeout-delete i,
+.swipeout-edit i
+{
 	color: white;
 }
 .list-block .item-inner {
