@@ -1,9 +1,9 @@
 .cssVersion:before {
-	content: '20171229l';
+	content: '20180101';
 }
 @font-face {
     font-family: OpenSans;
-    src: url(../../../font/OpenSans-Regular.ttf);
+    src: url(../font/OpenSans-Regular.ttf);
 }
 html, body {
 	background: white;
@@ -35,8 +35,17 @@ label.label-radio input[type=checkbox]:checked~.item-inner, label.label-radio in
 label.label-checkbox input[type=checkbox]:checked+.item-media i.icon-form-checkbox, label.label-checkbox input[type=radio]:checked+.item-media i.icon-form-checkbox {
     background-color: #880E4F;
 }
+.navbar {
+	z-index: 7000;
+}
+.smart-select-page {
+	z-index: 6000;
+}
 .navbar input[type=search], .navbar select {
 	font-size: 17px;
+}
+.navbar-inner.navbar-on-center {
+	background: #F7F7F8;
 }
 .navbar-inner select {
 	height: 28px;
@@ -52,6 +61,7 @@ label.label-checkbox input[type=checkbox]:checked+.item-media i.icon-form-checkb
 }
 .invisible {
 	opacity: 0;
+	pointer-events: none;
 }
 .hide {
 	display: none;
@@ -85,10 +95,10 @@ input:-webkit-autofill {
 .transactionCategories {
 	color: #9E9E9E;
 }
-.transactionAmount {
+.positive {
 	color: #2E8B57;
 }
-.transactionAmount.negative {
+.negative {
 	color: #C0392B;
 }
 .navbar-fixed .page-content, .navbar-through .page-content {
@@ -137,6 +147,7 @@ input:-webkit-autofill {
 	width: 100%;
     display: block;
 	position: absolute;
+	left: 0;
     pointer-events: none;
 }
 .view > .progressbar-infinite {

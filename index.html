@@ -9,8 +9,8 @@
 		<link rel="manifest" href="manifest.json">
 		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
 		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-		<link rel="stylesheet" href="lib/framework7/css/app.css">
 		<link rel="stylesheet" href="lib/icomoon/style.css">
+		<link rel="stylesheet" href="lib/singgit.css">
 	</head>
 	<body>
 		<div id="singgit" class="framework7-root">
@@ -27,18 +27,19 @@
 								<div class="center">Edit Transaction</div>
 							</template>
 							<template v-else-if="activeTab=='transactions' || activeTab=='statistic'">
+								<div v-if="activeTab=='statistic'" class="center">Statistic</div>
 								<div class="searchbar-input" :class="{invisible:activeTab=='statistic'}">
 									<input type="search" placeholder="Search" v-model="search">
 								</div>
 								<select v-model="activeMonth" @change="activeTab=='transactions'?showTransactions():showStatistic()">
 									<option v-for="item in 12" :value="(item<10?'0':'')+item" :selected="(item<10?'0':'')+item==activeMonth">{{months[item-1]}}</option>
 								</select>
-								<select v-model="activeYear">
+								<select v-model="activeYear" @change="activeTab=='transactions'?showTransactions():showStatistic()">
 									<option v-for="item in years" :value="item" :selected="item==activeYear">{{item}}</option>
 								</select>
 							</template>
 							<template v-else-if="activeTab=='config'">
-								<div class="center">Configuration</div>
+								<div>Configuration</div>
 							</template>
 						</div>
 					</div>
@@ -59,7 +60,7 @@
 														<div class="item-inner">
 															<div class="item-title label">Amount</div>
 															<div class="item-input">
-																<input type="text" id="amount" @input="$('#amount').val($('#amount').val().replace(' ', ''))">
+																<input type="text" id="amount" name="amount" @input="$('#amount').val($('#amount').val().replace(' ', '').replace(',', ''))">
 															</div>
 														</div>
 													</div>
@@ -69,53 +70,50 @@
 														<div class="item-inner">
 															<div class="item-title label">Description</div>
 															<div class="item-input">
-																<input type="text" id="description">
+																<input type="text" id="description" name="description">
 															</div>
 														</div>
 													</div>
 												</li>
-												<li id="account">
+												<li>
 													<a href="#" data-back-on-select="true" class="item-link smart-select">
 														<div class="item-content">
 															<div class="item-inner">
 																<div class="item-title label">Account</div>
 																<div class="item-input">
-																	<select @change="$nextTick(function(){ $('#account .item-after').text($('#account select').val()) })">
+																	<select id="account" name="account" @change="$nextTick(function(){ $('#account').parents('li').find('.item-after').text($('#account').val()) })">
 																		<option v-for="item in accounts" :value="item">{{item}}</option>
 																	</select>
 																</div>
-																<!--<div class="item-after">Wallet</div>-->
 															</div>
 														</div>
 													</a>
 												</li>
-												<li id="categories">
+												<li>
 													<a href="#" class="item-link smart-select">
 														<div class="item-content">
 															<div class="item-inner">
 																<div class="item-title label">Categories</div>
 																<div class="item-input">
-																	<select multiple="multiple">
+																	<select id="categories" name="categories" multiple="multiple">
 																		<option v-for="item in categories" :value="item">{{item}}</option>
 																	</select>
 																</div>
-																<!--<div class="item-after">Wallet</div>-->
 															</div>
 														</div>
 													</a>
 												</li>
-												<li id="transfer">
+												<li>
 													<a href="#" data-back-on-select="true" class="item-link smart-select">
 														<div class="item-content">
 															<div class="item-inner">
 																<div class="item-title label">Transfer To</div>
 																<div class="item-input">
-																	<select @change="$nextTick(function(){ $('#transfer .item-after').text($('#transfer select').val()) })">
+																	<select id="transfer" name="transfer" @change="$nextTick(function(){ $('#transfer').parents('li').find('.item-after').text($('#transfer').val()) })">
 																		<option value=""></option>
 																		<option v-for="item in accounts" :value="item">{{item}}</option>
 																	</select>
 																</div>
-																<!--<div class="item-after">Wallet</div>-->
 															</div>
 														</div>
 													</a>
@@ -125,7 +123,7 @@
 														<div class="item-inner">
 															<div class="item-title label">Date</div>
 															<div class="item-input">
-																<input type="text" id="date">
+																<input type="text" id="date" name="date">
 															</div>
 														</div>
 													</div>
@@ -135,7 +133,7 @@
 														<div class="item-inner">
 															<div class="item-title label">Repeat X-Times</div>
 															<div class="item-input">
-																<input type="number" id="repeat" value="1" min="1">
+																<input type="number" id="repeat" name="repeat" value="1" min="1">
 															</div>
 														</div>
 													</div>
@@ -155,22 +153,24 @@
 									<div id="tabTransactions" class="tab">
 										<div class="list-block inset">
 											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description.indexOf(search)>-1">
+												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.categories.join(', ')).toLowerCase().indexOf(search.toLowerCase())>-1">
 													<div class="item-content swipeout-content" zclick="editTransaction(item.id)">
 														<div class="item-inner">
+															<div class="transactionDate">{{item.formatteddate}}</div>
 															<template v-if="item.description!='Reconcile'">
-																<div class="transactionDate">{{item.formatteddate}}</div>
 																<div class="transactionDescription">
-																	{{item.description}}<br>
-																	{{item.account[0]}}
-																	<template v-if="item.account[1]==''">: <span class="transactionCategories">{{item.categories.join(', ')}}</span></template>
-																	<span v-else>to {{item.account[1]}} </span>
+																		{{item.description}}<br>
+																		{{item.account[0]}}
+																		<template v-if="item.account[1]==''">: <span class="transactionCategories">{{item.categories.join(', ')}}</span></template>
+																		<span v-else>to {{item.account[1]}} </span>
 																</div>
-																<div class="transactionAmount" :class="{negative:item.negative}">
-																	{{item.amount}} 
+																<div :class="{positive:item.amount>=0, negative:item.amount<0}">
+																	{{toCurrency(item.amount)}} 
 																</div>
 															</template>
-															<div v-else class="reconcile"></div>
+															<template v-else>
+																<div class="reconcile"></div>
+															</template>
 														</div>
 													</div>
 													<div class="swipeout-actions-left">
@@ -183,16 +183,63 @@
 									</div>
 									
 									<!-- ======================================================================================================= Tab Statistic -->
-									<div id="tabStatistic" class="tab">
-										<div class="list-block inset">
-											<ul>
-												<li class="item-content">
-													<div class="item-inner">
-														statistic
-													</div>
-												</li>
-											</ul>
-										</div>
+									<div id="tabStatistic" class="tab" style="margin-top:-10px">
+										<template v-if="typeof statistic.totalIncome != 'undefined'">
+										
+											<div class="content-block-title">Current Balance</div>
+											<div class="list-block inset">
+												<ul>
+													<li v-for="item in accounts" class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">{{item}}</div>
+															<div class="item-input" :class="{positive:statistic.totalIncome>=0, negative:statistic.totalIncome<0}">{{toCurrency(balance[item])}}</div>
+														</div>
+													</li>
+													<li class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Total</div>
+															<div class="item-input" :class="{positive:balance.Total>=0, negative:balance.Total<0}">{{toCurrency(balance.Total)}}</div>
+														</div>
+													</li>
+												</ul>
+											</div>
+											
+											<div class="content-block-title">Monthly Performance</div>
+											<div class="list-block inset">
+												<ul>
+													<li class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Income</div>
+															<div class="item-input" :class="{positive:statistic.totalIncome>=0, negative:statistic.totalIncome<0}">{{toCurrency(statistic.totalIncome)}}</div>
+														</div>
+													</li>
+													<li class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Expenses</div>
+															<div class="item-input" :class="{positive:statistic.totalExpenses>=0, negative:statistic.totalExpenses<0}">{{toCurrency(statistic.totalExpenses)}}</div>
+														</div>
+													</li>
+													<li class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">Saving</div>
+															<div class="item-input" :class="{positive:statistic.totalSaving>=0, negative:statistic.totalSaving<0}">{{toCurrency(statistic.totalSaving)}}</div>
+														</div>
+													</li>
+												</ul>
+											</div>
+											
+											<div class="content-block-title">Expenses By Category</div>
+											<div class="list-block inset">
+												<ul>
+													<li v-for="item in categories" class="item-content">
+														<div class="item-inner">
+															<div class="item-title label">{{item}}</div>
+															<div class="item-input" :class="{positive:statistic.totalByCategory[item]>=0, negative:statistic.totalByCategory[item]<0}">{{toCurrency(statistic.totalByCategory[item])}}</div>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</template>
 									</div>
 									
 									<!-- ======================================================================================================= Tab Config -->
@@ -202,7 +249,7 @@
 												<li class="item-content">
 													<div class="item-inner">
 														<div class="item-title label">Index Version</div>
-														<div class="item-input">20171229l</div>
+														<div class="item-input">20180101</div>
 													</div>
 												</li>
 												<li class="item-content">
@@ -229,7 +276,7 @@
 						<div class="toolbar-inner">
 							<a href="#tabForm" class="tab-link active" @click="newTransaction()"><i class="icon-plus"></i></a>
 							<a href="#tabTransactions" class="tab-link" @click="showTransactions()"><i class="icon-list-ul"></i></a>
-							<a href="#tabStatistic" class="tab-link" @click="activeTab='statistic'"><i class="icon-line-chart"></i></a>
+							<a href="#tabStatistic" class="tab-link" @click="showStatistic()"><i class="icon-line-chart"></i></a>
 							<a href="#tabConfig" class="tab-link" @click="activeTab='config'"><i class="icon-sliders"></i></a>
 						</div>
 					</div>
@@ -242,12 +289,8 @@
 		<script src="lib/firebase/firebase.js"></script>
 		<script src="lib/firebase/firebase-firestore.js"></script>
 		<script src="lib/framework7/js/framework7.min.js"></script>
-		<script src="lib/framework7/js/vue.min.js"></script>
 		<script src="lib/moment/moment.min.js"></script>
-		<script src="lib/framework7/js/app.js"></script>
-
-		<!--
-		<script src="lib/framework7/js/framework7-vue.min.js"></script>
-		-->
+		<script src="lib/vue/vue.min.js"></script>
+		<script src="lib/singgit.js"></script>
 	</body>
 </html>

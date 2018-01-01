@@ -14,7 +14,7 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-20171229l';
+const PRECACHE = 'precache-20180101';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
@@ -31,18 +31,18 @@ const PRECACHE_URLS = [
 	'img/singgit-512.png',
 	'lib/firebase/firebase.js',
 	'lib/firebase/firebase-firestore.js',
-	'lib/framework7/css/app.css',
 	'lib/framework7/css/framework7.ios.min.css',
 	'lib/framework7/css/framework7.ios.colors.min.css',
-	'lib/framework7/js/app.js',
 	'lib/framework7/js/framework7.min.js',
-	'lib/framework7/js/vue.min.js',
 	'lib/icomoon/style.css',
 	'lib/icomoon/fonts/icomoon.ttf',
 	'lib/icomoon/fonts/icomoon.woff',
 	'lib/icomoon/fonts/icomoon.svg',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
-	'lib/moment/moment.min.js'
+	'lib/moment/moment.min.js',
+	'lib/singgit.css',
+	'lib/singgit.js',
+	'lib/vue/vue.min.js'
 ];
 
 // The install handler takes care of precaching the resources we always need.
