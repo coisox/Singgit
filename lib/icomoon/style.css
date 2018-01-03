@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
   src:
-    url('fonts/icomoon.ttf?e0w5aj') format('truetype'),
-    url('fonts/icomoon.woff?e0w5aj') format('woff'),
-    url('fonts/icomoon.svg?e0w5aj#icomoon') format('svg');
+    url('fonts/icomoon.ttf?tqodnp') format('truetype'),
+    url('fonts/icomoon.woff?tqodnp') format('woff'),
+    url('fonts/icomoon.svg?tqodnp#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -47,14 +47,14 @@ i {
 .icon-list-ul:before {
   content: "\f0ca";
 }
+.icon-bug:before {
+  content: "\f188";
+}
 .icon-sliders:before {
   content: "\f1de";
 }
 .icon-trash:before {
   content: "\f1f8";
-}
-.icon-pie-chart:before {
-  content: "\f200";
 }
 .icon-line-chart:before {
   content: "\f201";

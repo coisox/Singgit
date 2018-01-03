@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20180101';
+	content: '20180102';
 }
 @font-face {
     font-family: OpenSans;
@@ -22,7 +22,8 @@ html, body {
 }
 .item-title.label,
 a,
-.modal-button
+.modal-button,
+.thead *
 {
 	color: #880E4F; /*warna tema*/
 }
@@ -199,4 +200,27 @@ i.icon.icon-prev {
 }
 i.icon.icon-next {
     background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'><g><path fill='#880E4F' d='M1,1.6l11.8,5.8L1,13.4V1.6 M0,0v15l15-7.6L0,0L0,0z'/></g></svg>");
+}
+.item-input .icon-bug {
+	display: none;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	color: #E74C3C !important;
+}
+.item-input .error + .icon-bug {
+	display: initial;
+}
+#tabStatistic, #tabConfig {
+	margin-top:-10px;
+}
+.distributed div {
+	width: 100%;
+	text-align: center;
+}
+.distributed div:first-child {
+	text-align: left;
+}
+.distributed div:last-child {
+	text-align: right;
 }

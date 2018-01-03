@@ -60,7 +60,8 @@
 														<div class="item-inner">
 															<div class="item-title label">Amount</div>
 															<div class="item-input">
-																<input type="text" id="amount" name="amount" @input="$('#amount').val($('#amount').val().replace(' ', '').replace(',', ''))">
+																<input type="text" id="amount" name="amount" @input="$('#amount').val($('#amount').val().replace(' ', '').replace(',', '')); $('#amount').removeClass('error');">
+																<i class="icon-bug"></i>
 															</div>
 														</div>
 													</div>
@@ -183,7 +184,7 @@
 									</div>
 									
 									<!-- ======================================================================================================= Tab Statistic -->
-									<div id="tabStatistic" class="tab" style="margin-top:-10px">
+									<div id="tabStatistic" class="tab">
 										<template v-if="typeof statistic.totalIncome != 'undefined'">
 										
 											<div class="content-block-title">Current Balance</div>
@@ -192,7 +193,7 @@
 													<li v-for="item in accounts" class="item-content">
 														<div class="item-inner">
 															<div class="item-title label">{{item}}</div>
-															<div class="item-input" :class="{positive:statistic.totalIncome>=0, negative:statistic.totalIncome<0}">{{toCurrency(balance[item])}}</div>
+															<div class="item-input" :class="{positive:balance[item]>=0, negative:balance[item]<0}">{{toCurrency(balance[item])}}</div>
 														</div>
 													</li>
 													<li class="item-content">
@@ -244,30 +245,36 @@
 									
 									<!-- ======================================================================================================= Tab Config -->
 									<div id="tabConfig" class="tab">
+									
+										<div class="content-block-title">Component Version</div>
 										<div class="list-block inset">
 											<ul>
 												<li class="item-content">
-													<div class="item-inner">
-														<div class="item-title label">Index Version</div>
-														<div class="item-input">20180101</div>
+													<div class="item-inner distributed thead">
+														<div>Index Version</div><div>Script Version</div><div>CSS Version</div>
 													</div>
 												</li>
 												<li class="item-content">
-													<div class="item-inner">
-														<div class="item-title label">CSS Version</div>
-														<div class="item-input cssVersion"></div>
-													</div>
-												</li>
-												<li class="item-content">
-													<div class="item-inner">
-														<div class="item-title label">Script Version</div>
-														<div class="item-input scriptVersion"></div>
+													<div class="item-inner distributed">
+														<div>20180102</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
 										</div>
-									</div>
+										
+										<div class="content-block-title">Calibrate Accounts Balance</div>
+										<div class="list-block inset">
+											<ul>
+												<li class="item-content">
+													<div class="item-inner">
+														Recheck overall account balance based on Opening Balance vs all transactions.
+														<a href="#" class="button-round button-fill button-big button" @click="calibrate()">Calibrate</a>
+													</div>
+												</li>
+											</ul>
+										</div>
 									
+									</div>
 								</div>
 							</div>
 						</div>
