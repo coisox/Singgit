@@ -40,8 +40,8 @@ const PRECACHE_URLS = [
 	'lib/icomoon/fonts/icomoon.svg',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css',
-	'lib/singgit.js',
+	'lib/singgit.css?v20180107',
+	'lib/singgit.js?v20180107',
 	'lib/vue/vue.min.js'
 ];
 
