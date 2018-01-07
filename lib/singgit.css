@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20180106';
+	content: '20180107';
 }
 @font-face {
     font-family: OpenSans;
@@ -11,7 +11,7 @@ html, body {
 ::-webkit-scrollbar {
     width: 0px;
 }
-* {
+*:not(i):not(b) {
 	font: 14px OpenSans !important;
 	color: #424242;
 }
@@ -75,7 +75,7 @@ input:-webkit-autofill {
 {
     font-size: 20px !important;
 }
-.tabbar a.active i {
+.tabbar a.active {
 	color: #880E4F;
 }
 .button.button-fill {
@@ -167,13 +167,10 @@ input:-webkit-autofill {
 }
 .swipeout-delete {
 	background: #E74C3C !important;
+	color: white;
 }
 .swipeout-edit {
 	background: #34495E !important;
-}
-.swipeout-delete i,
-.swipeout-edit i
-{
 	color: white;
 }
 .list-block .item-inner {
@@ -223,4 +220,12 @@ i.icon.icon-next {
 }
 .distributed div:last-child {
 	text-align: right;
+}
+.btnCalibrate {
+	width: 44px;
+    border-radius: 100px;
+	color: white;
+}
+.buttonOnSide {
+	width: calc(100% - 44px);
 }

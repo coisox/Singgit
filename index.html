@@ -91,12 +91,12 @@
 													</a>
 												</li>
 												<li>
-													<a href="#" class="item-link smart-select">
+													<a href="#" data-back-on-select="true" class="item-link smart-select">
 														<div class="item-content">
 															<div class="item-inner">
 																<div class="item-title label">Categories</div>
 																<div class="item-input">
-																	<select id="categories" name="categories" multiple="multiple">
+																	<select id="categories" name="categories" @change="$nextTick(function(){ $('#categories').parents('li').find('.item-after').text($('#categories').val()); $('#categories').removeClass('error'); })">
 																		<option v-for="item in categories" :value="item">{{item}}</option>
 																	</select>
 																</div>
@@ -110,7 +110,7 @@
 															<div class="item-inner">
 																<div class="item-title label">Transfer To</div>
 																<div class="item-input">
-																	<select id="transfer" name="transfer" @change="$nextTick(function(){ $('#transfer').parents('li').find('.item-after').text($('#transfer').val()) })">
+																	<select id="transfer" name="transfer" @change="$nextTick(function(){ $('#transfer').parents('li').find('.item-after').text($('#transfer').val()); $('#transfer').removeClass('error'); })">
 																		<option value=""></option>
 																		<option v-for="item in accounts" :value="item">{{item}}</option>
 																	</select>
@@ -154,7 +154,7 @@
 									<div id="tabTransactions" class="tab">
 										<div class="list-block inset">
 											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.categories.join(', ')).toLowerCase().indexOf(search.toLowerCase())>-1">
+												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.categories).toLowerCase().indexOf(search.toLowerCase())>-1">
 													<div class="item-content swipeout-content" zclick="editTransaction(item.id)">
 														<div class="item-inner">
 															<div class="transactionDate">{{item.formatteddate}}</div>
@@ -162,10 +162,10 @@
 																<div class="transactionDescription">
 																		{{item.description}}<br>
 																		{{item.account[0]}}
-																		<template v-if="item.account[1]==''">: <span class="transactionCategories">{{item.categories.join(', ')}}</span></template>
+																		<template v-if="item.account[1]==''">: <span class="transactionCategories">{{item.categories}}</span></template>
 																		<span v-else>to {{item.account[1]}} </span>
 																</div>
-																<div :class="{positive:item.amount>=0, negative:item.amount<0}">
+																<div :class="{positive:item.amount>=0 && item.account[1]!='Loan', negative:item.amount<0 || item.account[1]=='Loan'}">
 																	{{toCurrency(item.amount)}} 
 																</div>
 															</template>
@@ -187,7 +187,7 @@
 									<div id="tabStatistic" class="tab">
 										<template v-if="typeof statistic.totalIncome != 'undefined'">
 										
-											<div class="content-block-title">Current Balance</div>
+											<div class="content-block-title">Current Balance <span :class="{positive:balance.Total>=0, negative:balance.Total<0}"><b>{{toCurrency(balance.Total)}}</b></span></div>
 											<div class="list-block inset">
 												<ul>
 													<li v-for="item in accounts" class="item-content">
@@ -196,16 +196,10 @@
 															<div class="item-input" :class="{positive:balance[item]>=0, negative:balance[item]<0}">{{toCurrency(balance[item])}}</div>
 														</div>
 													</li>
-													<li class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Total</div>
-															<div class="item-input" :class="{positive:balance.Total>=0, negative:balance.Total<0}">{{toCurrency(balance.Total)}}</div>
-														</div>
-													</li>
 												</ul>
 											</div>
-											
-											<div class="content-block-title">Monthly Performance</div>
+
+											<div class="content-block-title">Monthly Performance <span :class="{positive:statistic.totalSaving>=0, negative:statistic.totalSaving<0}"><b>{{toCurrency(statistic.totalSaving)}}</b></span></div>
 											<div class="list-block inset">
 												<ul>
 													<li class="item-content">
@@ -220,16 +214,10 @@
 															<div class="item-input" :class="{positive:statistic.totalExpenses>=0, negative:statistic.totalExpenses<0}">{{toCurrency(statistic.totalExpenses)}}</div>
 														</div>
 													</li>
-													<li class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Saving</div>
-															<div class="item-input" :class="{positive:statistic.totalSaving>=0, negative:statistic.totalSaving<0}">{{toCurrency(statistic.totalSaving)}}</div>
-														</div>
-													</li>
 												</ul>
 											</div>
 											
-											<div class="content-block-title">Expenses By Category</div>
+											<div class="content-block-title">Monthly Expenses</div>
 											<div class="list-block inset">
 												<ul>
 													<li v-for="item in categories" class="item-content">
@@ -256,7 +244,7 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180106</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180107</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
@@ -267,8 +255,8 @@
 											<ul>
 												<li class="item-content">
 													<div class="item-inner">
-														Recheck overall account balance based on Opening Balance vs all transactions.
-														<a href="#" class="button-round button-fill button-big button" @click="calibrate()">Calibrate</a>
+														<div class="buttonOnSide">Recheck overall account balance based on Opening Balance vs all transactions.</div>
+														<a href="#" class="button-round button-fill button-big button btnCalibrate" @click="calibrate()"><i class="icon-play"></i></a>
 													</div>
 												</li>
 											</ul>
