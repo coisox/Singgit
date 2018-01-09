@@ -155,7 +155,7 @@
 										<div class="list-block inset">
 											<ul>
 												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.categories).toLowerCase().indexOf(search.toLowerCase())>-1">
-													<div class="item-content swipeout-content" zclick="editTransaction(item.id)">
+													<div class="item-content swipeout-content">
 														<div class="item-inner">
 															<div class="transactionDate">{{item.formatteddate}}</div>
 															<template v-if="item.description!='Reconcile'">
@@ -244,7 +244,7 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180107</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180109</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
