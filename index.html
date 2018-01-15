@@ -94,9 +94,9 @@
 													<a href="#" data-back-on-select="true" class="item-link smart-select">
 														<div class="item-content">
 															<div class="item-inner">
-																<div class="item-title label">Categories</div>
+																<div class="item-title label">Category</div>
 																<div class="item-input">
-																	<select id="categories" name="categories" @change="$nextTick(function(){ $('#categories').parents('li').find('.item-after').text($('#categories').val()); $('#categories').removeClass('error'); })">
+																	<select id="category" name="category" @change="$nextTick(function(){ $('#category').parents('li').find('.item-after').text($('#category').val()); $('#category').removeClass('error'); })">
 																		<option v-for="item in categories" :value="item">{{item}}</option>
 																	</select>
 																</div>
@@ -154,7 +154,7 @@
 									<div id="tabTransactions" class="tab">
 										<div class="list-block inset">
 											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.categories).toLowerCase().indexOf(search.toLowerCase())>-1">
+												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1">
 													<div class="item-content swipeout-content">
 														<div class="item-inner">
 															<div class="transactionDate">{{item.formatteddate}}</div>
@@ -162,7 +162,7 @@
 																<div class="transactionDescription">
 																		{{item.description}}<br>
 																		{{item.account[0]}}
-																		<template v-if="item.account[1]==''">: <span class="transactionCategories">{{item.categories}}</span></template>
+																		<template v-if="item.account[1]==''">: <span class="transactionCategory">{{item.category}}</span></template>
 																		<span v-else>to {{item.account[1]}} </span>
 																</div>
 																<div :class="{positive:item.amount>=0 && item.account[1]!='Loan', negative:item.amount<0 || item.account[1]=='Loan'}">
@@ -244,7 +244,7 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180109</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180115</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>

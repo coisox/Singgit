@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20180109';
+	content: '20180115';
 }
 @font-face {
     font-family: OpenSans;
@@ -93,7 +93,7 @@ input:-webkit-autofill {
     text-overflow: ellipsis;
 	margin-right: 5px;
 }
-.transactionCategories {
+.transactionCategory {
 	color: #9E9E9E;
 }
 .positive {
