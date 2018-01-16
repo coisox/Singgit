@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20180116c';
+	content: '20180117';
 }
 @font-face {
     font-family: OpenSans;
@@ -169,7 +169,7 @@ input:-webkit-autofill {
 	background: #E74C3C !important;
 	color: white;
 }
-.swipeout-fork {
+.swipeout-copy {
 	background: #3498DB !important;
 	color: white;
 }
