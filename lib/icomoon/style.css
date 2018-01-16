@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
   src:
-    url('fonts/icomoon.ttf?yq73w1') format('truetype'),
-    url('fonts/icomoon.woff?yq73w1') format('woff'),
-    url('fonts/icomoon.svg?yq73w1#icomoon') format('svg');
+    url('fonts/icomoon.ttf?xq0occ') format('truetype'),
+    url('fonts/icomoon.woff?xq0occ') format('woff'),
+    url('fonts/icomoon.svg?xq0occ#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,42 +23,30 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-plus:before {
-  content: "\f067";
+.icon-alert-triangle:before {
+  content: "\e907";
 }
-.icon-search:before {
-  content: "\f002";
+.icon-book-open:before {
+  content: "\e900";
 }
-.icon-close:before {
-  content: "\f00d";
+.icon-edit-3:before {
+  content: "\e901";
 }
-.icon-remove:before {
-  content: "\f00d";
+.icon-file:before {
+  content: "\e902";
 }
-.icon-times:before {
-  content: "\f00d";
-}
-.icon-pencil:before {
-  content: "\f040";
-}
-.icon-play:before {
-  content: "\f04b";
-}
-.icon-retweet:before {
-  content: "\f079";
-}
-.icon-list-ul:before {
-  content: "\f0ca";
-}
-.icon-bug:before {
-  content: "\f188";
+.icon-git-branch:before {
+  content: "\e903";
 }
 .icon-sliders:before {
-  content: "\f1de";
+  content: "\e904";
 }
 .icon-trash:before {
-  content: "\f1f8";
+  content: "\e905";
 }
-.icon-line-chart:before {
-  content: "\f201";
+.icon-trending-up:before {
+  content: "\e906";
+}
+.icon-zap:before {
+  content: "\e908";
 }

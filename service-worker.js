@@ -14,7 +14,7 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-20180115';
+const PRECACHE = 'precache-20180116';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
@@ -40,8 +40,8 @@ const PRECACHE_URLS = [
 	'lib/icomoon/fonts/icomoon.svg',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css?v20180115',
-	'lib/singgit.js?v20180115',
+	'lib/singgit.css',
+	'lib/singgit.js',
 	'lib/vue/vue.min.js'
 ];
 

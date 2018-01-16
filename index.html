@@ -61,7 +61,7 @@
 															<div class="item-title label">Amount</div>
 															<div class="item-input">
 																<input type="text" id="amount" name="amount" @input="$('#amount').val($('#amount').val().replace(' ', '').replace(',', '')); $('#amount').removeClass('error');">
-																<i class="icon-bug"></i>
+																<i class="invalid icon-alert-triangle"></i>
 															</div>
 														</div>
 													</div>
@@ -129,16 +129,6 @@
 														</div>
 													</div>
 												</li>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Repeat X-Times</div>
-															<div class="item-input">
-																<input type="number" id="repeat" name="repeat" value="1" min="1">
-															</div>
-														</div>
-													</div>
-												</li>
 											</ul>
 										</form>
 										<div class="content-block">
@@ -176,7 +166,8 @@
 													</div>
 													<div class="swipeout-actions-left">
 														<a href="#" class="swipeout-delete" @click="deleteTransaction(item.id)"><i class="icon-trash"></i></a>
-														<a href="#" class="swipeout-edit" @click="editTransaction(item.id)"><i class="icon-pencil"></i></a>
+														<a href="#" class="swipeout-fork" @click="forkTransaction(item.id)"><i class="icon-git-branch"></i></a>
+														<a href="#" class="swipeout-edit" @click="editTransaction(item.id)"><i class="icon-edit-3"></i></a>
 													</div>
 												</li>
 											</ul>
@@ -244,7 +235,7 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180115</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180116</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
@@ -256,7 +247,7 @@
 												<li class="item-content">
 													<div class="item-inner">
 														<div class="buttonOnSide">Recheck overall account balance based on Opening Balance vs all transactions.</div>
-														<a href="#" class="button-round button-fill button-big button btnCalibrate" @click="calibrate()"><i class="icon-play"></i></a>
+														<a href="#" class="button-round button-fill button-big button btnCalibrate" @click="calibrate()"><i class="icon-zap"></i></a>
 													</div>
 												</li>
 											</ul>
@@ -269,9 +260,9 @@
 					</div>
 					<div class="toolbar tabbar">
 						<div class="toolbar-inner">
-							<a href="#tabForm" class="tab-link active" @click="newTransaction()"><i class="icon-plus"></i></a>
-							<a href="#tabTransactions" class="tab-link" @click="showTransactions()"><i class="icon-list-ul"></i></a>
-							<a href="#tabStatistic" class="tab-link" @click="showStatistic()"><i class="icon-line-chart"></i></a>
+							<a href="#tabForm" class="tab-link active" @click="newTransaction()"><i class="icon-file"></i></a>
+							<a href="#tabTransactions" class="tab-link" @click="showTransactions()"><i class="icon-book-open"></i></a>
+							<a href="#tabStatistic" class="tab-link" @click="showStatistic()"><i class="icon-trending-up"></i></a>
 							<a href="#tabConfig" class="tab-link" @click="activeTab='config'"><i class="icon-sliders"></i></a>
 						</div>
 					</div>
