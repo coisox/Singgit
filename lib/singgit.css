@@ -1,5 +1,5 @@
 .cssVersion:before {
-	content: '20180122';
+	content: '20180301';
 }
 @font-face {
     font-family: OpenSans;
@@ -232,4 +232,13 @@ i.icon.icon-next {
 }
 .buttonOnSide {
 	width: calc(100% - 44px);
+}
+.views {
+    max-width: 500px;
+    margin: auto;
+}
+.toggleClipboard {
+	background: white;
+    padding: 4px 10px;
+    border-radius: 7px;
 }

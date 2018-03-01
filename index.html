@@ -31,10 +31,12 @@
 								<div class="searchbar-input" :class="{invisible:activeTab=='statistic'}">
 									<input type="search" placeholder="Search" v-model="search">
 								</div>
-								<select v-model="activeMonth" @change="activeTab=='transactions'?showTransactions():showStatistic()">
-									<option v-for="item in 12" :value="(item<10?'0':'')+item" :selected="(item<10?'0':'')+item==activeMonth">{{months[item-1]}}</option>
+								<div v-if="activeTab=='transactions'" class="toggleClipboard" @click="clipboard = !clipboard"><i :class="{'icon-eye':!clipboard, 'icon-eye-off':clipboard}"></i></div>
+								<select v-model="activeMonth" @change="if(activeTab=='statistic') showStatistic()">
+									<option v-if="activeTab=='transactions'" :value="'ALL'">ALL</option>
+									<option v-for="item in 12" :value="(item<10?'0':'')+item">{{months[item-1]}}</option>
 								</select>
-								<select v-model="activeYear" @change="activeTab=='transactions'?showTransactions():showStatistic()">
+								<select v-model="activeYear" @change="if(activeTab=='statistic') showStatistic()">
 									<option v-for="item in years" :value="item" :selected="item==activeYear">{{item}}</option>
 								</select>
 							</template>
@@ -60,7 +62,7 @@
 														<div class="item-inner">
 															<div class="item-title label">Amount</div>
 															<div class="item-input">
-																<input type="text" id="amount" name="amount" @input="$('#amount').val($('#amount').val().replace(' ', '').replace(',', '')); $('#amount').removeClass('error');">
+																<input type="text" id="amount" name="amount" @input="onInputAmount()">
 																<i class="invalid icon-alert-triangle"></i>
 															</div>
 														</div>
@@ -82,7 +84,7 @@
 															<div class="item-inner">
 																<div class="item-title label">Account</div>
 																<div class="item-input">
-																	<select id="account" name="account" @change="$nextTick(function(){ $('#account').parents('li').find('.item-after').text($('#account').val()) })">
+																	<select id="account" name="account" @change="onChangeAccount()">
 																		<option v-for="item in accounts" :value="item">{{item}}</option>
 																	</select>
 																</div>
@@ -96,7 +98,7 @@
 															<div class="item-inner">
 																<div class="item-title label">Category</div>
 																<div class="item-input">
-																	<select id="category" name="category" @change="$nextTick(function(){ $('#category').parents('li').find('.item-after').text($('#category').val()); $('#category').removeClass('error'); })">
+																	<select id="category" name="category" @change="onChangeCategory()">
 																		<option v-for="item in categories" :value="item">{{item}}</option>
 																	</select>
 																</div>
@@ -110,7 +112,7 @@
 															<div class="item-inner">
 																<div class="item-title label">Transfer To</div>
 																<div class="item-input">
-																	<select id="transfer" name="transfer" @change="$nextTick(function(){ $('#transfer').parents('li').find('.item-after').text($('#transfer').val()); $('#transfer').removeClass('error'); })">
+																	<select id="transfer" name="transfer" @change="onChangeTransfer()">
 																		<option value=""></option>
 																		<option v-for="item in accounts" :value="item">{{item}}</option>
 																	</select>
@@ -142,9 +144,18 @@
 									
 									<!-- ======================================================================================================= Tab Transactions -->
 									<div id="tabTransactions" class="tab">
-										<div class="list-block inset">
+										<table v-if="clipboard">
+											<tr v-for="item in transactions"v-if="((activeMonth=='ALL') || (item.date.substring(0,6)==activeYear+activeMonth)) && (item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1)">
+												<td>{{item.formatteddate}}</td>
+												<td>{{item.description}}</td>
+												<td>{{item.account[0]}}</td>
+												<td>{{item.account[1]}}</td>
+												<td>{{item.amount}}</td>
+											</tr>
+										</table>
+										<div v-else class="list-block inset">
 											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1">
+												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="((activeMonth=='ALL') || (item.date.substring(0,6)==activeYear+activeMonth)) && (item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1)">
 													<div class="item-content swipeout-content">
 														<div class="item-inner">
 															<div class="transactionDate">{{item.formatteddate}}</div>
@@ -211,7 +222,7 @@
 											<div class="content-block-title">Monthly Expenses</div>
 											<div class="list-block inset">
 												<ul>
-													<li v-for="item in categories" class="item-content">
+													<li v-for="item in categories" v-if="item!='Transfer'" class="item-content">
 														<div class="item-inner">
 															<div class="item-title label">{{item}}</div>
 															<div class="item-input" :class="{positive:statistic.totalByCategory[item]>=0, negative:statistic.totalByCategory[item]<0}">{{toCurrency(statistic.totalByCategory[item])}}</div>
@@ -235,7 +246,7 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180122</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180301</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
@@ -276,7 +287,8 @@
 		<script src="lib/firebase/firebase-firestore.js"></script>
 		<script src="lib/framework7/js/framework7.min.js"></script>
 		<script src="lib/moment/moment.min.js"></script>
-		<script src="lib/vue/vue.min.js"></script>
+		<script src="lib/vue/vue.js"></script>
+		<script src="lib/jslinq/jslinq.js"></script>
 		<script src="lib/singgit.js"></script>
 	</body>
 </html>
