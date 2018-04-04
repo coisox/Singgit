@@ -145,7 +145,7 @@
 									<!-- ======================================================================================================= Tab Transactions -->
 									<div id="tabTransactions" class="tab">
 										<table v-if="clipboard">
-											<tr v-for="item in transactions"v-if="((activeMonth=='ALL') || (item.date.substring(0,6)==activeYear+activeMonth)) && (item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1)">
+											<tr v-for="item in transactions"v-if="(activeMonth=='ALL' || (item.date.substring(0,6)==activeYear+activeMonth)) && filter(item)">
 												<td>{{item.formatteddate}}</td>
 												<td>{{item.description}}</td>
 												<td>{{item.account[0]}}</td>
@@ -155,7 +155,7 @@
 										</table>
 										<div v-else class="list-block inset">
 											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="((activeMonth=='ALL') || (item.date.substring(0,6)==activeYear+activeMonth)) && (item.description=='Reconcile' || (item.description+', '+item.account[0]+', '+item.account[1]+', '+item.category).toLowerCase().indexOf(search.toLowerCase())>-1)">
+												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="(activeMonth=='ALL' || (item.date.substring(0,6)==activeYear+activeMonth)) && filter(item)">
 													<div class="item-content swipeout-content">
 														<div class="item-inner">
 															<div class="transactionDate">{{item.formatteddate}}</div>
@@ -246,12 +246,13 @@
 												</li>
 												<li class="item-content">
 													<div class="item-inner distributed">
-														<div>20180305</div><div class="cssVersion"></div><div class="scriptVersion"></div>
+														<div>20180404</div><div class="cssVersion"></div><div class="scriptVersion"></div>
 													</div>
 												</li>
 											</ul>
 										</div>
 										
+										<!--
 										<div class="content-block-title">Calibrate Accounts Balance</div>
 										<div class="list-block inset">
 											<ul>
@@ -263,6 +264,7 @@
 												</li>
 											</ul>
 										</div>
+										-->
 									
 									</div>
 								</div>
