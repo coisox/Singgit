@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0508';
+	content: '0509';
 }
 @font-face {
     font-family: OpenSans;
@@ -75,7 +75,9 @@ input, select, .favourite, .list-group-item {
     background-color: #880E4F; /*official purple*/
     border-color: #880E4F;  /*official purple*/
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:not(:disabled):not(.disabled):active
+{
 	background-color: #600C39; /*official purple darker*/
     border-color: #600C39; /*official purple darker*/
 }
