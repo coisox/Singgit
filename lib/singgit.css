@@ -72,14 +72,8 @@ input, select, .favourite, .list-group-item {
 	margin-bottom: .5rem;
 }
 .btn-primary {
-    background-color: #880E4F; /*official purple*/
-    border-color: #880E4F;  /*official purple*/
-}
-.btn-primary:hover,
-.btn-primary:not(:disabled):not(.disabled):active
-{
-	background-color: #600C39; /*official purple darker*/
-    border-color: #600C39; /*official purple darker*/
+    background-color: #880E4F !important; /*official purple*/
+    border-color: #880E4F !important;  /*official purple*/
 }
 .card {
 	padding: 15px;
