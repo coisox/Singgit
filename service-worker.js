@@ -14,30 +14,35 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-20180404g';
+const PRECACHE = 'precache-0508';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-	'manifest.json',
-	'index.html',
 	'./', // Alias for index.html
+	'index.html',
+	'manifest.json',
+	
 	'font/OpenSans-Regular.ttf',
-	'img/singgit-48.png',
-	'img/singgit-72.png',
-	'img/singgit-96.png',
+	'font/icomoon/fonts/icomoon.svg',
+	'font/icomoon/fonts/icomoon.ttf',
+	'font/icomoon/fonts/icomoon.woff',
+	'font/icomoon/style.css',
 	'img/singgit-144.png',
 	'img/singgit-192.png',
+	'img/singgit-48.png',
 	'img/singgit-512.png',
-	'lib/firebase/firebase.js',
+	'img/singgit-72.png',
+	'img/singgit-96.png',
+	'img/singgit.png',
+	'lib/bootstrap/bootstrap.min.css',
+	'lib/bootstrap/bootstrap.min.js',
+	'lib/bootstrap/popper.min.js',
+	'lib/clusterize/clusterize.min.css',
+	'lib/clusterize/clusterize.min.js',
 	'lib/firebase/firebase-firestore.js',
-	'lib/framework7/css/framework7.ios.min.css',
-	'lib/framework7/css/framework7.ios.colors.min.css',
-	'lib/framework7/js/framework7.min.js',
-	'lib/icomoon/style.css',
-	'lib/icomoon/fonts/icomoon.ttf',
-	'lib/icomoon/fonts/icomoon.woff',
-	'lib/icomoon/fonts/icomoon.svg',
+	'lib/firebase/firebase.js',
+	'lib/jquery.autocomplete/jquery.autocomplete.min.js',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
 	'lib/singgit.css',

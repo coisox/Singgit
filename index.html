@@ -3,299 +3,145 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>Singgit</title>
 		<link rel="manifest" href="manifest.json">
-		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
-		<link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-		<link rel="stylesheet" href="lib/icomoon/style.css">
+
+		<link rel="stylesheet" href="font/icomoon/style.css">
+		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
 		<link rel="stylesheet" href="lib/singgit.css">
 	</head>
 	<body>
-		<div id="singgit" class="framework7-root">
-			<div class="statusbar-overlay"></div>
-			<div class="views">
-				<div class="view view-main">
-				
-					<div class="navbar">
-					  <div class="navbar-inner">
-							<template v-if="activeTab=='new'">
-								<div class="center">New Transaction</div>
-							</template>
-							<template v-else-if="activeTab=='edit'">
-								<div class="center">Edit Transaction</div>
-							</template>
-							<template v-else-if="activeTab=='transactions' || activeTab=='statistic'">
-								<div v-if="activeTab=='statistic'" class="center">Statistic</div>
-								<div class="searchbar-input" :class="{invisible:activeTab=='statistic'}">
-									<input type="search" placeholder="Search" v-model="search">
-								</div>
-								<div v-if="activeTab=='transactions'" class="toggleClipboard" @click="clipboard = !clipboard"><i :class="{'icon-eye':!clipboard, 'icon-eye-off':clipboard}"></i></div>
-								<select v-model="activeMonth" @change="if(activeTab=='statistic') showStatistic()">
-									<option v-if="activeTab=='transactions'" :value="'ALL'">ALL</option>
-									<option v-for="item in 12" :value="(item<10?'0':'')+item">{{months[item-1]}}</option>
-								</select>
-								<select v-model="activeYear" @change="if(activeTab=='statistic') showStatistic()">
-									<option v-for="item in years" :value="item" :selected="item==activeYear">{{item}}</option>
-								</select>
-							</template>
-							<template v-else-if="activeTab=='config'">
-								<div>Configuration</div>
-							</template>
+		<div id="singgit">
+			<div class="tab-content row">
+				<div role="tabpanel" class="tab-pane col-md-4 active" id="form">
+					<form class="card">
+						<div class="card-header row">New Transaction</div>
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Amount</label>
+							<div class="col-8"><input type="number" class="form-control" id="amount" name="amount"></div>
 						</div>
-					</div>
-					
-					<div class="progressbar-infinite color-multi hide"></div>
-					
-					<div class="pages navbar-through toolbar-through">
-						<div class="page">
-							<div class="page-content">
-								<div class="tabs">
-								
-									<!-- ======================================================================================================= Tab Form -->
-									<div id="tabForm" class="tab active">
-										<form class="list-block inset">
-											<ul>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Amount</div>
-															<div class="item-input">
-																<input type="text" id="amount" name="amount" @input="onInputAmount()">
-																<i class="invalid icon-alert-triangle"></i>
-															</div>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Description</div>
-															<div class="item-input">
-																<input type="text" id="description" name="description">
-															</div>
-														</div>
-													</div>
-												</li>
-												<li>
-													<a href="#" data-back-on-select="true" class="item-link smart-select">
-														<div class="item-content">
-															<div class="item-inner">
-																<div class="item-title label">Account</div>
-																<div class="item-input">
-																	<select id="account" name="account" @change="onChangeAccount()">
-																		<option v-for="item in accounts" :value="item">{{item}}</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-back-on-select="true" class="item-link smart-select">
-														<div class="item-content">
-															<div class="item-inner">
-																<div class="item-title label">Category</div>
-																<div class="item-input">
-																	<select id="category" name="category" @change="onChangeCategory()">
-																		<option v-for="item in categories" :value="item">{{item}}</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-back-on-select="true" class="item-link smart-select">
-														<div class="item-content">
-															<div class="item-inner">
-																<div class="item-title label">Transfer To</div>
-																<div class="item-input">
-																	<select id="transfer" name="transfer" @change="onChangeTransfer()">
-																		<option value=""></option>
-																		<option v-for="item in accounts" :value="item">{{item}}</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</a>
-												</li>
-												<li>
-													<div class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Date</div>
-															<div class="item-input">
-																<input type="text" id="date" name="date">
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</form>
-										<div class="content-block">
-											<div class="buttons-row">
-												<template v-if="activeTab=='new'"><a href="#" class="button-round button-fill button-big button" @click="newTransaction()">Reset</a></template>
-												<template v-else><a href="#" class="button-round button-fill button-big button" @click="cancelTransaction()">Cancel</a></template>
-												<a href="#" class="button-round button-fill button-big button" @click="saveTransaction()">Save</a>
-											</div>
-										</div>
-									</div>
-									
-									<!-- ======================================================================================================= Tab Transactions -->
-									<div id="tabTransactions" class="tab">
-										<table v-if="clipboard">
-											<tr v-for="item in transactions"v-if="(activeMonth=='ALL' || (item.date.substring(0,6)==activeYear+activeMonth)) && filter(item)">
-												<td>{{item.formatteddate}}</td>
-												<td>{{item.description}}</td>
-												<td>{{item.account[0]}}</td>
-												<td>{{item.account[1]}}</td>
-												<td>{{item.amount}}</td>
-											</tr>
-										</table>
-										<div v-else class="list-block inset">
-											<ul>
-												<li class="swipeout" v-for="item in transactions" :key="item.id" :id="item.id" v-if="(activeMonth=='ALL' || (item.date.substring(0,6)==activeYear+activeMonth)) && filter(item)">
-													<div class="item-content swipeout-content">
-														<div class="item-inner">
-															<div class="transactionDate">{{item.formatteddate}}</div>
-															<template v-if="item.description!='Reconcile'">
-																<div class="transactionDescription">
-																		{{item.description}}<br>
-																		{{item.account[0]}}
-																		<template v-if="item.account[1]==''">: <span class="transactionCategory">{{item.category}}</span></template>
-																		<span v-else>to {{item.account[1]}} </span>
-																</div>
-																<div :class="{positive:item.amount>=0 && item.account[1]!='Loan', negative:item.amount<0 || item.account[1]=='Loan'}">
-																	{{toCurrency(item.amount)}} 
-																</div>
-															</template>
-															<template v-else>
-																<div class="reconcile"></div>
-															</template>
-														</div>
-													</div>
-													<div class="swipeout-actions-left">
-														<a href="#" class="swipeout-delete" @click="deleteTransaction(item.id)"><i class="icon-trash"></i></a>
-														<a href="#" class="swipeout-copy" @click="copyTransaction(item.id)"><i class="icon-copy"></i></a>
-														<a href="#" class="swipeout-edit" @click="editTransaction(item.id)"><i class="icon-edit-3"></i></a>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-									
-									<!-- ======================================================================================================= Tab Statistic -->
-									<div id="tabStatistic" class="tab">
-										<template v-if="typeof statistic.totalIncome != 'undefined'">
-										
-											<div class="content-block-title">Current Balance <span :class="{positive:balance.Total>=0, negative:balance.Total<0}"><b>{{toCurrency(balance.Total)}}</b></span></div>
-											<div class="list-block inset">
-												<ul>
-													<li v-for="item in accounts" class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">{{item}}</div>
-															<div class="item-input" :class="{positive:balance[item]>=0, negative:balance[item]<0}">{{toCurrency(balance[item])}}</div>
-														</div>
-													</li>
-												</ul>
-											</div>
-
-											<div class="content-block-title">Monthly Performance <span :class="{positive:statistic.totalSaving>=0, negative:statistic.totalSaving<0}"><b>{{toCurrency(statistic.totalSaving)}}</b></span></div>
-											<div class="list-block inset">
-												<ul>
-													<li class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Income</div>
-															<div class="item-input" :class="{positive:statistic.totalIncome>=0, negative:statistic.totalIncome<0}">{{toCurrency(statistic.totalIncome)}}</div>
-														</div>
-													</li>
-													<li class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">Expenses</div>
-															<div class="item-input" :class="{positive:statistic.totalExpenses>=0, negative:statistic.totalExpenses<0}">{{toCurrency(statistic.totalExpenses)}}</div>
-														</div>
-													</li>
-												</ul>
-											</div>
-											
-											<div class="content-block-title">Monthly Expenses</div>
-											<div class="list-block inset">
-												<ul>
-													<li v-for="item in categories" v-if="item!='Transfer'" class="item-content">
-														<div class="item-inner">
-															<div class="item-title label">{{item}}</div>
-															<div class="item-input" :class="{positive:statistic.totalByCategory[item]>=0, negative:statistic.totalByCategory[item]<0}">{{toCurrency(statistic.totalByCategory[item])}}</div>
-														</div>
-													</li>
-												</ul>
-											</div>
-										</template>
-									</div>
-									
-									<!-- ======================================================================================================= Tab Config -->
-									<div id="tabConfig" class="tab">
-									
-										<div class="content-block-title">Component Version</div>
-										<div class="list-block inset">
-											<ul>
-												<li class="item-content">
-													<div class="item-inner distributed thead">
-														<div>Index Version</div><div>Script Version</div><div>CSS Version</div>
-													</div>
-												</li>
-												<li class="item-content">
-													<div class="item-inner distributed">
-														<div>20180404g</div><div class="cssVersion"></div><div class="scriptVersion"></div>
-													</div>
-												</li>
-											</ul>
-										</div>
-										
-										<div class="content-block-title">Service Worker</div>
-										<div class="content-block">
-											<a href="#" class="button-round button-fill button-big button" @click="updateServiceWorker()">Update</a>
-										</div>
-										
-										<!--
-										<div class="content-block-title">Calibrate Accounts Balance</div>
-										<div class="list-block inset">
-											<ul>
-												<li class="item-content">
-													<div class="item-inner">
-														<div class="buttonOnSide">Recheck overall account balance based on Opening Balance vs all transactions.</div>
-														<a href="#" class="button-round button-fill button-big button btnCalibrate" @click="calibrate()"><i class="icon-zap"></i></a>
-													</div>
-												</li>
-											</ul>
-										</div>
-										-->
-									
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Description</label>
+							<div class="col-8">
+								<div class="input-group">
+									<input type="text" class="form-control" id="description" name="description">
+									<div class="input-group-append">
+										<span class="input-group-text favourite" :class="{'active':favourite}" @click="favourite=!favourite"><i class="icon-heart"></i></span>
 									</div>
 								</div>
+								
 							</div>
 						</div>
-					</div>
-					<div class="toolbar tabbar">
-						<div class="toolbar-inner">
-							<a href="#tabForm" class="tab-link active" @click="newTransaction()"><i class="icon-file"></i></a>
-							<a href="#tabTransactions" class="tab-link" @click="showTransactions()"><i class="icon-book-open"></i></a>
-							<a href="#tabStatistic" class="tab-link" @click="showStatistic()"><i class="icon-trending-up"></i></a>
-							<a href="#tabConfig" class="tab-link" @click="activeTab='config'"><i class="icon-sliders"></i></a>
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Account</label>
+							<div class="col-8">
+								<select class="form-control" id="account" name="account">
+									<option v-for="item in accounts" :value="item">{{item}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Category</label>
+							<div class="col-8">
+								<select class="form-control" id="category" name="category">
+									<option v-for="item in categories" :value="item">{{item}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Transfer To</label>
+							<div class="col-8">
+								<select class="form-control" id="transfer" name="transfer">
+									<option value=""></option>
+									<option v-for="item in accounts" :value="item">{{item}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-4 col-form-label">Date</label>
+							<div class="col-8"><input type="date" class="form-control" id="date" name="date"></div>
+						</div>
+						<div class="form-group row">
+							<div class="btn-group col-12" role="group">
+								<button type="button" class="btn btn-primary col" @click="newTransaction()">New</button>
+								<button type="button" class="btn btn-primary col d-none" @click="deleteTransaction()" :class="{'d-inline-block':editItem!=null}">Delete</button>
+								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
+							</div>
+						</div>
+						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0508&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+					</form>
+				</div>
+				<div role="tabpanel" class="tab-pane col-md-4" id="transaction">
+					<div class="card">
+						<div class="card-header row">
+							<input type="text" class="form-control" id="filter" v-model="filter" @change="clusterize.update(populateData())">
+						</div>
+						<div id="scrollArea" class="clusterize-scroll">
+							<ul id="contentArea" class="list-group clusterize-content"></ul>
 						</div>
 					</div>
 				</div>
+				<div role="tabpanel" class="tab-pane col-md-4" id="statistic">
+					<div class="card">
+						<div class="card-header row d-flex justify-content-between align-items-center">
+							Statistic
+							<span>
+								<i class="icon-navigation-2 icon-arrow-left p-2" @click="navigateMonth(-1)"></i>
+								{{statFilterDesc}}
+								<i class="icon-navigation-2 icon-arrow-right p-2" @click="navigateMonth(1)"></i>
+							</span>
+						</div>
+						<b></b>
+						
+						<ul class="list-group">
+							<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all)}}</span></li>
+							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
+								{{item}}
+								<span :class="{positive:accounts_balance[item]>=0, negative:accounts_balance[item]<0}">{{toCurrency(accounts_balance[item])}}</span>
+							</li>
+						</ul>
+						
+						<ul class="list-group mt-3">
+							<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Income
+								<span :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Expenses
+								<span :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
+							</li>
+						</ul>
+						
+						<ul class="list-group mt-3">
+							<li class="list-group-item list-header">MONTHLY EXPENSES</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0">
+								{{item}}
+								<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
+			
+			<ul class="nav nav-pills fixed-bottom border-top d-md-none" role="tablist">
+				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
+				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
+				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
+			</ul>
 		</div>
 		
 		<script type="text/javascript">if('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js');</script>
 		<script src="lib/jquery/jquery-3.2.1.slim.min.js"></script>
 		<script src="lib/firebase/firebase.js"></script>
 		<script src="lib/firebase/firebase-firestore.js"></script>
-		<script src="lib/framework7/js/framework7.min.js"></script>
+		<script src="lib/bootstrap/popper.min.js"></script>
+		<script src="lib/bootstrap/bootstrap.min.js"></script>
 		<script src="lib/moment/moment.min.js"></script>
 		<script src="lib/vue/vue.js"></script>
-		<script src="lib/jslinq/jslinq.js"></script>
+		<script src="lib/clusterize/clusterize.min.js"></script>
+		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
 		<script src="lib/singgit.js"></script>
 	</body>
 </html>
