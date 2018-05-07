@@ -8,10 +8,6 @@
 ::-webkit-scrollbar {
     width: .5rem;
 }
-::-webkit-scrollbar-thumb {
-	background-color: #880E4F;  /*official purple*/
-	border-radius: 50px;
-}
 html, body {
 	overflow: hidden;
 }
@@ -164,6 +160,10 @@ input, select, .favourite, .list-group-item {
 @media only screen and (min-width : 768px) {
 	body {
 		background: #F5F5F5;
+	}
+	::-webkit-scrollbar-thumb {
+		background-color: #880E4F;  /*official purple*/
+		border-radius: 50px;
 	}
 	.card {
 		box-shadow: 0 2px 4px rgba(0,0,0,.08);
