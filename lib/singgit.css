@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0509b';
+	content: '0509E';
 }
 @font-face {
     font-family: OpenSans;
@@ -41,6 +41,7 @@ input, select, .transactionDescription, .list-group-item {
 input, select, .favourite, .list-group-item {
     border-color: #E0E0E0 !important;  /*official grey medium*/
 }
+.pointer,
 .favourite,
 .icon-arrow-left,
 .icon-arrow-right {
@@ -67,7 +68,7 @@ input, select, .favourite, .list-group-item {
 .card-header {
 	color: white;
 	margin-top: -15px;
-    padding: 10px 15px;
+    padding: 11px 15px 10px 15px;
 	background: #880E4F; /*official purple*/
 	margin-bottom: .5rem;
 }
@@ -114,18 +115,15 @@ input, select, .favourite, .list-group-item {
 .negative {
 	color: #C0392B;
 }
-.form-control#filter {
-	margin: -6px 0 -7px 0;
-    padding-right: 2.3rem;
-    padding-top: 5px;
-    border-color: #880E4F !important; /*official purple*/
+.close-gap {
+	margin-top: -7px;
+	margin-bottom: -7px;
 }
-#transaction .card-header:after {
-	content: "\e902";
-    font-family: icomoon;
+.hyphen:after {
+    content: '-';
     position: absolute;
-    right: 27px;
-    color: #E0E0E0; /*official grey medium*/
+    right: -3px;
+    top: 7px;
 }
 .clusterize-scroll {
 	margin-right: -.5rem;

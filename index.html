@@ -15,7 +15,7 @@
 		<div id="singgit">
 			<div class="tab-content row">
 				<div role="tabpanel" class="tab-pane col-md-4 active" id="form">
-					<form class="card" autocomplete="off">
+					<form id="formTransaction" class="card" autocomplete="off">
 						<div class="card-header row">New Transaction</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Amount</label>
@@ -30,7 +30,6 @@
 										<span class="input-group-text favourite" :class="{'active':favourite}" @click="favourite=!favourite"><i class="icon-heart"></i></span>
 									</div>
 								</div>
-								
 							</div>
 						</div>
 						<div class="form-group row">
@@ -66,16 +65,22 @@
 							<div class="btn-group col-12" role="group">
 								<button type="button" class="btn btn-primary col" @click="newTransaction()">New</button>
 								<button type="button" class="btn btn-primary col d-none" @click="deleteTransaction()" :class="{'d-inline-block':editItem!=null}">Delete</button>
+								<button type="button" class="btn btn-primary col d-none" @click="saveAsTransaction()" :class="{'d-inline-block':editItem!=null}">Save As</button>
 								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
 							</div>
 						</div>
-						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0509b&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0509E&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 					</form>
 				</div>
 				<div role="tabpanel" class="tab-pane col-md-4" id="transaction">
 					<div class="card">
 						<div class="card-header row">
-							<input type="text" class="form-control" id="filter" v-model="filter" @change="clusterize.update(populateData())">
+							<div class="input-group close-gap">
+								<input type="text" class="form-control" v-model="filter_description" @change="clusterize.update(populateData())">
+								<div class="input-group-append">
+									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter"><i class="icon-filter"></i></span>
+								</div>
+							</div>
 						</div>
 						<div id="scrollArea" class="clusterize-scroll">
 							<ul id="contentArea" class="list-group clusterize-content"></ul>
@@ -104,11 +109,11 @@
 						
 						<ul class="list-group mt-3">
 							<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
+							<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
 								Income
 								<span :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
 							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
+							<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
 								Expenses
 								<span :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
 							</li>
@@ -116,7 +121,7 @@
 						
 						<ul class="list-group mt-3">
 							<li class="list-group-item list-header">MONTHLY EXPENSES</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0">
+							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0" @click="quickFilter(item)">
 								{{item}}
 								<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
 							</li>
@@ -130,6 +135,60 @@
 				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
 				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
 			</ul>
+			
+			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-body text-center">Save successfully</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="modalFilter" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<form id="formFilter" class="modal-content">
+						<div class="modal-body">
+							<div class="form-group row">
+								<label class="col-12 col-form-label">Account</label>
+								<div class="col-12">
+									<select class="form-control" v-model="filter_account">
+										<option value=""></option>
+										<option v-for="item in accounts" :value="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-12 col-form-label">Category</label>
+								<div class="col-12">
+									<select class="form-control" v-model="filter_category">
+										<option value=""></option>
+										<option v-for="item in categories" :value="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-12 col-form-label">Date</label>
+								<div class="col-6 hyphen"><input type="date" class="form-control" v-model="filter_from"></div>
+								<div class="col-6"><input type="date" class="form-control" v-model="filter_to"></div>
+							</div>
+							<div class="form-group row">
+								<label class="col-12 col-form-label">Type</label>
+								<div class="col-12">
+									<select class="form-control" v-model="filter_type">
+										<option value=""></option>
+										<option value="income">Income</option>
+										<option value="expenses">Expenses</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="resetFilter()">Clear</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="clusterize.update(populateData())">Ok</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 		
 		<script type="text/javascript">if('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js');</script>
