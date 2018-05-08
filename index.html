@@ -97,35 +97,35 @@
 								<i class="icon-navigation-2 icon-arrow-right p-2" @click="navigateMonth(1)"></i>
 							</span>
 						</div>
-						<b></b>
-						
-						<ul class="list-group">
-							<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all)}}</span></li>
-							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
-								{{item}}
-								<span :class="{positive:accounts_balance[item]>=0, negative:accounts_balance[item]<0}">{{toCurrency(accounts_balance[item])}}</span>
-							</li>
-						</ul>
-						
-						<ul class="list-group mt-3">
-							<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
-							<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
-								Income
-								<span :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
-							</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
-								Expenses
-								<span :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
-							</li>
-						</ul>
-						
-						<ul class="list-group mt-3">
-							<li class="list-group-item list-header">MONTHLY EXPENSES</li>
-							<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0" @click="quickFilter(item)">
-								{{item}}
-								<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
-							</li>
-						</ul>
+						<div class="statContent">
+							<ul class="list-group">
+								<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all)}}</span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
+									{{item}}
+									<span :class="{positive:accounts_balance[item]>=0, negative:accounts_balance[item]<0}">{{toCurrency(accounts_balance[item])}}</span>
+								</li>
+							</ul>
+							
+							<ul class="list-group mt-3">
+								<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
+									Income
+									<span :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
+									Expenses
+									<span :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
+								</li>
+							</ul>
+							
+							<ul class="list-group mt-3">
+								<li class="list-group-item list-header">MONTHLY EXPENSES</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0" @click="quickFilter(item)">
+									{{item}}
+									<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

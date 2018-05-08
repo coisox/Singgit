@@ -5,11 +5,11 @@
     font-family: OpenSans;
     src: url(../font/OpenSans-Regular.ttf);
 }
+body {
+	overflow: hidden;
+}
 ::-webkit-scrollbar {
     width: .5rem;
-}
-html, body {
-	overflow: hidden;
 }
 .nav-pills .nav-link,
 .transactionCategory,
@@ -85,9 +85,6 @@ input, select, .favourite, .list-group-item {
 .nav-pills .nav-link.active {
 	background-color: transparent;
 }
-.list-group {
-	display: initial;
-}
 .list-group-item {
 	padding: .5rem .75rem;
 }
@@ -125,10 +122,13 @@ input, select, .favourite, .list-group-item {
     right: -3px;
     top: 7px;
 }
-.clusterize-scroll {
+.clusterize-scroll,
+.statContent
+{
 	margin-right: -.5rem;
-	max-height: calc(100vh - 130px);
-	overflow-x: auto;
+    margin-bottom: -8px;
+    max-height: calc(100vh - 123px);
+    overflow-x: auto;
     overflow-y: scroll;
 }
 .autocomplete-suggestions {
@@ -147,7 +147,8 @@ input, select, .favourite, .list-group-item {
 	.card {
 		border: 0;
 	}
-	.clusterize-scroll {
+	.clusterize-scroll,
+	.statContent {
 		max-height: calc(100vh - 102px);
 	}
 }
@@ -155,7 +156,7 @@ input, select, .favourite, .list-group-item {
 	body {
 		background: #F5F5F5;
 	}
-	::-webkit-scrollbar-thumb {
+	zzz::-webkit-scrollbar-thumb {
 		background-color: #880E4F;  /*official purple*/
 		border-radius: 50px;
 	}
