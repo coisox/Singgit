@@ -112,6 +112,16 @@ input, select, .favourite, .list-group-item {
 .negative {
 	color: #C0392B;
 }
+.input-group-text.positive {
+	background-color: #2E8B57;
+	border-color: #2E8B57;
+	color: white;
+}
+.input-group-text.negative {
+	background-color: #C0392B;
+	border-color: #C0392B;
+	color: white;
+}
 .close-gap {
 	margin-top: -7px;
 	margin-bottom: -7px;
