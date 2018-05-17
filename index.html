@@ -21,10 +21,10 @@
 							<label class="col-4 col-form-label">Amount</label>
 							<div class="col-8">
 								<div class="input-group">
-									<div class="input-group-prepend">
+									<input type="text" class="form-control" id="amount" name="amount">
+									<div class="input-group-append pointer">
 										<span class="input-group-text" :class="{'negative':isExpenses, 'positive':!isExpenses}" @click="isExpenses=!isExpenses"><i :class="{'icon-minus':isExpenses, 'icon-plus':!isExpenses}"></i></span>
 									</div>
-									<input type="number" class="form-control" id="amount" name="amount">
 								</div>
 							</div>
 						</div>
@@ -32,10 +32,10 @@
 							<label class="col-4 col-form-label">Description</label>
 							<div class="col-8">
 								<div class="input-group">
-									<div class="input-group-prepend">
+									<input type="text" class="form-control" id="description" name="description">
+									<div class="input-group-append">
 										<span class="input-group-text favourite" :class="{'active':isFavourite}" @click="isFavourite=!isFavourite"><i class="icon-heart"></i></span>
 									</div>
-									<input type="text" class="form-control" id="description" name="description">
 								</div>
 							</div>
 						</div>
@@ -66,7 +66,15 @@
 						</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Date</label>
-							<div class="col-8"><input type="date" class="form-control" id="date" name="date"></div>
+							<div class="col-8">
+								<input type="date" class="form-control" id="date" name="date">
+								<div class="input-group fake-date">
+									<input type="date" class="form-control">
+									<div class="input-group-append">
+										<span class="input-group-text"><i class="icon-calendar"></i></span>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="form-group row">
 							<div class="btn-group col-12" role="group">
@@ -76,7 +84,7 @@
 								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
 							</div>
 						</div>
-						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0517&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0518&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 					</form>
 				</div>
 				<div role="tabpanel" class="tab-pane col-md-4" id="transaction">
@@ -175,8 +183,24 @@
 							</div>
 							<div class="form-group row">
 								<label class="col-12 col-form-label">Date</label>
-								<div class="col-6 hyphen"><input type="date" id="filter_from" class="form-control" v-model="filter_from"></div>
-								<div class="col-6"><input type="date" id="filter_to" class="form-control" v-model="filter_to"></div>
+								<div class="col-6 hyphen">
+									<input type="date" id="filter_from" class="form-control" v-model="filter_from">
+									<div class="input-group fake-date">
+										<input type="date" class="form-control">
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="icon-calendar"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<input type="date" id="filter_to" class="form-control" v-model="filter_to">
+									<div class="input-group fake-date">
+										<input type="date" class="form-control">
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="icon-calendar"></i></span>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-12 col-form-label">Type</label>

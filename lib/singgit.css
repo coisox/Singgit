@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0517';
+	content: '0518';
 }
 @font-face {
     font-family: OpenSans;
@@ -10,6 +10,30 @@ body {
 }
 ::-webkit-scrollbar {
     width: .5rem;
+}
+::-webkit-clear-button,
+::-webkit-inner-spin-button
+{
+	display: none;
+}
+::-webkit-calendar-picker-indicator {
+	background: red;
+	position: absolute;
+	right: 15px;
+	width: 30px;
+	height: 32px;
+	opacity: 0;
+	cursor: pointer;
+}
+.fake-date {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0 15px;
+	pointer-events: none;
+}
+.fake-date .form-control {
+	opacity: 0;
 }
 .nav-pills .nav-link,
 .transactionCategory,
@@ -40,6 +64,9 @@ input, select, .transactionDescription, .list-group-item {
 }
 input, select, .favourite, .list-group-item {
     border-color: #E0E0E0 !important;  /*official grey medium*/
+}
+input.error {
+	border-color: #C0392B !important;
 }
 .pointer,
 .favourite,
@@ -160,6 +187,9 @@ input, select, .favourite, .list-group-item {
 	.clusterize-scroll,
 	.statContent {
 		max-height: calc(100vh - 102px);
+	}
+	.fake-date {
+		display: none;
 	}
 }
 @media only screen and (min-width : 768px) {
