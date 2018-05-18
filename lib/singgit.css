@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0518';
+	content: '0519';
 }
 @font-face {
     font-family: OpenSans;
@@ -37,8 +37,7 @@ body {
 }
 .nav-pills .nav-link,
 .transactionCategory,
-.input-group-text,
-.version
+.input-group-text
 {
 	color: #9E9E9E;  /*official grey darker*/
 }
@@ -51,7 +50,8 @@ body {
 .col-form-label,
 .transactionDate,
 .nav-pills .nav-link.active,
-.autocomplete-suggestions strong
+.autocomplete-suggestions strong,
+.official-color-text
 {
 	color: #880E4F; /*official purple*/
 }
@@ -180,6 +180,10 @@ input.error {
     padding-bottom: 0 !important;
     border-bottom: 0 !important;
 }
+.mt-30px {
+	margin-top: 30px;
+}
+
 @media only screen and (max-width : 767px) {
 	.card {
 		border: 0;
@@ -202,6 +206,8 @@ input.error {
 	}
 	.card {
 		box-shadow: 0 2px 4px rgba(0,0,0,.08);
+	}
+	.card.max-height {
 		min-height: calc(100vh - 60px);
 	}
 	.tab-content > .tab-pane {

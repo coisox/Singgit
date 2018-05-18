@@ -14,7 +14,8 @@
 	<body>
 		<div id="singgit">
 			<div class="tab-content row">
-				<div role="tabpanel" class="tab-pane col-md-4 active" id="form">
+				<div role="tabpanel" class="tab-pane active col-md-4" id="form">
+				
 					<form id="formTransaction" class="card" autocomplete="off">
 						<div class="card-header row">New Transaction</div>
 						<div class="form-group row">
@@ -84,11 +85,41 @@
 								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
 							</div>
 						</div>
-						<div class="form-group row text-center d-block mt-5 version">IDX&nbsp;0518&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 					</form>
+					
+					<div class="card d-none d-md-block mt-30px">
+						<div class="card-header row">Utility</div>
+						
+						<div class="d-block text-center official-color-text">Version</div>
+						<div class="d-block text-center">IDX&nbsp;0519&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						
+						<div class="form-group row d-block text-center official-color-text mt-4">Backup Autocomplete</div>
+						<div class="form-group row">
+							<div class="btn-group col-12" role="group">
+								<button type="button" class="btn btn-primary col" @click="exportAutocomplete()">Export</button>
+								<button type="button" class="btn btn-primary col" @click="importAutocomplete()">Import</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane col-md-4 d-md-none" id="utility">
+					<div class="card">
+						<div class="card-header row">Utility</div>
+						
+						<div class="d-block text-center official-color-text">Version</div>
+						<div class="d-block text-center">IDX&nbsp;0519&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						
+						<div class="form-group row d-block text-center official-color-text mt-4">Backup Autocomplete</div>
+						<div class="form-group row">
+							<div class="btn-group col-12" role="group">
+								<button type="button" class="btn btn-primary col" @click="exportAutocomplete()">Export</button>
+								<button type="button" class="btn btn-primary col" @click="importAutocomplete()">Import</button>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div role="tabpanel" class="tab-pane col-md-4" id="transaction">
-					<div class="card">
+					<div class="card max-height">
 						<div class="card-header row">
 							<div class="input-group close-gap">
 								<input type="text" class="form-control" v-model="filter_description" @change="clusterize.update(populateData())">
@@ -103,7 +134,7 @@
 					</div>
 				</div>
 				<div role="tabpanel" class="tab-pane col-md-4" id="statistic">
-					<div class="card">
+					<div class="card max-height">
 						<div class="card-header row d-flex justify-content-between align-items-center">
 							Statistic
 							<span>
@@ -149,12 +180,13 @@
 				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
 				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
 				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
+				<li class="nav-item col"><a href="#utility" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-sliders"></i></a></li>
 			</ul>
 			
-			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
+			<div id="modalDone" class="modal fade" tabindex="-1" role="dialog">
 				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
-						<div class="modal-body text-center">Save successfully</div>
+						<div class="modal-body text-center">Done</div>
 					</div>
 				</div>
 			</div>
