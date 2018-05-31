@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0531';
+	content: '0531Q';
 }
 @font-face {
     font-family: OpenSans;
@@ -55,6 +55,13 @@ body {
 {
 	color: #880E4F; /*official purple*/
 }
+.hex-icon {
+	position: absolute;
+    font-size: 40px;
+    color: white;
+    top: 25px;
+    left: calc(50% - 20px);
+}
 input, select {
     outline: none !important;
     box-shadow: none !important;
@@ -71,7 +78,8 @@ input.error {
 .pointer,
 .favourite,
 .icon-arrow-left,
-.icon-arrow-right {
+.icon-arrow-right,
+.hex-icon {
 	cursor: pointer;
 }
 .favourite.active {
@@ -211,7 +219,7 @@ input.error {
 		min-height: calc(100vh - 60px);
 	}
 	.card.med-height {
-		min-height: calc(100vh - 311px);
+		min-height: calc(100vh - 405px);
 	}
 	.tab-content > .tab-pane {
 		display: block;

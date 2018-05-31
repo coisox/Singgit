@@ -14,13 +14,13 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-0531';
+const PRECACHE = 'precache-0531Q';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
 	'./', // Alias for index.html
-	'index.html',
+	'index.html?v0531Q',
 	'manifest.json',
 	
 	'font/OpenSans-Regular.ttf',
@@ -35,6 +35,7 @@ const PRECACHE_URLS = [
 	'img/singgit-72.png',
 	'img/singgit-96.png',
 	'img/singgit.png',
+	'img/hexagon.svg',
 	'lib/bootstrap/bootstrap.min.css',
 	'lib/bootstrap/bootstrap.min.js',
 	'lib/bootstrap/popper.min.js',
@@ -45,8 +46,8 @@ const PRECACHE_URLS = [
 	'lib/jquery.autocomplete/jquery.autocomplete.min.js',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css',
-	'lib/singgit.js',
+	'lib/singgit.css?v0531Q',
+	'lib/singgit.js?v0531Q',
 	'lib/vue/vue.min.js'
 ];
 

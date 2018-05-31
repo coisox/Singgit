@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css">
+		<link rel="stylesheet" href="lib/singgit.css?v0531Q">
 	</head>
 	<body>
 		<div id="singgit">
@@ -91,13 +91,23 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0531&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0531Q&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
-						<div class="form-group row d-block text-center official-color-text mt-4">Backup Autocomplete</div>
-						<div class="form-group row">
-							<div class="btn-group col-12" role="group">
-								<button type="button" class="btn btn-primary col" @click="exportAutocomplete()">Export</button>
-								<button type="button" class="btn btn-primary col" @click="importAutocomplete()">Import</button>
+						<div class="row mt-4">
+							<div class="col text-center">
+								<i class="icon-upload-cloud hex-icon"></i>
+								<img src="img/hexagon.svg" class="pointer" @click="exportAutocomplete()"></img>
+								<div>Export<br>Preset</div>
+							</div>
+							<div class="col text-center">
+								<i class="icon-download-cloud hex-icon"></i>
+								<img src="img/hexagon.svg" class="pointer" @click="importAutocomplete()"></img>
+								<div>Import<br>Preset</div>
+							</div>
+							<div class="col text-center">
+								<i class="icon-shield hex-icon"></i>
+								<img src="img/hexagon.svg" class="pointer" id="checkForUpdate"></img>
+								<div>Update<br>Version</div>
 							</div>
 						</div>
 					</div>
@@ -107,7 +117,7 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0531&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0531Q&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="form-group row d-block text-center official-color-text mt-4">Backup Autocomplete</div>
 						<div class="form-group row">
@@ -254,7 +264,16 @@
 			</div>
 		</div>
 		
-		<script type="text/javascript">if('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js');</script>
+		<script type="text/javascript">
+			if('serviceWorker' in navigator) {
+				navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+					document.getElementById('checkForUpdate').onclick = function() {
+						registration.update();
+					}
+				});				
+			}
+		</script>
+		
 		<script src="lib/jquery/jquery-3.2.1.slim.min.js"></script>
 		<script src="lib/firebase/firebase.js"></script>
 		<script src="lib/firebase/firebase-firestore.js"></script>
@@ -264,6 +283,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js"></script>
+		<script src="lib/singgit.js?v0531Q"></script>
 	</body>
 </html>
