@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0531Q';
+	content: '0531V';
 }
 @font-face {
     font-family: OpenSans;
@@ -219,7 +219,7 @@ input.error {
 		min-height: calc(100vh - 60px);
 	}
 	.card.med-height {
-		min-height: calc(100vh - 405px);
+		min-height: calc(100vh - 373px);
 	}
 	.tab-content > .tab-pane {
 		display: block;
