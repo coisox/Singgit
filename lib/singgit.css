@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0531W';
+	content: '0531X';
 }
 @font-face {
     font-family: OpenSans;
@@ -61,6 +61,7 @@ body {
     color: white;
     top: 25px;
     left: calc(50% - 20px);
+	pointer-events: none;
 }
 input, select {
     outline: none !important;
