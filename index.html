@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v0604B">
+		<link rel="stylesheet" href="lib/singgit.css?v0613">
 	</head>
 	<body>
 		<div id="singgit">
@@ -91,7 +91,7 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0604B&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0613&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
 							<div class="col text-center">
@@ -117,7 +117,7 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0604B&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0613&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
 							<div class="col text-center">
@@ -152,6 +152,7 @@
 							<ul id="contentArea" class="list-group clusterize-content"></ul>
 						</div>
 					</div>
+					<div v-if="counted" class="countedContainer">{{counted.toFixed(2)}}</div>
 				</div>
 				<div role="tabpanel" class="tab-pane col-md-4" id="statistic">
 					<div class="card max-height">
@@ -273,6 +274,7 @@
 				</div>
 			</div>
 		</div>
+		<textarea id="clipboard"></textarea>
 		
 		<script type="text/javascript">
 			var registration = null;
@@ -292,6 +294,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v0604B"></script>
+		<script src="lib/singgit.js?v0613"></script>
 	</body>
 </html>

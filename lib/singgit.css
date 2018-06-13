@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0604B';
+	content: '0613';
 }
 @font-face {
     font-family: OpenSans;
@@ -140,7 +140,13 @@ input.error {
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-	margin-right: 5px;
+	margin-right: .75rem;
+}
+#contentArea .negative,
+#contentArea .positive
+{
+    margin: -.5rem -.75rem;
+    padding: 20px .75rem;
 }
 .positive {
 	color: #2E8B57;
@@ -191,6 +197,32 @@ input.error {
 }
 .mt-30px {
 	margin-top: 30px;
+}
+.counted {
+	background: #FCF3CF;
+}
+.counteds:after {
+	content: '';
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    background: #F39C12;
+    position: absolute;
+    top: calc(50% - 5px);
+    left: calc(100% + 8px);
+}
+.countedContainer {
+	position: absolute;
+    bottom: 10px;
+    left: 25px;
+    padding: .5rem .75rem;
+    background: #F39C12;
+    border-radius: .25rem;
+    color: white;
+}
+textarea#clipboard {
+    position: fixed;
+    top: -50%;
 }
 
 @media only screen and (max-width : 767px) {
