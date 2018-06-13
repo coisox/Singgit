@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0613';
+	content: '0613B';
 }
 @font-face {
     font-family: OpenSans;
@@ -199,7 +199,7 @@ input.error {
 	margin-top: 30px;
 }
 .counted {
-	background: #FCF3CF;
+	background: #FFEBCC;
 }
 .counteds:after {
 	content: '';
@@ -212,13 +212,14 @@ input.error {
     left: calc(100% + 8px);
 }
 .countedContainer {
-	position: absolute;
-    bottom: 10px;
-    left: 25px;
+	position: fixed;
+    bottom: 52px;
+    left: 10px;
     padding: .5rem .75rem;
     background: #F39C12;
     border-radius: .25rem;
     color: white;
+	z-index: 10;
 }
 textarea#clipboard {
     position: fixed;
