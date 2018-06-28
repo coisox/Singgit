@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v0613C">
+		<link rel="stylesheet" href="lib/singgit.css?v0628">
 	</head>
 	<body>
 		<div id="singgit">
@@ -91,23 +91,18 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0613C&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0628&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
-							<div class="col text-center">
+							<div class="col-md-4 offset-md-2 text-center">
 								<i class="icon-upload-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="exportAutocomplete()"></img>
 								<div>Export<br>Preset</div>
 							</div>
-							<div class="col text-center">
+							<div class="col-md-4 text-center">
 								<i class="icon-download-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="importAutocomplete()"></img>
 								<div>Import<br>Preset</div>
-							</div>
-							<div class="col text-center">
-								<i class="icon-shield hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
-								<div>Update<br>Version</div>
 							</div>
 						</div>
 					</div>
@@ -117,23 +112,18 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0613C&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0628&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
-							<div class="col text-center">
+							<div class="col-md-4 offset-md-2 text-center">
 								<i class="icon-upload-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="exportAutocomplete()"></img>
 								<div>Export<br>Preset</div>
 							</div>
-							<div class="col text-center">
+							<div class="col-md-4 text-center">
 								<i class="icon-download-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="importAutocomplete()"></img>
 								<div>Import<br>Preset</div>
-							</div>
-							<div class="col text-center">
-								<i class="icon-shield hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
-								<div>Update<br>Version</div>
 							</div>
 						</div>
 					</div>
@@ -166,7 +156,7 @@
 						</div>
 						<div class="statContent">
 							<ul class="list-group">
-								<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all)}}</span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all-accounts_balance['THJ'])}}</span></li>
 								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
 									{{item}}
 									<span :class="{positive:accounts_balance[item]>=0, negative:accounts_balance[item]<0}">{{toCurrency(accounts_balance[item])}}</span>
@@ -187,7 +177,7 @@
 							
 							<ul class="list-group mt-3">
 								<li class="list-group-item list-header">MONTHLY EXPENSES</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer'].indexOf(item)<0" @click="quickFilter(item)">
+								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer','Exclude Stat'].indexOf(item)<0" @click="quickFilter(item)">
 									{{item}}
 									<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
 								</li>
@@ -294,6 +284,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v0613C"></script>
+		<script src="lib/singgit.js?v0628"></script>
 	</body>
 </html>

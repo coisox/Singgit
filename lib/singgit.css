@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0613C';
+	content: '0628';
 }
 @font-face {
     font-family: OpenSans;
@@ -224,6 +224,9 @@ input.error {
 textarea#clipboard {
     position: fixed;
     top: -50%;
+}
+.strikethrough {
+	text-decoration: line-through;
 }
 
 @media only screen and (max-width : 767px) {
