@@ -1,4 +1,4 @@
-/*
+0629/*
  Copyright 2016 Google Inc. All Rights Reserved.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-0628';
+const PRECACHE = 'precache-';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
 	'./', // Alias for index.html
-	'index.html?v0628',
+	'index.html?v0629',
 	'manifest.json',
 	
 	'font/OpenSans-Regular.ttf',
@@ -46,8 +46,8 @@ const PRECACHE_URLS = [
 	'lib/jquery.autocomplete/jquery.autocomplete.min.js',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css?v0628',
-	'lib/singgit.js?v0628',
+	'lib/singgit.css?v0629',
+	'lib/singgit.js?v0629',
 	'lib/vue/vue.min.js'
 ];
 

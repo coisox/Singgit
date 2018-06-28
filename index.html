@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v0628">
+		<link rel="stylesheet" href="lib/singgit.css?v0629">
 	</head>
 	<body>
 		<div id="singgit">
@@ -91,18 +91,23 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0628&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0629&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
-							<div class="col-md-4 offset-md-2 text-center">
+							<div class="col text-center">
 								<i class="icon-upload-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="exportAutocomplete()"></img>
 								<div>Export<br>Preset</div>
 							</div>
-							<div class="col-md-4 text-center">
+							<div class="col text-center">
 								<i class="icon-download-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="importAutocomplete()"></img>
 								<div>Import<br>Preset</div>
+							</div>
+							<div class="col text-center">
+								<i class="icon-shield hex-icon"></i>
+								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
+								<div>Update<br>Version</div>
 							</div>
 						</div>
 					</div>
@@ -112,18 +117,23 @@
 						<div class="card-header row">Utility</div>
 						
 						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0628&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
+						<div class="d-block text-center">IDX&nbsp;0629&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
 						
 						<div class="row mt-4">
-							<div class="col-md-4 offset-md-2 text-center">
+							<div class="col text-center">
 								<i class="icon-upload-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="exportAutocomplete()"></img>
 								<div>Export<br>Preset</div>
 							</div>
-							<div class="col-md-4 text-center">
+							<div class="col text-center">
 								<i class="icon-download-cloud hex-icon"></i>
 								<img src="img/hexagon.svg" class="pointer" @click="importAutocomplete()"></img>
 								<div>Import<br>Preset</div>
+							</div>
+							<div class="col text-center">
+								<i class="icon-shield hex-icon"></i>
+								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
+								<div>Update<br>Version</div>
 							</div>
 						</div>
 					</div>
@@ -284,6 +294,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v0628"></script>
+		<script src="lib/singgit.js?v0629"></script>
 	</body>
 </html>
