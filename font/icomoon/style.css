@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
   src:
-    url('fonts/icomoon.ttf?prmpqs') format('truetype'),
-    url('fonts/icomoon.woff?prmpqs') format('woff'),
-    url('fonts/icomoon.svg?prmpqs#icomoon') format('svg');
+    url('fonts/icomoon.ttf?8jd2fm') format('truetype'),
+    url('fonts/icomoon.woff?8jd2fm') format('woff'),
+    url('fonts/icomoon.svg?8jd2fm#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -35,11 +35,8 @@ i {
 .icon-book-open:before {
   content: "\e906";
 }
-.icon-download-cloud:before {
-  content: "\e900";
-}
-.icon-edit-3:before {
-  content: "\e908";
+.icon-calendar:before {
+  content: "\e913";
 }
 .icon-file:before {
   content: "\e90b";
@@ -53,11 +50,11 @@ i {
 .icon-minus:before {
   content: "\e911";
 }
-.icon-more-vertical:before {
-  content: "\e901";
-}
 .icon-plus:before {
   content: "\e912";
+}
+.icon-refresh-ccw:before {
+  content: "\e900";
 }
 .icon-shield:before {
   content: "\e914";
@@ -65,15 +62,6 @@ i {
 .icon-sliders:before {
   content: "\e90c";
 }
-.icon-tag:before {
-  content: "\e907";
-}
 .icon-trending-up:before {
   content: "\e90e";
-}
-.icon-upload-cloud:before {
-  content: "\e915";
-}
-.icon-zap:before {
-  content: "\e90f";
 }

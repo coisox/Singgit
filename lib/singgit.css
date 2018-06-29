@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0629';
+	content: '0630';
 }
 @font-face {
     font-family: OpenSans;
@@ -227,6 +227,13 @@ textarea#clipboard {
 }
 .strikethrough {
 	text-decoration: line-through;
+}
+.rotate {
+	animation: loading 2s linear 1;
+}
+@keyframes loading {
+	0% { transform: rotate(0); }
+	100% { transform: rotate(360deg); }
 }
 
 @media only screen and (max-width : 767px) {
