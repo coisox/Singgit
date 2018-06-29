@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0630';
+	content: '0631';
 }
 @font-face {
     font-family: OpenSans;
@@ -189,6 +189,7 @@ input.error {
     border: 1px solid #E0E0E0;
     border-radius: .25rem;
     margin-top: 0px;
+	max-height: initial !important;
 }
 .autocomplete-suggestion:last-child .mb-2.pb-2.border-bottom {
     margin-bottom: 0 !important;
