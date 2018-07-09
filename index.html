@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v0709">
+		<link rel="stylesheet" href="lib/singgit.css?v0709B">
 	</head>
 	<body>
 		<div id="singgit">
@@ -86,7 +86,7 @@
 						</div>
 						
 						<div class="footer text-secondary text-center pointer" @click="checkForUpdate()">
-							Version: IDX&nbsp;0709&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span>
+							Version: IDX&nbsp;0709B&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span>
 						</div>
 					</form>
 				</div>
@@ -147,24 +147,24 @@
 						</div>
 					</div>
 				</div>
-				<div role="tabpanel" class="tab-pane col-md-3" id="draftAutocomplete">
+				<div role="tabpanel" class="tab-pane col-md-3" id="favourite">
 					<div class="card max-height">
 						<div class="card-header row d-flex justify-content-between align-items-center">
-							Autocomplete
+							Favourite
 							<span>
-								<button type="button" class="btn" @click="draftAutocomplete()"><div class="rotate" v-if="autocompleteLoading"><i class="icon-refresh-ccw"></i></div><div v-else>Draft</div></button>
-								<button type="button" class="btn" @click="saveAutocomplete()">Save</button>
+								<button type="button" class="btn" @click="draftFavourite()"><div class="rotate d-none" :class="{'d-inline':favouriteLoading}"><i class="icon-refresh-ccw"></i></div><div :class="{'d-none':favouriteLoading}">Draft</div></button>
+								<button type="button" class="btn" @click="saveFavourite()">Save</button>
 							</span>
 						</div>
 						<div class="clusterize-scroll">
 							<ul class="list-group clusterize-content">
-								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in autocomplete">
+								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in favourite">
 									<div class="transactionDescription" onclick="singgit.editTransaction(i+)">
 										{{item.value}}<br>
 										<template v-if="item.transfer!=''">{{item.account}} <span>to {{item.transfer}}</span></template>
 										<template v-else>{{item.account}} <span class="transactionCategory">{{item.category}}</span></template>
 									</div>
-									<div class="syncAutocompleteDelete pointer" @click="deleteAutocomplete(index)">
+									<div class="favouriteDelete pointer" @click="deleteFavourite(index)">
 										<i class="icon-trash-2"></i>
 									</div>
 								</li>
@@ -178,7 +178,7 @@
 				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
 				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
 				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
-				<li class="nav-item col"><a href="#utility" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-sliders"></i></a></li>
+				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-star"></i></a></li>
 			</ul>
 			
 			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
@@ -271,6 +271,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v0709"></script>
+		<script src="lib/singgit.js?v0709B"></script>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-0709/*
+/*
  Copyright 2016 Google Inc. All Rights Reserved.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ const RUNTIME = 'runtime';
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
 	'./', // Alias for index.html
-	'index.html?v0709',
+	'index.html?v0709B',
 	'manifest.json',
 	
 	'font/OpenSans-Regular.ttf',
@@ -46,8 +46,8 @@ const PRECACHE_URLS = [
 	'lib/jquery.autocomplete/jquery.autocomplete.min.js',
 	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css?v0709',
-	'lib/singgit.js?v0709',
+	'lib/singgit.css?v0709B',
+	'lib/singgit.js?v0709B',
 	'lib/vue/vue.min.js'
 ];
 

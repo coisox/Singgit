@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0709';
+	content: '0709B';
 }
 @font-face {
     font-family: OpenSans;
@@ -142,7 +142,7 @@ input.error {
     text-overflow: ellipsis;
 	margin-right: .75rem;
 }
-#draftAutocomplete .card-header .btn {
+#favourite .card-header .btn {
 	padding: .375rem .75rem;
 	width: 62px;
 	color: white;
@@ -152,12 +152,12 @@ input.error {
 #transaction .card-header {
 	padding: 4px 15px 3px 15px;
 }
-#draftAutocomplete .card-header {
+#favourite .card-header {
     padding: 4px 15px 3px 15px;
 }
 #contentArea .negative,
 #contentArea .positive,
-.syncAutocompleteDelete
+.favouriteDelete
 {
     margin: -.5rem -.75rem;
     padding: 20px .75rem;
@@ -174,7 +174,7 @@ input.error {
 	color: white;
 }
 .input-group-text.negative,
-.syncAutocompleteDelete
+.favouriteDelete
 {
 	background-color: #C0392B;
 	border-color: #C0392B;
@@ -211,9 +211,6 @@ input.error {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     border-bottom: 0 !important;
-}
-.autocomplete-card {
-	background: white;
 }
 .mt-30px {
 	margin-top: 30px;
