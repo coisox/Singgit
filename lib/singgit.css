@@ -1,5 +1,5 @@
 #version_css:before {
-	content: '0631';
+	content: '0709';
 }
 @font-face {
     font-family: OpenSans;
@@ -142,8 +142,22 @@ input.error {
     text-overflow: ellipsis;
 	margin-right: .75rem;
 }
+#draftAutocomplete .card-header .btn {
+	padding: .375rem .75rem;
+	width: 62px;
+	color: white;
+	border-color: white;
+	background-color: transparent !important;
+}
+#transaction .card-header {
+	padding: 4px 15px 3px 15px;
+}
+#draftAutocomplete .card-header {
+    padding: 4px 15px 3px 15px;
+}
 #contentArea .negative,
-#contentArea .positive
+#contentArea .positive,
+.syncAutocompleteDelete
 {
     margin: -.5rem -.75rem;
     padding: 20px .75rem;
@@ -159,7 +173,9 @@ input.error {
 	border-color: #2E8B57;
 	color: white;
 }
-.input-group-text.negative {
+.input-group-text.negative,
+.syncAutocompleteDelete
+{
 	background-color: #C0392B;
 	border-color: #C0392B;
 	color: white;
@@ -196,6 +212,9 @@ input.error {
     padding-bottom: 0 !important;
     border-bottom: 0 !important;
 }
+.autocomplete-card {
+	background: white;
+}
 .mt-30px {
 	margin-top: 30px;
 }
@@ -229,8 +248,18 @@ textarea#clipboard {
 .strikethrough {
 	text-decoration: line-through;
 }
+.card.max-height {
+    min-height: calc(100vh - 40px);
+}
+.footer {
+	position: absolute;
+	bottom: 30px;
+	width: 100%;
+	margin-right: -15px;
+    margin-left: -15px;
+}
 .rotate {
-	animation: loading 2s linear 1;
+	animation: loading 2s linear infinite;
 }
 @keyframes loading {
 	0% { transform: rotate(0); }
@@ -262,9 +291,6 @@ textarea#clipboard {
 	}
 	.card.max-height {
 		min-height: calc(100vh - 60px);
-	}
-	.card.med-height {
-		min-height: calc(100vh - 373px);
 	}
 	.tab-content > .tab-pane {
 		display: block;

@@ -9,14 +9,13 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v0631">
+		<link rel="stylesheet" href="lib/singgit.css?v0709">
 	</head>
 	<body>
 		<div id="singgit">
 			<div class="tab-content row">
-				<div role="tabpanel" class="tab-pane active col-md-4" id="form">
-				
-					<form id="formTransaction" class="card med-height" autocomplete="off">
+				<div role="tabpanel" class="tab-pane col-md-3 active" id="form">
+					<form id="formTransaction" class="card max-height" autocomplete="off">
 						<div class="card-header row">New Transaction</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Amount</label>
@@ -85,53 +84,16 @@
 								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
 							</div>
 						</div>
+						
+						<div class="footer text-secondary text-center pointer" @click="checkForUpdate()">
+							Version: IDX&nbsp;0709&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span>
+						</div>
 					</form>
-					
-					<div class="card d-none d-md-block mt-30px">
-						<div class="card-header row">Utility</div>
-						
-						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0631&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
-						
-						<div class="row mt-4">
-							<div class="col-4 offset-2 text-center">
-								<i class="icon-refresh-ccw hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="syncAutocomplete()"></img>
-								<div>Sync<br>Preset</div>
-							</div>
-							<div class="col-4 text-center">
-								<i class="icon-shield hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
-								<div>Update<br>Version</div>
-							</div>
-						</div>
-					</div>
 				</div>
-				<div role="tabpanel" class="tab-pane col-md-4 d-md-none" id="utility">
-					<div class="card">
-						<div class="card-header row">Utility</div>
-						
-						<div class="d-block text-center official-color-text">Version</div>
-						<div class="d-block text-center">IDX&nbsp;0631&nbsp;&nbsp;&nbsp;CSS&nbsp;<span id="version_css"></span>&nbsp;&nbsp;&nbsp;JS&nbsp;<span id="version_js"></span></div>
-						
-						<div class="row mt-4">
-							<div class="col-4 offset-2 text-center">
-								<i class="icon-refresh-ccw hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="syncAutocomplete()"></img>
-								<div>Sync<br>Preset</div>
-							</div>
-							<div class="col-4 text-center">
-								<i class="icon-shield hex-icon"></i>
-								<img src="img/hexagon.svg" class="pointer" @click="checkForUpdate()"></img>
-								<div>Update<br>Version</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane col-md-4" id="transaction">
+				<div role="tabpanel" class="tab-pane col-md-3" id="transaction">
 					<div class="card max-height">
 						<div class="card-header row">
-							<div class="input-group close-gap">
+							<div class="input-group">
 								<input type="text" class="form-control" v-model="filter_description" @change="clusterize.update(populateData())">
 								<div class="input-group-append">
 									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter"><i class="icon-filter"></i></span>
@@ -144,7 +106,7 @@
 					</div>
 					<div v-if="counted" class="countedContainer">{{counted.toFixed(2)}}</div>
 				</div>
-				<div role="tabpanel" class="tab-pane col-md-4" id="statistic">
+				<div role="tabpanel" class="tab-pane col-md-3" id="statistic">
 					<div class="card max-height">
 						<div class="card-header row d-flex justify-content-between align-items-center">
 							Statistic
@@ -180,6 +142,31 @@
 								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer','Exclude Stat'].indexOf(item)<0" @click="quickFilter(item)">
 									{{item}}
 									<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane col-md-3" id="draftAutocomplete">
+					<div class="card max-height">
+						<div class="card-header row d-flex justify-content-between align-items-center">
+							Autocomplete
+							<span>
+								<button type="button" class="btn" @click="draftAutocomplete()"><div class="rotate" v-if="autocompleteLoading"><i class="icon-refresh-ccw"></i></div><div v-else>Draft</div></button>
+								<button type="button" class="btn" @click="saveAutocomplete()">Save</button>
+							</span>
+						</div>
+						<div class="clusterize-scroll">
+							<ul class="list-group clusterize-content">
+								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in autocomplete">
+									<div class="transactionDescription" onclick="singgit.editTransaction(i+)">
+										{{item.value}}<br>
+										<template v-if="item.transfer!=''">{{item.account}} <span>to {{item.transfer}}</span></template>
+										<template v-else>{{item.account}} <span class="transactionCategory">{{item.category}}</span></template>
+									</div>
+									<div class="syncAutocompleteDelete pointer" @click="deleteAutocomplete(index)">
+										<i class="icon-trash-2"></i>
+									</div>
 								</li>
 							</ul>
 						</div>
@@ -284,6 +271,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v0631"></script>
+		<script src="lib/singgit.js?v0709"></script>
 	</body>
 </html>
