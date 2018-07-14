@@ -1,6 +1,3 @@
-#version_css:before {
-	content: '0709B';
-}
 @font-face {
     font-family: OpenSans;
     src: url(../font/OpenSans-Regular.ttf);
@@ -94,7 +91,9 @@ input.error {
 	font-weight: 20px;
 	font-weight: bold;
 }
-.icon-arrow-right {
+.icon-arrow-right,
+.icon-upload
+{
 	margin-right: -.5rem;
 }
 .btn {
@@ -151,9 +150,6 @@ input.error {
 }
 #transaction .card-header {
 	padding: 4px 15px 3px 15px;
-}
-#favourite .card-header {
-    padding: 4px 15px 3px 15px;
 }
 #contentArea .negative,
 #contentArea .positive,
@@ -248,19 +244,9 @@ textarea#clipboard {
 .card.max-height {
     min-height: calc(100vh - 40px);
 }
-.footer {
-	position: absolute;
-	bottom: 30px;
-	width: 100%;
-	margin-right: -15px;
-    margin-left: -15px;
-}
-.rotate {
-	animation: loading 2s linear infinite;
-}
-@keyframes loading {
-	0% { transform: rotate(0); }
-	100% { transform: rotate(360deg); }
+.dimm {
+	opacity: .4;
+	pointer-events: none;
 }
 
 @media only screen and (max-width : 767px) {
