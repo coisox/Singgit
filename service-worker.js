@@ -1,100 +1,66 @@
-/*
- Copyright 2016 Google Inc. All Rights Reserved.
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-     http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
-// Names of the two caches used in this version of the service worker.
-// Change to v2, etc. when you update any of the local resources, which will
-// in turn trigger the install event again.
-const PRECACHE = 'precache-';
-const RUNTIME = 'runtime';
-
-// A list of local resources we always want to be cached.
-const PRECACHE_URLS = [
-	'./', // Alias for index.html
-	'index.html?v180715',
+var cacheName = 'v180918F';
+var filesToCache = [
+	'./',
+	'index.html',
 	'manifest.json',
-	
-	'font/OpenSans-Regular.ttf',
-	'font/icomoon/fonts/icomoon.svg',
-	'font/icomoon/fonts/icomoon.ttf',
-	'font/icomoon/fonts/icomoon.woff',
-	'font/icomoon/style.css',
-	'img/singgit-144.png',
-	'img/singgit-192.png',
-	'img/singgit-48.png',
-	'img/singgit-512.png',
-	'img/singgit-72.png',
-	'img/singgit-96.png',
-	'img/singgit.png',
-	'img/hexagon.svg',
-	'lib/bootstrap/bootstrap.min.css',
+	'lib/singgit.css',
+	'lib/singgit.js',
 	'lib/bootstrap/bootstrap.min.js',
 	'lib/bootstrap/popper.min.js',
+	'lib/bootstrap/bootstrap.min.css',
 	'lib/clusterize/clusterize.min.css',
 	'lib/clusterize/clusterize.min.js',
 	'lib/firebase/firebase-firestore.js',
 	'lib/firebase/firebase.js',
+	'lib/jquery/jquery-3.3.1.min.js',
 	'lib/jquery.autocomplete/jquery.autocomplete.min.js',
-	'lib/jquery/jquery-3.2.1.slim.min.js',
 	'lib/moment/moment.min.js',
-	'lib/singgit.css?v180715',
-	'lib/singgit.js?v180715',
-	'lib/vue/vue.min.js'
+	'lib/vue/vue.js',
+	'img/hexagon.svg',
+	'img/singgit.png',
+	'img/singgit-48.png',
+	'img/singgit-72.png',
+	'img/singgit-96.png',
+	'img/singgit-144.png',
+	'img/singgit-192.png',
+	'img/singgit-512.png',
+	'font/OpenSans-Regular.ttf',
+	'font/icomoon/style.css',
+	'font/icomoon/fonts/icomoon.svg',
+	'font/icomoon/fonts/icomoon.ttf',
+	'font/icomoon/fonts/icomoon.woff'
 ];
 
-// The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', event => {
-	event.waitUntil(
-		caches.open(PRECACHE)
-		.then(cache => cache.addAll(PRECACHE_URLS))
-		.then(self.skipWaiting())
+self.addEventListener('install', function(e) {
+	//console.log('[ServiceWorker] Install');
+	e.waitUntil(
+		caches.open(cacheName).then(function(cache) {
+			//console.log('[ServiceWorker] Caching app shell');
+			return cache.addAll(filesToCache);
+		})
 	);
 });
 
-// The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', event => {
-	const currentCaches = [PRECACHE, RUNTIME];
-	event.waitUntil(
-		caches.keys().then(cacheNames => {
-			return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-		}).then(cachesToDelete => {
-			return Promise.all(cachesToDelete.map(cacheToDelete => {
-				return caches.delete(cacheToDelete);
-			}));
-		}).then(() => self.clients.claim())
-	);
-});
-
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
-self.addEventListener('fetch', event => {
-	// Skip cross-origin requests, like those for Google Analytics.
-	if (event.request.url.startsWith(self.location.origin)) {
-		event.respondWith(
-			caches.match(event.request).then(cachedResponse => {
-				if (cachedResponse) {
-					return cachedResponse;
+self.addEventListener('activate', function(e) {
+	//console.log('[ServiceWorker] Activate', cacheName);
+	e.waitUntil(
+		caches.keys().then(function(keyList) {
+			return Promise.all(keyList.map(function(key) {
+				if (key !== cacheName) {
+					//console.log('[ServiceWorker] Removing old cache', key);
+					return caches.delete(key);
 				}
+			}));
+		})
+	);
+	return self.clients.claim();
+});
 
-				return caches.open(RUNTIME).then(cache => {
-					return fetch(event.request).then(response => {
-						// Put a copy of the response in the runtime cache.
-						return cache.put(event.request, response.clone()).then(() => {
-							return response;
-						});
-					});
-				});
-			})
-		);
-	}
+self.addEventListener('fetch', function(e) {
+	//console.log('[ServiceWorker] Fetch', e.request.url);
+	e.respondWith(
+		caches.match(e.request).then(function(response) {
+			return response || fetch(e.request);
+		})
+	);
 });

@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
-		<link rel="stylesheet" href="lib/singgit.css?v180715">
+		<link rel="stylesheet" href="lib/singgit.css">
 	</head>
 	<body>
 		<div id="singgit">
@@ -253,11 +253,10 @@
 		<textarea id="clipboard"></textarea>
 		
 		<script type="text/javascript">
-			var registration = null;
 			if('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-					this.registration = registration;
-				});				
+				navigator.serviceWorker
+					.register('service-worker.js')
+					.then(function() {});
 			}
 		</script>
 		
@@ -270,6 +269,6 @@
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js?v180715"></script>
+		<script src="lib/singgit.js"></script>
 	</body>
 </html>
