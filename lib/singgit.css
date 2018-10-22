@@ -92,7 +92,7 @@ input.error {
 	font-weight: bold;
 }
 .icon-arrow-right,
-.icon-upload
+.icon-upload-cloud
 {
 	margin-right: -.5rem;
 }
@@ -247,6 +247,14 @@ textarea#clipboard {
 .dimm {
 	opacity: .4;
 	pointer-events: none;
+}
+.walletCalculator {
+	border: 1px solid #E0E0E0 !important;
+	border-radius: .25rem;
+	background: transparent;
+	text-align: right;
+	padding: 0 .25rem;
+	margin: -5px 0;
 }
 
 @media only screen and (max-width : 767px) {
