@@ -248,7 +248,7 @@ textarea#clipboard {
 	opacity: .4;
 	pointer-events: none;
 }
-.walletCalculator {
+.adjustor {
 	border: 1px solid #E0E0E0 !important;
 	border-radius: .25rem;
 	background: transparent;
