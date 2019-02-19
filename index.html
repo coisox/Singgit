@@ -19,7 +19,7 @@
 					<form id="formTransaction" class="card max-height" autocomplete="off">
 						<div class="card-header row d-flex justify-content-between">
 							New Transaction
-							<span class="pointer" id="version_js"></span>
+							<span class="pointer">{{version_js}}</span>
 						</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Amount</label>
@@ -96,8 +96,15 @@
 							<div class="input-group">
 								<input type="text" class="form-control" v-model="filter_description" @change="clusterize.update(populateData())">
 								<div class="input-group-append">
-									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter" data-toggle="tooltip" data-placement="bottom" title="Open Filter Dialog"><i class="icon-filter"></i></span>
-									<span class="input-group-text pointer" @click="unclusterize()" data-toggle="tooltip" data-placement="bottom" title="Unclusterize"><i class="icon-maximize"></i></span>
+									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter">
+										<span data-toggle="tooltip" data-placement="bottom" title="Open filter dialog"><i class="icon-filter"></i></span>
+									</span>
+									<span class="input-group-text pointer" @click="copyToClipboard()">
+										<span data-toggle="tooltip" data-placement="bottom" title="Copy to clipboard"><i class="icon-clipboard"></i></span>
+									</span>
+									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalSetting">
+										<span data-toggle="tooltip" data-placement="bottom" title="Open setting Dialog"><i class="icon-sliders"></i></span>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -261,6 +268,32 @@
 					</form>
 				</div>
 			</div>
+			
+			<div id="modalSetting" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<form id="formSetting" class="modal-content">
+						<div class="modal-body">
+							<div class="form-group row">
+								<label class="col-12 col-form-label">Fetch transactions since</label>
+								<div class="col-12">
+									<input type="month" id="dateforfilter" class="form-control" :value="dateforfilter">
+									<div class="input-group fake-date">
+										<input type="date" class="form-control">
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="icon-calendar"></i></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="applySetting(0)">Cancel</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="applySetting(1)">Ok</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
 		</div>
 		<textarea id="clipboard"></textarea>
 		
