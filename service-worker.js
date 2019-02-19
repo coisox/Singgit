@@ -1,4 +1,4 @@
-var cacheName = 'v190220';
+var cacheName = 'v190220d';
 var filesToCache = [
 	'./',
 	'index.html',
@@ -32,6 +32,8 @@ var filesToCache = [
 ];
 
 self.addEventListener('install', function(e) {
+	self.skipWaiting();
+	
 	//console.log('[ServiceWorker] Install');
 	e.waitUntil(
 		caches.open(cacheName).then(function(cache) {

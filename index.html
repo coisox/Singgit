@@ -19,7 +19,7 @@
 					<form id="formTransaction" class="card max-height" autocomplete="off">
 						<div class="card-header row d-flex justify-content-between">
 							New Transaction
-							<span class="pointer">{{version_js}}</span>
+							<span class="pointer" @click="updateServiceWorker()">{{version_js}}</span>
 						</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Amount</label>
@@ -299,9 +299,12 @@
 		
 		<script type="text/javascript">
 			if('serviceWorker' in navigator) {
-				navigator.serviceWorker
-					.register('service-worker.js')
-					.then(function() {});
+				navigator.serviceWorker.register('service-worker.js').then(reg => {
+					if(localStorage.getItem('SINGGIT_UpdateServiceWorker')) {
+						localStorage.removeItem('SINGGIT_UpdateServiceWorker');
+						reg.update();
+					}
+				});
 			}
 		</script>
 		
