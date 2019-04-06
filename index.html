@@ -212,9 +212,8 @@
 								<i class="icon-share favourite-upload pointer p-2" @click="uploadFavourite()" data-toggle="tooltip" data-placement="bottom" title="Upload Favourite"></i>
 							</span>
 						</div>
-						<div class="scrollArea" :class="{'text-center':loading}">
-							<div v-if="loading" class="spinner-border m-5" role="status"></div>
-							<ul v-else class="list-group">
+						<div class="scrollArea">
+							<ul class="list-group">
 								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in favourite">
 									<div class="transactionDescription">
 										<input class="border-0 p-0 w-100" v-model="item.value"><br>
