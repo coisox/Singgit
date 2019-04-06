@@ -5,6 +5,9 @@
 body {
 	overflow: hidden;
 }
+[v-cloak] {
+	display: none;
+}
 ::-webkit-scrollbar {
     width: .5rem;
 }
@@ -128,6 +131,7 @@ input.error {
 }
 .transactionDate {
 	font-weight: bold;
+	width: 65px;
 }
 .reconcile {
 	background: #3498DB;
@@ -158,22 +162,22 @@ input.error {
     margin: -.5rem -.75rem;
     padding: 20px .75rem;
 }
-.positive {
-	color: #2E8B57;
-}
 .negative {
 	color: #C0392B;
 }
-.input-group-text.positive {
-	background-color: #2E8B57;
-	border-color: #2E8B57;
-	color: white;
+.negative.positive {
+	color: #2E8B57;
 }
 .input-group-text.negative,
 .favouriteDelete
 {
 	background-color: #C0392B;
 	border-color: #C0392B;
+	color: white;
+}
+.input-group-text.negative.positive {
+	background-color: #2E8B57;
+	border-color: #2E8B57;
 	color: white;
 }
 .close-gap {
@@ -186,10 +190,9 @@ input.error {
     right: -3px;
     top: 7px;
 }
-.clusterize-scroll,
-.statContent
-{
-	margin-right: -.5rem;
+.scrollArea,
+.statContent {
+    margin-right: -.5rem;
     margin-bottom: -8px;
     max-height: calc(100vh - 123px);
     overflow-x: auto;
@@ -261,9 +264,9 @@ textarea#clipboard {
 	.card {
 		border: 0;
 	}
-	.clusterize-scroll,
+	.scrollArea,
 	.statContent {
-		max-height: calc(100vh - 102px);
+		max-height: calc(100vh - 95px);
 	}
 	.fake-date {
 		display: none;

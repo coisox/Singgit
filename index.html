@@ -9,17 +9,16 @@
 
 		<link rel="stylesheet" href="font/icomoon/style.css">
 		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
-		<link rel="stylesheet" href="lib/clusterize/clusterize.min.css">
 		<link rel="stylesheet" href="lib/singgit.css">
 	</head>
 	<body>
-		<div id="singgit">
+		<div id="singgit" v-cloak>
 			<div class="tab-content row">
 				<div role="tabpanel" class="tab-pane col-md-3 active" id="form">
 					<form id="formTransaction" class="card max-height" autocomplete="off">
 						<div class="card-header row d-flex justify-content-between">
-							New Transaction
-							<span class="pointer" @click="updateServiceWorker()">{{version_js}}</span>
+							{{formTitle}}
+							<span>{{version_js}}</span>
 						</div>
 						<div class="form-group row">
 							<label class="col-4 col-form-label">Amount</label>
@@ -94,7 +93,7 @@
 					<div class="card max-height">
 						<div class="card-header row">
 							<div class="input-group">
-								<input type="text" class="form-control" v-model="filter_description" @change="clusterize.update(populateData())">
+								<input type="text" class="form-control" v-model.lazy="filter_description">
 								<div class="input-group-append">
 									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter">
 										<span data-toggle="tooltip" data-placement="bottom" title="Open filter dialog"><i class="icon-filter"></i></span>
@@ -102,14 +101,50 @@
 									<span class="input-group-text pointer" @click="copyToClipboard()">
 										<span data-toggle="tooltip" data-placement="bottom" title="Copy to clipboard"><i class="icon-clipboard"></i></span>
 									</span>
-									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalSetting">
-										<span data-toggle="tooltip" data-placement="bottom" title="Open setting Dialog"><i class="icon-sliders"></i></span>
-									</span>
 								</div>
 							</div>
 						</div>
-						<div id="scrollArea" class="clusterize-scroll">
-							<ul id="contentArea" class="list-group clusterize-content"></ul>
+						<div class="scrollArea" :class="{'text-center':loading}">
+							<div v-if="loading" class="spinner-border m-5" role="status"></div>
+
+							<!-- original
+							-->
+							<ul v-else id="contentArea" class="list-group">
+								<li v-for="(item, index) in filteredTransactions" :key="item.id" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[index]}">
+									<div class="transactionDate">{{item.formatteddate}}</div>
+									<template v-if="item.description=='Reconcile'">
+										<div class="reconcile" @click="editTransaction(index)"></div>
+									</template>
+									<template v-else>
+										<div class="transactionDescription" @click="editTransaction(index)">
+											{{item.description}}<br>
+											{{item.account[0]}}<template v-if="item.account[1]">: <span class="transactionCategory">{{item.category}}</span>: <span>to {{item.account[1]}}</span></template>
+										</div>
+										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[index]=!countedCart[index]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
+									</template>
+								</li>
+							</ul>
+							
+							<!-- lib/vue-virtual-scroll-list/index.js tp slow bila nak edit
+							<virtual-list v-else id="contentArea" wclass="list-group" wtag="ul" :size="100" :remain="15">
+								<li v-for="(item, index) in filteredTransactions" :key="index" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[index]}" :data-formatteddate="item.formatteddate" :data-description="item.description" :data-account0="item.account[0]" :data-account1="item.account[0]" :data-category="item.category" :data-amount="item.amount">
+									<div class="transactionDate">{{item.formatteddate}}</div>
+									<template v-if="item.description=='Reconcile'">
+										<div class="reconcile" @click="editTransaction(index)"></div>
+									</template>
+									<template v-else>
+										<div class="transactionDescription" @click="editTransaction(index)">
+											{{item.description}}<br>
+											{{item.account[0]}}
+											<template v-if="item.account[1]">to {{item.account[1]}}</template>
+											<template v-else>: <span class="transactionCategory">{{item.category}}</span></template>
+										</div>
+										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[index]=!countedCart[index]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
+									</template>
+								</li>
+							</virtual-list>
+							-->
+							
 						</div>
 					</div>
 					<div v-if="counted" class="countedContainer">{{counted.toFixed(2)}}</div>
@@ -119,49 +154,52 @@
 						<div class="card-header row d-flex justify-content-between">
 							Statistic
 							<span>
-								<i class="icon-arrow-left p-2" @click="navigateMonth(-1)"></i>
-								{{statFilterDesc}}
-								<i class="icon-arrow-right p-2" @click="navigateMonth(1)"></i>
+								<i class="icon-arrow-left p-2" @click="statFilter[0].add(-1, 'months'); statFilter.push(1)"></i>
+								{{statFilter[0].format('MMM YYYY')}}
+								<i class="icon-arrow-right p-2" @click="statFilter[0].add(1, 'months'); statFilter.push(1)"></i>
 							</span>
 						</div>
-						<div class="statContent">
-							<ul class="list-group">
-								<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all-accounts_balance['THJ']-accounts_balance['Loan'])}}</span></li>
-								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
-									<span class="text-nowrap" @click="item.adjustorShow=!item.adjustorShow">{{item.desc}}</span>
-									<template v-if="item.adjustorShow">
-										<span class="w-100"></span>
-										<span :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
-										<span class="pl-1 pr-1">-</span>
-										<input type="text" v-model="item.adjustorValue" class="ml-1 w-50 adjustor">
-										<span class="pl-1 pr-1">=</span>
-										<span>{{toCurrency(accounts_balance[item.desc] - Number(item.adjustorValue.toString().replace(/,/gi,'')))}}</span> 
-									</template>
-									<template v-else>
-										<span :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
-									</template>
-								</li>
-							</ul>
-							
-							<ul class="list-group mt-3">
-								<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
-								<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
-									Income
-									<span :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
-									Expenses
-									<span :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
-								</li>
-							</ul>
-							
-							<ul class="list-group mt-3">
-								<li class="list-group-item list-header">MONTHLY EXPENSES</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer','Exclude Stat'].indexOf(item)<0" @click="quickFilter(item)">
-									{{item}}
-									<span :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
-								</li>
-							</ul>
+						<div class="statContent" :class="{'text-center':loading}">
+							<div v-if="loading" class="spinner-border m-5" role="status"></div>
+							<template v-else>
+								<ul class="list-group">
+									<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span class="negative" :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all-accounts_balance['THJ']-accounts_balance['Loan'])}}</span></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
+										<span class="text-nowrap" @click="item.adjustorShow=!item.adjustorShow">{{item.desc}}</span>
+										<template v-if="item.adjustorShow">
+											<span class="w-100"></span>
+											<span class="negative" :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
+											<span class="pl-1 pr-1">-</span>
+											<input type="text" v-model="item.adjustorValue" class="ml-1 w-50 adjustor">
+											<span class="pl-1 pr-1">=</span>
+											<span>{{toCurrency(accounts_balance[item.desc] - Number(item.adjustorValue.toString().replace(/,/gi,'')))}}</span> 
+										</template>
+										<template v-else>
+											<span class="negative" :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
+										</template>
+									</li>
+								</ul>
+								
+								<ul class="list-group mt-3">
+									<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span class="negative" :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
+										Income
+										<span class="negative" :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
+										Expenses
+										<span class="negative" :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
+									</li>
+								</ul>
+								
+								<ul class="list-group mt-3">
+									<li class="list-group-item list-header">MONTHLY EXPENSES</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer','Exclude Stat'].indexOf(item)<0" @click="quickFilter(item)">
+										{{item}}
+										<span class="negative" :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
+									</li>
+								</ul>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -174,8 +212,9 @@
 								<i class="icon-share favourite-upload pointer p-2" @click="uploadFavourite()" data-toggle="tooltip" data-placement="bottom" title="Upload Favourite"></i>
 							</span>
 						</div>
-						<div class="clusterize-scroll">
-							<ul class="list-group clusterize-content">
+						<div class="scrollArea" :class="{'text-center':loading}">
+							<div v-if="loading" class="spinner-border m-5" role="status"></div>
+							<ul v-else class="list-group">
 								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in favourite">
 									<div class="transactionDescription">
 										<input class="border-0 p-0 w-100" v-model="item.value"><br>
@@ -194,9 +233,9 @@
 			
 			<ul class="nav nav-pills fixed-bottom border-top d-md-none" role="tablist">
 				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
-				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
-				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
-				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-star"></i></a></li>
+				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-book-open"></i></a></li>
+				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-trending-up"></i></a></li>
+				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-star"></i></a></li>
 			</ul>
 			
 			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
@@ -268,42 +307,13 @@
 					</form>
 				</div>
 			</div>
-			
-			<div id="modalSetting" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					<form id="formSetting" class="modal-content">
-						<div class="modal-body">
-							<div class="form-group row">
-								<label class="col-12 col-form-label">Fetch transactions since</label>
-								<div class="col-12">
-									<input type="month" id="dateforfilter" class="form-control" :value="dateforfilter">
-									<div class="input-group fake-date">
-										<input type="date" class="form-control">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="icon-calendar"></i></span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="applySetting(0)">Cancel</button>
-							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="applySetting(1)">Ok</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			
 		</div>
 		<textarea id="clipboard"></textarea>
 		
-		<script type="text/javascript">
+		<script>
 			if('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('service-worker.js').then(reg => {
-					if(localStorage.getItem('SINGGIT_UpdateServiceWorker')) {
-						localStorage.removeItem('SINGGIT_UpdateServiceWorker');
-						reg.update();
-					}
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('sw.js');
 				});
 			}
 		</script>
@@ -315,7 +325,6 @@
 		<script src="lib/bootstrap/bootstrap.min.js"></script>
 		<script src="lib/moment/moment.min.js"></script>
 		<script src="lib/vue/vue.js"></script>
-		<script src="lib/clusterize/clusterize.min.js"></script>
 		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
 		<script src="lib/singgit.js"></script>
 	</body>
