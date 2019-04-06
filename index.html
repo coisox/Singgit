@@ -153,7 +153,6 @@
 					<div class="card max-height">
 						<div class="card-header row d-flex justify-content-between">
 							Statistic
-							<div class="d-none">{{filteredTransactions.length}}</div>
 							<span>
 								<i class="icon-arrow-left p-2" @click="statFilter[0].add(-1, 'months'); statFilter.push(1)"></i>
 								{{statFilter[0].format('MMM YYYY')}}
@@ -234,9 +233,9 @@
 			
 			<ul class="nav nav-pills fixed-bottom border-top d-md-none" role="tablist">
 				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
-				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-book-open"></i></a></li>
-				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-trending-up"></i></a></li>
-				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center" @click="fetchTransactions()"><i class="icon-star"></i></a></li>
+				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
+				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
+				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-star"></i></a></li>
 			</ul>
 			
 			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
