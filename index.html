@@ -153,6 +153,7 @@
 					<div class="card max-height">
 						<div class="card-header row d-flex justify-content-between">
 							Statistic
+							<div class="d-none">{{filteredTransactions.length}}</div>
 							<span>
 								<i class="icon-arrow-left p-2" @click="statFilter[0].add(-1, 'months'); statFilter.push(1)"></i>
 								{{statFilter[0].format('MMM YYYY')}}

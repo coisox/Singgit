@@ -58,7 +58,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "8abd659a258a5d84f5ac3c5656f45b71"
+    "revision": "bb42269b99138806ecd19da96cd82fa6"
   },
   {
     "url": "lib/bootstrap/bootstrap.min.css",
@@ -98,7 +98,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "lib/singgit.js",
-    "revision": "1aca47285d2056ef4ab275d53d4c1a1a"
+    "revision": "6e36e2ab0d89dc42038b33ecc6a7f66c"
   },
   {
     "url": "lib/vue/vue.js",
