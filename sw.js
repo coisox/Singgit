@@ -58,7 +58,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "da0e6b1ad2cfeba6c2903d5a5dc32b6e"
+    "revision": "bac10c9d09b5659db3f70ed8715eb398"
   },
   {
     "url": "lib/bootstrap/bootstrap.min.css",
@@ -98,7 +98,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "lib/singgit.js",
-    "revision": "6f99cca7503e63318e730bda5010eec0"
+    "revision": "13343e25627ae48bb7ba7ecc47f71b50"
   },
   {
     "url": "lib/vue/vue.js",
@@ -122,6 +122,6 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "workbox-config.js",
-    "revision": "035dd53f91c0c6b95fe0816fbe3910f7"
+    "revision": "c17064cbda109e6fc9648187f1c74277"
   }
 ]);

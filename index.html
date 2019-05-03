@@ -107,20 +107,18 @@
 						<div class="scrollArea" :class="{'text-center':loading}">
 							<div v-if="loading" class="spinner-border m-5" role="status"></div>
 
-							<!-- original
-							-->
 							<ul v-else id="contentArea" class="list-group">
-								<li v-for="(item, index) in filteredTransactions" :key="item.id" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[index]}">
+								<li v-for="item in filteredTransactions" :key="item.id" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[item.id]}">
 									<div class="transactionDate">{{item.formatteddate}}</div>
 									<template v-if="item.description=='Reconcile'">
-										<div class="reconcile" @click="editTransaction(index)"></div>
+										<div class="reconcile" @click="editTransaction(item.id)"></div>
 									</template>
 									<template v-else>
-										<div class="transactionDescription" @click="editTransaction(index)">
+										<div class="transactionDescription" @click="editTransaction(item.id)">
 											{{item.description}}<br>
 											{{item.account[0]}}<template v-if="item.account[1]">: <span class="transactionCategory">{{item.category}}</span>: <span>to {{item.account[1]}}</span></template>
 										</div>
-										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[index]=!countedCart[index]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
+										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[item.id]=!countedCart[item.id]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
 									</template>
 								</li>
 							</ul>
