@@ -189,6 +189,15 @@
 				<div class="tab-item text-primary" :class="{'active': page=='cloud'}" @click="page='cloud'"><i class="icon-cloud"></i></div>
 			</div>
 		</div>
+
+		<script>
+			if('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('sw.js');
+				});
+			}
+		</script>
+		
 		<script src='lib/vue/vue.js'></script>
 		<script src='lib/taffydb/taffy-min.js'></script>
 		<script src='lib/moment/moment.min.js'></script>

@@ -1,9 +1,3 @@
-if('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('sw.js');
-	});
-}
-
 app = new Vue({
     el: '#app',
     data: {
