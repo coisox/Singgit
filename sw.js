@@ -1,112 +1,72 @@
 importScripts('lib/workbox.4.0.0/workbox-sw.js');
 workbox.precaching.precacheAndRoute([
   {
-    "url": "font/icomoon/fonts/icomoon.svg",
-    "revision": "3cba1da854aaaab022a26b9e5f12b9d9"
+    "url": "app.css",
+    "revision": "0937a04b97e493117eb50fedf38bc073"
   },
   {
-    "url": "font/icomoon/fonts/icomoon.ttf",
-    "revision": "9620f168ce62884977fcd8045a88c8e8"
+    "url": "app.js",
+    "revision": "1527b8f1a65364135b3ee7804b46b3e9"
   },
   {
-    "url": "font/icomoon/fonts/icomoon.woff",
-    "revision": "1f7d7fca129e14f4f12738fac511ac23"
+    "url": "font/fonts/icomoon.svg",
+    "revision": "d239cfcedb6cd3da53f60331321dbdb3"
   },
   {
-    "url": "font/icomoon/selection.json",
-    "revision": "a8839eeda369e690ec22d0f0c35cf142"
+    "url": "font/fonts/icomoon.ttf",
+    "revision": "d2e16b444bc56e2020b4fe1200b01509"
   },
   {
-    "url": "font/icomoon/style.css",
-    "revision": "e4422fd2907cfe392114010684e0073b"
+    "url": "font/fonts/icomoon.woff",
+    "revision": "b0449714b22739485ff7278ad4a6ec70"
   },
   {
-    "url": "font/OpenSans-Regular.ttf",
-    "revision": "629a55a7e793da068dc580d184cc0e31"
+    "url": "font/selection.json",
+    "revision": "4743b6e522f56f37f06af9935cef75a5"
   },
   {
-    "url": "img/hexagon.svg",
-    "revision": "7974f7258525073e327579d412231305"
+    "url": "font/style.css",
+    "revision": "b9ce38679b31b4d9a1b5249202fb8fa1"
   },
   {
-    "url": "img/singgit-144.png",
-    "revision": "240e21c41265e4a028a35f3e0d06a189"
+    "url": "img/favicon.png",
+    "revision": "0a63cc2c9589451b114cc942e5c92390"
   },
   {
-    "url": "img/singgit-192.png",
-    "revision": "7b72568f45504a162181cffba32b4352"
-  },
-  {
-    "url": "img/singgit-48.png",
-    "revision": "6945bab084e4ea7de328499556881cbe"
-  },
-  {
-    "url": "img/singgit-512.png",
-    "revision": "5872409474f23056a05de2181c953ceb"
-  },
-  {
-    "url": "img/singgit-72.png",
-    "revision": "eee7b97e34f7f94d16eff104e317f970"
-  },
-  {
-    "url": "img/singgit-96.png",
-    "revision": "7aea6bee6b765c2dab4a7484975187e2"
-  },
-  {
-    "url": "img/singgit.png",
-    "revision": "82716b1dab4979f79e879a366da2f38a"
+    "url": "img/singgit-256.png",
+    "revision": "f6cf51f4c2fd22b081f86061c3e6d610"
   },
   {
     "url": "index.html",
-    "revision": "bac10c9d09b5659db3f70ed8715eb398"
+    "revision": "8cb1b4b7213a8d96909e73e108528827"
   },
   {
-    "url": "lib/bootstrap/bootstrap.min.css",
-    "revision": "a15c2ac3234aa8f6064ef9c1f7383c37"
-  },
-  {
-    "url": "lib/bootstrap/bootstrap.min.js",
-    "revision": "e1d98d47689e00f8ecbc5d9f61bdb42e"
-  },
-  {
-    "url": "lib/bootstrap/popper.min.js",
-    "revision": "56456db9d72a4b380ed3cb63095e6022"
-  },
-  {
-    "url": "lib/firebase/firebase-firestore.js",
-    "revision": "891f0df03133590fda6de8a8e60a99be"
-  },
-  {
-    "url": "lib/firebase/firebase.js",
-    "revision": "1e7fcd644740ffc7f3ef0bc30e78920f"
-  },
-  {
-    "url": "lib/jquery.autocomplete/jquery.autocomplete.min.js",
-    "revision": "2c52ceecb553772569e2fad4e7df77ed"
-  },
-  {
-    "url": "lib/jquery/jquery-3.3.1.min.js",
-    "revision": "a09e13ee94d51c524b7e2a728c7d4039"
+    "url": "lib/dropbox/Dropbox-sdk.min.js",
+    "revision": "1b2d8cd04034423190f3d83c0607f08a"
   },
   {
     "url": "lib/moment/moment.min.js",
     "revision": "aeb7908241d9f6d5a45e504cc4f2ec15"
   },
   {
-    "url": "lib/singgit.css",
-    "revision": "b31973edaadf17a19c4719e3aac4a37e"
+    "url": "lib/spectre/spectre-exp.min.css",
+    "revision": "5909d80638a6ae6aa3a455b6f6a6d768"
   },
   {
-    "url": "lib/singgit.js",
-    "revision": "13343e25627ae48bb7ba7ecc47f71b50"
+    "url": "lib/spectre/spectre.css",
+    "revision": "204edc89a96431bec9f5c364cd31b5e0"
+  },
+  {
+    "url": "lib/spectre/spectre.min.css",
+    "revision": "5cd401d486f79e82913923fe7d7f47ff"
+  },
+  {
+    "url": "lib/taffydb/taffy-min.js",
+    "revision": "27c11a100def26ee818ec43974349fbd"
   },
   {
     "url": "lib/vue/vue.js",
     "revision": "440e570c372631aa20b9c778ad9e7273"
-  },
-  {
-    "url": "lib/vue/vue.min.js",
-    "revision": "9cfa1585246355bf21ba3980f5843cdb"
   },
   {
     "url": "lib/workbox.4.0.0/workbox-sw.js",
@@ -114,7 +74,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "manifest.json",
-    "revision": "b8b7e401372dcb13e3514d8e6e0cc933"
+    "revision": "409e90a14b1300e3d200e50c86e62dfe"
   },
   {
     "url": "sw-config.js",
@@ -122,6 +82,6 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "workbox-config.js",
-    "revision": "c17064cbda109e6fc9648187f1c74277"
+    "revision": "bead981998f55c3157e8a29304824862"
   }
 ]);

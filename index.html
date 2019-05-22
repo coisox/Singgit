@@ -1,328 +1,198 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 		<title>Singgit</title>
-		<link rel="icon" href="data:,">
-		<link rel="manifest" href="manifest.json">
-
-		<link rel="stylesheet" href="font/icomoon/style.css">
-		<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
-		<link rel="stylesheet" href="lib/singgit.css">
+		<link rel="icon" type="image/png" href="img/favicon.png" />
+		<link rel="stylesheet" href="lib/spectre/spectre-exp.min.css">
+		<link rel="stylesheet" href="lib/spectre/spectre.min.css">
+		<link rel="stylesheet" href="font/style.css">
+		<link rel="stylesheet" href="app.css">
 	</head>
-	<body>
-		<div id="singgit" v-cloak>
-			<div class="tab-content row">
-				<div role="tabpanel" class="tab-pane col-md-3 active" id="form">
-					<form id="formTransaction" class="card max-height" autocomplete="off">
-						<div class="card-header row d-flex justify-content-between">
-							{{formTitle}}
-							<span>{{version_js}}</span>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Amount</label>
-							<div class="col-8">
-								<div class="input-group">
-									<input type="text" class="form-control" id="amount" name="amount">
-									<div class="input-group-append pointer">
-										<span class="input-group-text" :class="{'negative':isExpenses, 'positive':!isExpenses}" @click="isExpenses=!isExpenses"><i :class="{'icon-minus':isExpenses, 'icon-plus':!isExpenses}"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Description</label>
-							<div class="col-8">
-								<div class="input-group">
-									<input type="text" class="form-control" id="description" name="description">
-									<div class="input-group-append">
-										<span class="input-group-text favourite" :class="{'active':isFavourite}" @click="isFavourite=!isFavourite"><i class="icon-heart"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Account</label>
-							<div class="col-8">
-								<select class="form-control" id="account" name="account">
-									<option v-for="item in accounts" :value="item.desc">{{item.desc}}</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Category</label>
-							<div class="col-8">
-								<select class="form-control" id="category" name="category">
-									<option v-for="item in categories" :value="item">{{item}}</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Transfer To</label>
-							<div class="col-8">
-								<select class="form-control" id="transfer" name="transfer">
-									<option value=""></option>
-									<option v-for="item in accounts" :value="item.desc">{{item.desc}}</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-4 col-form-label">Date</label>
-							<div class="col-8">
-								<input type="date" class="form-control" id="date" name="date">
-								<div class="input-group fake-date">
-									<input type="date" class="form-control">
-									<div class="input-group-append">
-										<span class="input-group-text"><i class="icon-calendar"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<div class="btn-group col-12" role="group">
-								<button type="button" class="btn btn-primary col" @click="newTransaction()">New</button>
-								<button type="button" class="btn btn-primary col d-none" @click="deleteTransaction()" :class="{'d-inline-block':editItem!=null}">Delete</button>
-								<button type="button" class="btn btn-primary col d-none" @click="saveAsTransaction()" :class="{'d-inline-block':editItem!=null}">Save As</button>
-								<button type="button" class="btn btn-primary col" @click="saveTransaction()">Save</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div role="tabpanel" class="tab-pane col-md-3" id="transaction">
-					<div class="card max-height">
-						<div class="card-header row">
-							<div class="input-group">
-								<input type="text" class="form-control" v-model.lazy="filter_description">
-								<div class="input-group-append">
-									<span class="input-group-text pointer" data-toggle="modal" data-target="#modalFilter">
-										<span data-toggle="tooltip" data-placement="bottom" title="Open filter dialog"><i class="icon-filter"></i></span>
-									</span>
-									<span class="input-group-text pointer" @click="copyToClipboard()">
-										<span data-toggle="tooltip" data-placement="bottom" title="Copy to clipboard"><i class="icon-clipboard"></i></span>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="scrollArea" :class="{'text-center':loading}">
-							<div v-if="loading" class="spinner-border m-5" role="status"></div>
 
-							<ul v-else id="contentArea" class="list-group">
-								<li v-for="item in filteredTransactions" :key="item.id" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[item.id]}">
-									<div class="transactionDate">{{item.formatteddate}}</div>
-									<template v-if="item.description=='Reconcile'">
-										<div class="reconcile" @click="editTransaction(item.id)"></div>
-									</template>
-									<template v-else>
-										<div class="transactionDescription" @click="editTransaction(item.id)">
-											{{item.description}}<br>
-											{{item.account[0]}}<template v-if="item.account[1]">: <span class="transactionCategory">{{item.category}}</span>: <span>to {{item.account[1]}}</span></template>
-										</div>
-										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[item.id]=!countedCart[item.id]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
-									</template>
-								</li>
-							</ul>
-							
-							<!-- lib/vue-virtual-scroll-list/index.js tp slow bila nak edit
-							<virtual-list v-else id="contentArea" wclass="list-group" wtag="ul" :size="100" :remain="15">
-								<li v-for="(item, index) in filteredTransactions" :key="index" class="list-group-item d-flex align-items-center" :class="{'counted':countedCart[index]}" :data-formatteddate="item.formatteddate" :data-description="item.description" :data-account0="item.account[0]" :data-account1="item.account[0]" :data-category="item.category" :data-amount="item.amount">
-									<div class="transactionDate">{{item.formatteddate}}</div>
-									<template v-if="item.description=='Reconcile'">
-										<div class="reconcile" @click="editTransaction(index)"></div>
-									</template>
-									<template v-else>
-										<div class="transactionDescription" @click="editTransaction(index)">
-											{{item.description}}<br>
-											{{item.account[0]}}
-											<template v-if="item.account[1]">to {{item.account[1]}}</template>
-											<template v-else>: <span class="transactionCategory">{{item.category}}</span></template>
-										</div>
-										<div class="negative" :class="{'positive': item.amount>=0 && item.account[1]!='Loan', 'strikethrough': item.category=='Exclude Stat'}" @click="countedCart[index]=!countedCart[index]; counted+=item.amount;">{{toCurrency(item.amount)}}</div>
-									</template>
-								</li>
-							</virtual-list>
-							-->
-							
+	<body>
+		<div id="app">
+			<template v-if="page=='new' || page=='edit'">
+				<header class="navbar bg-primary">
+					<section class="navbar-section text-capitalize">
+						{{page}} Transaction
+					</section>
+					<section class="navbar-section">
+						<label class="form-label">v20190523</label>
+					</section>
+				</header>
+				<form class="form-horizontal column" @click="autoComplete.show=false">
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Amount</label>
+						</div>
+						<!-- <div class="col-8">
+							<input class="form-input" type="text" v-model="form.amount">
+						</div> -->
+						<div class="col-8 input-group">
+							<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/,/gi, '')">
+							<span class="input-group-addon" :class="form.negative?'bg-negative':'bg-positive'" @click="form.negative=!form.negative"><i :class="form.negative?'icon-minus':'icon-plus'"></i></span>
 						</div>
 					</div>
-					<div v-if="counted" class="countedContainer">{{counted.toFixed(2)}}</div>
-				</div>
-				<div role="tabpanel" class="tab-pane col-md-3" id="statistic">
-					<div class="card max-height">
-						<div class="card-header row d-flex justify-content-between">
-							Statistic
-							<span>
-								<i class="icon-arrow-left p-2" @click="statFilter[0].add(-1, 'months'); statFilter.push(1)"></i>
-								{{statFilter[0].format('MMM YYYY')}}
-								<i class="icon-arrow-right p-2" @click="statFilter[0].add(1, 'months'); statFilter.push(1)"></i>
-							</span>
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Description</label>
 						</div>
-						<div class="statContent" :class="{'text-center':loading}">
-							<div v-if="loading" class="spinner-border m-5" role="status"></div>
-							<template v-else>
-								<ul class="list-group">
-									<li class="list-group-item d-flex justify-content-between align-items-center list-header">CURRENT BALANCE <span class="negative" :class="{positive:accounts_balance_all>=0, negative:accounts_balance_all<0}">{{toCurrency(accounts_balance_all-accounts_balance['THJ']-accounts_balance['Loan'])}}</span></li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in accounts">
-										<span class="text-nowrap" @click="item.adjustorShow=!item.adjustorShow">{{item.desc}}</span>
-										<template v-if="item.adjustorShow">
-											<span class="w-100"></span>
-											<span class="negative" :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
-											<span class="pl-1 pr-1">-</span>
-											<input type="text" v-model="item.adjustorValue" class="ml-1 w-50 adjustor">
-											<span class="pl-1 pr-1">=</span>
-											<span>{{toCurrency(accounts_balance[item.desc] - Number(item.adjustorValue.toString().replace(/,/gi,'')))}}</span> 
-										</template>
-										<template v-else>
-											<span class="negative" :class="{positive:accounts_balance[item.desc]>=0, negative:accounts_balance[item.desc]<0}">{{toCurrency(accounts_balance[item.desc])}}</span>
-										</template>
-									</li>
-								</ul>
-								
-								<ul class="list-group mt-3">
-									<li class="list-group-item d-flex justify-content-between align-items-center list-header">MONTHLY PERFORMANCE <span class="negative" :class="{positive:income+expenses>=0, negative:income+expenses<0}">{{toCurrency(income+expenses)}}</span></li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('income')">
-										Income
-										<span class="negative" :class="{positive:income>=0, negative:income<0}">{{toCurrency(income)}}</span>
-									</li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" @click="quickFilter('expenses')">
-										Expenses
-										<span class="negative" :class="{positive:expenses>=0, negative:expenses<0}">{{toCurrency(expenses)}}</span>
-									</li>
-								</ul>
-								
-								<ul class="list-group mt-3">
-									<li class="list-group-item list-header">MONTHLY EXPENSES</li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in categories" v-if="['Income','Transfer','Exclude Stat'].indexOf(item)<0" @click="quickFilter(item)">
-										{{item}}
-										<span class="negative" :class="{positive:categories_expenses[item]>=0, negative:categories_expenses[item]<0}">{{toCurrency(categories_expenses[item])}}</span>
-									</li>
-								</ul>
-							</template>
-						</div>
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane col-md-3" id="favourite">
-					<div class="card max-height">
-						<div class="card-header row d-flex justify-content-between align-items-center">
-							Favourite
-							<span>
-								<i class="icon-git-merge pointer p-2" @click="mergeFavourite()" :class="{'dimm':favouriteLoading}" data-toggle="tooltip" data-placement="bottom" title="Merge Favourite"></i>
-								<i class="icon-share favourite-upload pointer p-2" @click="uploadFavourite()" data-toggle="tooltip" data-placement="bottom" title="Upload Favourite"></i>
-							</span>
-						</div>
-						<div class="scrollArea">
-							<ul class="list-group">
-								<li class="list-group-item d-flex align-items-center" v-for="(item,index) in favourite">
-									<div class="transactionDescription">
-										<input class="border-0 p-0 w-100" v-model="item.value"><br>
-										<template v-if="item.transfer!=''">{{item.account}} <span>to {{item.transfer}}</span></template>
-										<template v-else>{{item.account}} <span class="transactionCategory">{{item.category}}</span></template>
+						<div class="col-8 p-relative">
+							<input class="form-input" type="text" v-model="form.description" @input.stop="autoComplete.show=true">
+							<ul v-if="autoComplete.show && autoCompleteItems.length" class="menu p-absolute w-100">
+								<li class="menu-item" v-for="(item, index) in autoCompleteItems" @click="autoComplete.select(item)">
+									<div class="p-relative">
+										<div class="text-ellipsis">
+											{{item[2]}}
+										</div>
+										<div class="invi no-events">x</div>
 									</div>
-									<div class="favouriteDelete pointer" @click="deleteFavourite(index)">
-										<i class="icon-trash"></i>
-									</div>
+									<div>{{item[0]+(item[3]?' ➔ '+item[3]:'')}}</div>
+									<div class="divider" v-if="index!=4"></div>
 								</li>
 							</ul>
 						</div>
 					</div>
-				</div>
-			</div>
-			
-			<ul class="nav nav-pills fixed-bottom border-top d-md-none" role="tablist">
-				<li class="nav-item col"><a href="#form" role="tab" data-toggle="pill" class="nav-link text-center active" @click="newTransaction()"><i class="icon-file"></i></a></li>
-				<li class="nav-item col"><a href="#transaction" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-book-open"></i></a></li>
-				<li class="nav-item col"><a href="#statistic" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-trending-up"></i></a></li>
-				<li class="nav-item col"><a href="#favourite" role="tab" data-toggle="pill" class="nav-link text-center"><i class="icon-star"></i></a></li>
-			</ul>
-			
-			<div id="modalGeneral" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-					<div class="modal-content">
-						<div class="modal-body text-center">?</div>
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Account</label>
+						</div>
+						<div class="col-8">
+							<select class="form-select" v-model="form.account">
+								<option v-for="item in lov.account" :value="item">{{item}}</option>,
+							</select>
+						</div>
 					</div>
-				</div>
-			</div>
-			
-			<div id="modalFilter" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					<form id="formFilter" class="modal-content">
-						<div class="modal-body">
-							<div class="form-group row">
-								<label class="col-12 col-form-label">Account</label>
-								<div class="col-12">
-									<select class="form-control" v-model="filter_account">
-										<option value=""></option>
-										<option v-for="item in accounts" :value="item.desc">{{item.desc}}</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-12 col-form-label">Category</label>
-								<div class="col-12">
-									<select class="form-control" v-model="filter_category">
-										<option value=""></option>
-										<option v-for="item in categories" :value="item">{{item}}</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-12 col-form-label">Date</label>
-								<div class="col-6 hyphen">
-									<input type="date" id="filter_from" class="form-control" v-model="filter_from">
-									<div class="input-group fake-date">
-										<input type="date" class="form-control">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="icon-calendar"></i></span>
-										</div>
-									</div>
-								</div>
-								<div class="col-6">
-									<input type="date" id="filter_to" class="form-control" v-model="filter_to">
-									<div class="input-group fake-date">
-										<input type="date" class="form-control">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="icon-calendar"></i></span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-12 col-form-label">Type</label>
-								<div class="col-12">
-									<select class="form-control" v-model="filter_type">
-										<option value=""></option>
-										<option value="income">Income</option>
-										<option value="expenses">Expenses</option>
-									</select>
-								</div>
-							</div>
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Transfer To</label>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" @click="resetFilter()">Clear</button>
-							<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+						<div class="col-8">
+							<select class="form-select" v-model="form.transferto">
+								<option v-for="item in lov.account" :value="item">{{item}}</option>,
+							</select>
 						</div>
-					</form>
+					</div>
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Category</label>
+						</div>
+						<div class="col-8">
+							<select class="form-select" v-model="form.category">
+								<option v-for="(item, index) in lov.category" :value="item">{{item}}</option>,
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-4">
+							<label class="form-label">Date</label>
+						</div>
+						<div class="col-8 input-group p-relative">
+							<input class="form-input rounded-right" type="datetime-local" v-model="form.date">
+							<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:0"><i class="form-icon icon-calendar"></i></span>
+						</div>
+						<!-- <div class="col-8 input-group p-relative">
+							<input class="form-input no-events" type="text" :value="formDateFormatted">
+							<span class="input-group-addon bg-primary no-events"><i class="form-icon icon-calendar"></i></span>
+							<input class="form-input p-absolute" type="datetime-local" v-model="form.date" style="z-index:0; top:0; right:0; width:100%; opacity:0;">
+						</div> -->
+					</div>
+				</form>
+				<div class="btn-group btn-group-block column">
+					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.remove()"><i class="icon-trash"></i> Delete</button>
+					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.save(1)"><i class="icon-copy"></i> Save As</button>
+					<button class="btn btn-primary" @click="transaction.save()"><i class="icon-save"></i> {{page=='new'?'Add':'Update'}}</button>
 				</div>
+			</template>
+
+			<template v-else-if="page=='transactions'">
+				<header class="navbar bg-primary">
+					<section class="navbar-section">
+						<input class="form-input" type="text" v-model.lazy="transaction.filter" placeholder="search" @input="transaction.filter=transaction.filter.replace(/,/gi, '')">
+					</section>
+				</header>
+				<table class="table">
+					<tr v-for="item in filteredTransactions" @click="transaction.edit(item)">
+						<td width="1" class="text-primary text-bold">{{moment(item.date).format('DDMM')}}<br>{{moment(item.date).format('YYYY')}}</td>
+						<td class="pl-0">
+							<div class="p-relative">
+								<div class="text-ellipsis">
+									{{item.description}}
+								</div>
+								<div class="invi no-events">x</div>
+							</div>
+							<div>{{item.category+': '+item.account+(item.transferto?' ➔ '+item.transferto:'')}}</div>
+						</td>
+						<td width="1" class="text-right pl-0" :class="(item.amount<0 || (item.category=='Transfer' && item.transferto.toUpperCase().indexOf(transaction.filter.toUpperCase())<0))?'text-negative':'text-positive'">{{toCurrency(item.amount)}}</td>
+					</tr>
+					<tr v-if="transaction.more" @click="transaction.limit+=transaction.pageSize">
+						<td colspan="3" class="text-center">more</td>
+					</tr>
+				</table>
+			</template>
+
+			<template v-else-if="page=='statistic'">
+				<header class="navbar bg-primary">
+					<section class="navbar-section">
+						Statistic
+					</section>
+					<section class="navbar-section">
+						<label class="form-label bg-primary"><i class="icon-arrow-left mr-2"></i></label>
+						{{moment(statisticDate).format('MMM YYYY')}}
+						<label class="form-label bg-primary"><i class="icon-arrow-right ml-2"></i></label>
+					</section>
+				</header>
+				<table class="table">
+					<tr>
+						<td class="bg-gray">CURRENT BALANCE</td>
+						<td class="text-right bg-gray" :class="statistic.balance.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance.Overall)}}</td>
+					</tr>
+					<tr v-for="item in lov.account">
+						<td>{{item}}</td>
+						<td class="text-right" :class="statistic.balance[item]<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance[item])}}</td>
+					</tr>
+				</table>
+			</template>
+
+			<template v-else-if="page=='cloud'">
+				<header class="navbar bg-primary">
+					<section class="navbar-section">
+							<label class="form-label">Cloud Action</label>
+					</section>
+				</header>
+				<form class="column">
+					<div class="pt-4">
+						Backup data to Dropbox, or Overwrite local data from cloud, or Merge local data with cloud while display conflicts for further actions.
+					</div>
+
+					<div class="columns pt-5">
+						<div class="column col-4">Last Action</div><div class="column col-8">: {{cloud.lastAction.time}}</div>
+						<div class="column col-4">Action Type</div><div class="column col-8">: {{cloud.lastAction.type}}</div>
+						<div class="column col-4">Data Size</div>  <div class="column col-8">: {{cloud.lastAction.size}}</div>
+						<div class="column col-4">Duration</div>   <div class="column col-8">: {{cloud.lastAction.duration}}</div>
+					</div>
+
+					<div v-if="cloud.error">{{cloud.error}}</div>
+				</form>
+				<div class="pt-5 btn-group btn-group-block column">
+					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0"><i class="icon-upload-cloud"></i> Backup</button>
+					<button class="btn btn-primary" @click="cloud.overwrite()"><i class="icon-download-cloud"></i> Overwrite</button>
+					<button class="btn btn-primary" @click="cloud.merge()"><i class="icon-git-merge"></i> Merge</button>
+				</div>
+			</template>
+
+			<div class="tab bg-gray">
+				<div class="tab-item text-primary" :class="{'active': page=='new'}" @click="form=byValue(form_reset); page='new';"><i class="icon-file"></i></div>
+				<div class="tab-item text-primary" :class="{'active': page=='transactions'}" @click="page='transactions'"><i class="icon-book-open"></i></div>
+				<div class="tab-item text-primary" :class="{'active': page=='statistic'}" @click="page='statistic'"><i class="icon-trending-up"></i></div>
+				<div class="tab-item text-primary" :class="{'active': page=='cloud'}" @click="page='cloud'"><i class="icon-cloud"></i></div>
 			</div>
 		</div>
-		<textarea id="clipboard"></textarea>
-		
-		<script>
-			if('serviceWorker' in navigator) {
-				window.addEventListener('load', () => {
-					navigator.serviceWorker.register('sw.js');
-				});
-			}
-		</script>
-		
-		<script src="lib/jquery/jquery-3.3.1.min.js"></script>
-		<script src="lib/firebase/firebase.js"></script>
-		<script src="lib/firebase/firebase-firestore.js"></script>
-		<script src="lib/bootstrap/popper.min.js"></script>
-		<script src="lib/bootstrap/bootstrap.min.js"></script>
-		<script src="lib/moment/moment.min.js"></script>
-		<script src="lib/vue/vue.js"></script>
-		<script src="lib/jquery.autocomplete/jquery.autocomplete.min.js"></script>
-		<script src="lib/singgit.js"></script>
+		<script src='lib/vue/vue.js'></script>
+		<script src='lib/taffydb/taffy-min.js'></script>
+		<script src='lib/moment/moment.min.js'></script>
+		<script src='lib/dropbox/Dropbox-sdk.min.js'></script>
+		<script src='app.js'></script>
 	</body>
 </html>
