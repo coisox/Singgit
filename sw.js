@@ -33,8 +33,12 @@ workbox.precaching.precacheAndRoute([
     "revision": "0a63cc2c9589451b114cc942e5c92390"
   },
   {
-    "url": "img/singgit-256.png",
-    "revision": "f6cf51f4c2fd22b081f86061c3e6d610"
+    "url": "img/singgit-192.png",
+    "revision": "2a1413f14e674f8f267e330a33157fa5"
+  },
+  {
+    "url": "img/singgit-512.png",
+    "revision": "f1a824ed89c33b232a972a7a25d19039"
   },
   {
     "url": "index.html",
@@ -74,7 +78,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "manifest.json",
-    "revision": "409e90a14b1300e3d200e50c86e62dfe"
+    "revision": "b8b7e401372dcb13e3514d8e6e0cc933"
   },
   {
     "url": "sw-config.js",
