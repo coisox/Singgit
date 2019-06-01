@@ -42,7 +42,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "c7b9f6787d5f1d17d0e19a5971af451f"
+    "revision": "d7af6aab7f57136d4a8f597c7038f889"
   },
   {
     "url": "lib/dropbox/Dropbox-sdk.min.js",
