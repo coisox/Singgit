@@ -113,7 +113,7 @@
 						<input class="form-input" type="text" v-model.lazy="transaction.filter" placeholder="search" @input="transaction.filter=transaction.filter.replace(/,/gi, '')">
 					</section>
 				</header>
-				<table class="table">
+				<table class="table" v-if="filteredTransactions.length">
 					<tr v-for="item in filteredTransactions" @click="transaction.edit(item)">
 						<td width="1" class="text-primary text-bold">{{moment(item.date).format('DDMM')}}<br>{{moment(item.date).format('YYYY')}}</td>
 						<td class="pl-0">
@@ -144,14 +144,17 @@
 						<label class="form-label bg-primary"><i class="icon-arrow-right ml-2"></i></label>
 					</section>
 				</header>
-				<table class="table">
+				<table class="table" @click="modalDifferent.show=true">
 					<tr>
-						<td class="bg-gray">CURRENT BALANCE</td>
-						<td class="text-right bg-gray" :class="statistic.balance.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance.Overall)}}</td>
+						<td class="bg-gray">Overall</td>
+						<td class="bg-gray text-right" :class="statistic.balance.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance.Overall)}}</td>
 					</tr>
 					<tr v-for="item in lov.account">
 						<td>{{item}}</td>
-						<td class="text-right" :class="statistic.balance[item]<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance[item])}}</td>
+						<td class="text-right" :class="statistic.balance[item]<0?'text-negative':'text-positive'">
+							{{toCurrency(statistic.balance[item])}}
+							<template v-if="modalDifferent.actual[item]">({{statistic.different[item]}})</template>
+						</td>
 					</tr>
 				</table>
 			</template>
@@ -177,17 +180,27 @@
 					<div v-if="cloud.error">{{cloud.error}}</div>
 				</form>
 				<div class="pt-5 btn-group btn-group-block column">
-					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0"><i class="icon-upload-cloud"></i> Backup</button>
-					<button class="btn btn-primary" @click="cloud.overwrite()"><i class="icon-download-cloud"></i> Overwrite</button>
-					<button class="btn btn-primary" @click="cloud.merge()"><i class="icon-git-merge"></i> Merge</button>
+					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0"><i class="icon-upload-cloud"></i> Push</button>
+					<button class="btn btn-primary" @click="cloud.overwrite()"><i class="icon-download-cloud"></i> Pull</button>
+					<!--<button class="btn btn-primary" @click="cloud.merge()"><i class="icon-git-merge"></i> Merge</button>-->
 				</div>
 			</template>
 
 			<div class="tab bg-gray">
-				<div class="tab-item text-primary" :class="{'active': page=='new'}" @click="form=byValue(form_reset); page='new';"><i class="icon-file"></i></div>
+				<div class="tab-item text-primary" :class="{'active': page=='new'}" @click="form=byValue(form_reset); form.date=moment().format('YYYY-MM-DDTHH:mm'); page='new';"><i class="icon-file"></i></div>
 				<div class="tab-item text-primary" :class="{'active': page=='transactions'}" @click="page='transactions'"><i class="icon-book-open"></i></div>
 				<div class="tab-item text-primary" :class="{'active': page=='statistic'}" @click="page='statistic'"><i class="icon-trending-up"></i></div>
 				<div class="tab-item text-primary" :class="{'active': page=='cloud'}" @click="page='cloud'"><i class="icon-cloud"></i></div>
+			</div>
+			
+			<div class="modal" :class="{'active':modalDifferent.show}" id="modalDifferent">
+				<a class="modal-overlay" @click="modalDifferent.show=false"></a>
+				<div class="modal-container pt-3 pb-3">
+					<div class="columns pt-1 pb-1" v-for="item in lov.account">
+						<div class="column col-6">{{item}}</div>
+						<div class="column col-6"><input class="form-input" type="text" v-model="modalDifferent.actual[item]"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 

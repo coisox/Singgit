@@ -57,8 +57,8 @@ app = new Vue({
             amount: null,
             negative: true,
             description: '',
-            account: '',
-            category: '',
+            account: 'Wallet',
+            category: 'Other',
             transferto: '',
             date: moment().format('YYYY-MM-DDTHH:mm'),
         },
@@ -67,6 +67,10 @@ app = new Vue({
             account: ['Wallet', 'Credit Card', 'BIS', 'MBB', 'RHB', 'THJ', 'Loan'],
             category: ['Other', 'Food', 'Big', 'Transport', 'Service', 'Fixed', 'Asjustment', 'Income', 'Transfer', 'Exclude Stat'],
         },
+		modalDifferent: {
+			show: false,
+			actual: [],
+		},
         transaction: {
             data: null,
             filter: '',
@@ -174,13 +178,15 @@ app = new Vue({
 
             this.transaction.forceUpdate
 
-            var result = { balance:{ Overall:0 } }
+            var result = { balance:{ Overall:0 }, different:{} }
 
             this.lov.account.forEach(function(account){
                 result.balance[account] =
                     app.transaction.data({account:account, transferto:''}).sum('amount') -
                     app.transaction.data({account:account, transferto:{'!is':''}}).sum('amount') +
                     app.transaction.data({transferto:account}).sum('amount')
+				
+				result.different[account] = (result.balance[account] - (Number(app.modalDifferent.actual[account]) || 0)).toFixed(2)
 
                 if(account!='THJ') result.balance.Overall += result.balance[account]
             })
