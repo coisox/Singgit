@@ -1,6 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
+		version: 'v20190619',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -91,6 +92,9 @@ app = new Vue({
                 app.form.amountInString = app.form.amount.toString()
 
                 app.form.description = app.form.description.trim()
+				if(app.form.description=='') {
+					app.form.description = app.form.category = 'Food'
+				}
 
                 if(app.form.___id && !saveAs) app.transaction.data(app.form.___id).update(app.form)
                 else app.form.___id = app.transaction.data.insert(app.form).first().___id

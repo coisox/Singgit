@@ -19,7 +19,7 @@
 						{{page}} Transaction
 					</section>
 					<section class="navbar-section">
-						<label class="form-label">v20190601</label>
+						<label class="form-label">{{version}}</label>
 					</section>
 				</header>
 				<form class="form-horizontal column" @click="autoComplete.show=false">
@@ -139,9 +139,9 @@
 						Statistic
 					</section>
 					<section class="navbar-section">
-						<label class="form-label bg-primary"><i class="icon-arrow-left mr-2"></i></label>
+						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-left mr-2"></i></label>
 						{{moment(statisticDate).format('MMM YYYY')}}
-						<label class="form-label bg-primary"><i class="icon-arrow-right ml-2"></i></label>
+						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-right ml-2"></i></label>
 					</section>
 				</header>
 				<table class="table" @click="modalDifferent.show=true">

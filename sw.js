@@ -6,7 +6,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "app.js",
-    "revision": "220f71347eba757f4ffbc616bb30513b"
+    "revision": "b196a31e85acda879a5d4e82c4e049a8"
   },
   {
     "url": "font/fonts/icomoon.svg",
@@ -42,7 +42,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "d7af6aab7f57136d4a8f597c7038f889"
+    "revision": "426dc6b6dd03ee9aaf41c1c44d1c2881"
   },
   {
     "url": "lib/dropbox/Dropbox-sdk.min.js",
