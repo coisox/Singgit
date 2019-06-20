@@ -71,10 +71,12 @@
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 }
-.input-group .form-input + .input-group-addon {
+.input-group .form-input ~ .input-group-addon {
+	border-color: transparent;
+}
+.input-group .form-input ~ .input-group-addon:last-child {
 	border-top-right-radius: .25rem !important;
 	border-bottom-right-radius: .25rem !important;
-	border-color: transparent;
 }
 .form-input:focus {
     box-shadow: none;
@@ -94,6 +96,7 @@
 	padding: .4rem;
 	position: fixed;
 	top: 0;
+	z-index: 10;
 }
 .navbar + form {
 	margin-top: 52px;
@@ -142,4 +145,10 @@
 .input-group .input-group-addon:first-child:not(:last-child),
 .input-group .input-group-btn:first-child:not(:last-child) {
     border-right: 0;
+}
+.col-4 {
+    width: 28%;
+}
+.col-8 {
+    width: 72%;
 }

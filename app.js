@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190619',
+		version: 'v20190620',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -86,21 +86,39 @@ app = new Vue({
                 app.form.amount = app.toCurrency(app.form.amount).replace(/,/gi, '')
                 app.page = 'edit'
             },
-            save: function(saveAs) {
+            save: function(isUpdate, isRetain) {
+                app.form.description = app.form.description.trim()
                 app.form.amount = eval(app.form.amount)
                 if(app.form.negative) app.form.amount *= -1
-                app.form.amountInString = app.form.amount.toString()
 
-                app.form.description = app.form.description.trim()
-				if(app.form.description=='') {
-					app.form.description = app.form.category = 'Food'
+				//====================================================== auto AI start
+				if(!app.form.amount && !app.form.description) {
+					app.form.amount = 0
+					app.form.description = 'Reconcile'
+					app.form.category = 'Food'
+					app.form.account = 'Wallet'
 				}
-
-                if(app.form.___id && !saveAs) app.transaction.data(app.form.___id).update(app.form)
-                else app.form.___id = app.transaction.data.insert(app.form).first().___id
-
+				if(app.form.amount && !app.form.description) {
+					app.form.description = 'Food'
+					app.form.category = 'Food'
+				}
+				if(app.form.category=='Transfer') {
+					app.form.negative = false
+				}
+				//====================================================== auto AI end
+				
+                app.form.amountInString = app.form.amount.toFixed(2)
+				
+                if(app.form.___id && isUpdate) app.transaction.data(app.form.___id).update(JSON.parse(JSON.stringify(app.form)))
+                else app.form.___id = app.transaction.data.insert(JSON.parse(JSON.stringify(app.form))).first().___id
+				
                 app.transaction.forceUpdate++
-                app.page = 'transactions'
+								
+				if(isRetain) {
+					app.form.amount = ''
+					app.form.description = ''
+				}
+				else app.page = 'transactions'
             },
             remove: function() {
                 app.transaction.data(app.form.___id).remove()
@@ -115,7 +133,8 @@ app = new Vue({
                 app.form.account = item[0]
                 app.form.category = item[1]
                 app.form.description = item[2]
-                app.form.transferto = item[3]
+                app.form.negative = item[3]
+                app.form.transferto = item[4]
             }
         }
     },
@@ -140,13 +159,12 @@ app = new Vue({
             return moment(this.form.date).format('DD/MM/YYYY')
         },
         filteredTransactions: function() {
+			this.transaction.filter = this.transaction.filter.replace(/,/gi, '')
             this.transaction.forceUpdate
 
-
             //=========================================================== maintenance mode
-            // return this.transaction.data({description:"Groceries", category:{'!is':'Food'}}).get()          // find groceries that's not food
-            // return this.transaction.data({description:{right:' '}}).get()                                   // find all description end with space
-
+            // return this.transaction.data({description:"Groceries", category:{'!is':'Food'}}).get()			// find groceries that's not food
+            // return this.transaction.data({description:{right:' '}}).get()                                	// find all description end with space
 
             //=========================================================== actual mode
             var match = this.transaction.data(
@@ -172,7 +190,7 @@ app = new Vue({
                     {description:{likenocase:this.form.description}}
                 )
                 .order('date desc')
-                .distinct('account', 'category', 'description', 'transferto') //even change the order, it will always return in alphabetical order (a > d > t)
+                .distinct('account', 'category', 'description', 'negative', 'transferto') //even change the order, it will always return in alphabetical order (a > d > t)
     
                 return match.slice(0, 5)
             }

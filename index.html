@@ -90,8 +90,9 @@
 							<label class="form-label">Date</label>
 						</div>
 						<div class="col-8 input-group p-relative">
-							<input class="form-input rounded-right" type="datetime-local" v-model="form.date">
-							<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:0"><i class="form-icon icon-calendar"></i></span>
+							<input class="form-input rounded-right" type="datetime-local" v-model="form.date" style="width:calc(100% - 34px); flex:none;">
+							<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:34px"><i class="form-icon icon-calendar"></i></span>
+							<span class="input-group-addon bg-primary p-absolute z-1" style="right:0" @click="form.date=moment().format('YYYY-MM-DDTHH:mm');"><i class="form-icon icon-disc"></i></span>
 						</div>
 						<!-- <div class="col-8 input-group p-relative">
 							<input class="form-input no-events" type="text" :value="formDateFormatted">
@@ -101,16 +102,17 @@
 					</div>
 				</form>
 				<div class="btn-group btn-group-block column">
-					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.remove()"><i class="icon-trash"></i> Delete</button>
-					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.save(1)"><i class="icon-copy"></i> Save As</button>
-					<button class="btn btn-primary" @click="transaction.save()"><i class="icon-save"></i> {{page=='new'?'Add':'Update'}}</button>
+					<button class="btn btn-primary" @click="transaction.save(false, true)"><i class="icon-plus-circle"></i> <i class="icon-plus-circle"></i></button>
+					<button class="btn btn-primary" @click="transaction.save(false)"><i class="icon-plus-circle"></i></button>
+					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.save(true)"><i class="icon-save"></i></button>
+					<button v-if="page=='edit'" class="btn btn-primary" @click="transaction.remove()"><i class="icon-trash"></i></button>
 				</div>
 			</template>
 
 			<template v-else-if="page=='transactions'">
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
-						<input class="form-input" type="text" v-model.lazy="transaction.filter" placeholder="search" @input="transaction.filter=transaction.filter.replace(/,/gi, '')">
+						<input class="form-input" type="text" v-model="transaction.filter" placeholder="search">
 					</section>
 				</header>
 				<table class="table" v-if="filteredTransactions.length">
