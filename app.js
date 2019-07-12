@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190620',
+		version: 'v20190712',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -89,7 +89,6 @@ app = new Vue({
             save: function(isUpdate, isRetain) {
                 app.form.description = app.form.description.trim()
                 app.form.amount = eval(app.form.amount)
-                if(app.form.negative) app.form.amount *= -1
 
 				//====================================================== auto AI start
 				if(!app.form.amount && !app.form.description) {
@@ -106,6 +105,8 @@ app = new Vue({
 					app.form.negative = false
 				}
 				//====================================================== auto AI end
+				
+				if(app.form.negative) app.form.amount *= -1
 				
                 app.form.amountInString = app.form.amount.toFixed(2)
 				
@@ -192,6 +193,7 @@ app = new Vue({
                 .order('date desc')
                 .distinct('account', 'category', 'description', 'negative', 'transferto') //even change the order, it will always return in alphabetical order (a > d > t)
     
+				console.log(match.slice(0, 5))
                 return match.slice(0, 5)
             }
         },
@@ -208,6 +210,7 @@ app = new Vue({
                     app.transaction.data({account:account, transferto:{'!is':''}}).sum('amount') +
                     app.transaction.data({transferto:account}).sum('amount')
 				
+				if(app.modalDifferent.actual[account]) app.modalDifferent.actual[account] = app.modalDifferent.actual[account].replace(/,/gi, '')
 				result.different[account] = (result.balance[account] - (Number(app.modalDifferent.actual[account]) || 0)).toFixed(2)
 
                 if(account!='THJ') result.balance.Overall += result.balance[account]
@@ -226,6 +229,18 @@ app = new Vue({
         window.onscroll = function() {
             if(app.page=='transactions') app.transaction.scrollY = window.scrollY
         }
+		
+		//====================================================== data massage exercise
+		
+		// app.transaction.data().each(function (record, recordnumber) {
+			// record.amountInString = record.amount.toFixed(2)
+		// })
+		
+		// app.transaction.data().each(function (record, recordnumber) {
+			// if(record.negative==undefined) {
+				// app.transaction.data(record.___id).update({negative:false})
+			// }
+		// })
     },
     watch: {
         'transaction.filter': function(newVal) {
