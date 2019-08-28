@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190712',
+		version: 'v20190828',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -9,6 +9,11 @@ app = new Vue({
             backup: function() {
                 app.cloud.error = null
                 var start = moment()
+
+                app.dbx.filesCopyV2({
+                    from_path: '/transactions.json',
+                    to_path: '/transactions '+start.format('YYYYMMDD HHmm')+'.json'
+                })
                 
                 app.dbx.filesUpload({path:'/transactions.json', contents:localStorage.getItem('taffy_SINGGIT'), mode:'overwrite', mute:true})
                     .then(function(response) {
@@ -240,7 +245,9 @@ app = new Vue({
 			// if(record.negative==undefined) {
 				// app.transaction.data(record.___id).update({negative:false})
 			// }
-		// })
+        // })
+        
+        // app.transaction.data({category:'Fixed', date:{gt:'2019-07-00'}}).order('date desc').get().map(function(item){ return item.date + " " + item.description + ' ' + item.amount })
     },
     watch: {
         'transaction.filter': function(newVal) {
