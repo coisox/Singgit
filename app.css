@@ -2,7 +2,10 @@
 [type="datetime-local"]::-webkit-calendar-picker-indicator {
     opacity: 0;
 }
-[type="datetime-local"]::-webkit-clear-button {
+[type="datetime-local"]::-webkit-clear-button,
+[type="time"]::-webkit-clear-button,
+[type="date"]::-webkit-clear-button
+{
 	display: none;
 }
 #app {
@@ -70,9 +73,9 @@
 	color: #7B68A8;
 }
 .btn.btn-primary {
-    background: #7B68A8;
-    border-color: #7B68A8;
-    color: #fff;
+    background: #7B68A8 !important;
+    border-color: #7B68A8 !important;
+    color: #fff !important;
 }
 .form-input, .form-select, .btn {
 	border-radius: .25rem;
@@ -161,4 +164,10 @@
 }
 .col-8 {
     width: 72%;
+}
+.icon-plus-circle:before,
+.icon-disc:before
+{
+    transform: translateY(1px);
+    display: inline-block;
 }

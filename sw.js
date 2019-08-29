@@ -2,31 +2,31 @@ importScripts('lib/workbox.4.0.0/workbox-sw.js');
 workbox.precaching.precacheAndRoute([
   {
     "url": "app.css",
-    "revision": "a7aa2433c26607ae018f40144c437f14"
+    "revision": "a7588ca939632a92b69eec9c1963e3c8"
   },
   {
     "url": "app.js",
-    "revision": "13fd0e50e6d3a60cdbf0b48966ed494a"
+    "revision": "5e32492b95bd38f6b962bb9b67293fa2"
   },
   {
     "url": "font/fonts/icomoon.svg",
-    "revision": "3ece51fc6b1967b8d86b32e98de3b474"
+    "revision": "5551c2ebe30d93c7d158679a2c5a01e0"
   },
   {
     "url": "font/fonts/icomoon.ttf",
-    "revision": "1bcdfba85f192014d6b1eabbf54cedca"
+    "revision": "ad2bb15d413f63159d5704353bba9f34"
   },
   {
     "url": "font/fonts/icomoon.woff",
-    "revision": "51d73c78cde2f6bb933b18f37569ae9d"
+    "revision": "12bdc45a4cbf7a2ae83e497c0463b086"
   },
   {
     "url": "font/selection.json",
-    "revision": "e7e99d19380b4f9e7080e30b133b064a"
+    "revision": "8d817555ae9896d983b23c9db27f3d77"
   },
   {
     "url": "font/style.css",
-    "revision": "0009ce3a063e2662e781d444d77831c6"
+    "revision": "e8626ff64d9a79432c7e51980ca97a18"
   },
   {
     "url": "img/favicon.png",
@@ -42,7 +42,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "7c657eb321e8f1b602486da5a2467f60"
+    "revision": "89a74bf39defc1bc7c1a340c28e49717"
   },
   {
     "url": "lib/dropbox/Dropbox-sdk.min.js",

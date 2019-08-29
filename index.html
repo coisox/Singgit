@@ -59,17 +59,11 @@
 						<div class="col-4">
 							<label class="form-label">Account</label>
 						</div>
-						<div class="col-8">
+						<div class="col-8 d-flex">
 							<select class="form-select" v-model="form.account">
 								<option v-for="item in lov.account" :value="item">{{item}}</option>,
 							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-4">
-							<label class="form-label">Transfer To</label>
-						</div>
-						<div class="col-8">
+							<i class="icon-arrow-right p-2"></i>
 							<select class="form-select" v-model="form.transferto">
 								<option v-for="item in lov.account" :value="item">{{item}}</option>,
 							</select>
@@ -92,7 +86,7 @@
 						<div class="col-8 input-group p-relative">
 							<input class="form-input rounded-right" type="datetime-local" v-model="form.date" style="width:calc(100% - 34px); flex:none;">
 							<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:34px"><i class="form-icon icon-calendar"></i></span>
-							<span class="input-group-addon bg-primary p-absolute z-1" style="right:0" @click="form.date=moment().format('YYYY-MM-DDTHH:mm');"><i class="form-icon icon-disc"></i></span>
+							<span class="input-group-addon bg-primary p-absolute z-1" style="right:0" @click="form.date=moment().format('YYYY-MM-DDTHH:mm')"><i class="form-icon icon-disc"></i></span>
 						</div>
 						<!-- <div class="col-8 input-group p-relative">
 							<input class="form-input no-events" type="text" :value="formDateFormatted">
@@ -112,7 +106,10 @@
 			<template v-else-if="page=='transactions'">
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
-						<input class="form-input" type="text" v-model="transaction.filter" placeholder="search">
+						<div class="input-group w-100">
+							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="search">
+							<span class="input-group-addon bg-negative" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
+						</div>
 					</section>
 				</header>
 				<table class="table" v-if="filteredTransactions.length">
@@ -127,7 +124,7 @@
 							</div>
 							<div v-if="item.description!='Reconcile'">{{item.category+': '+item.account+(item.transferto?' ➔ '+item.transferto:'')}}</div>
 						</td>
-						<td width="1" class="text-right pl-0" :class="(item.amount<0 || (item.category=='Transfer' && item.transferto.toUpperCase().indexOf(transaction.filter.toUpperCase())<0))?'text-negative':'text-positive'"><template v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</template><div v-else class="reconcile">✓</div></td>
+						<td width="1" class="text-right pl-0" :class="item.classes"><template v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</template><div v-else class="reconcile">✓</div></td>
 					</tr>
 					<tr v-if="transaction.more" @click="transaction.limit+=transaction.pageSize">
 						<td colspan="3" class="text-center">more</td>
@@ -204,6 +201,52 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="modal" :class="{'active':modalFilter.show}" id="modalFilter">
+				<a class="modal-overlay" @click="modalFilter.show=false"></a>
+				<div class="modal-container pt-3 pb-3">
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4">Search</div>
+						<div class="column col-8"><input class="form-input" type="text" v-model="transaction.filter.search"></div>
+					</div>
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4">Category</div>
+						<div class="column col-8">
+							<select class="form-select" v-model="transaction.filter.category">
+								<option value=""></option>,
+								<option v-for="(item, index) in lov.category" :value="item">{{item}}</option>,
+							</select>
+						</div>
+					</div>
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4">From</div>
+						<div class="column col-8">
+							<div class="input-group p-relative">
+								<input class="form-input rounded-right" type="date" v-model="transaction.filter.dateFrom" style="width:calc(100% - 34px); flex:none;">
+								<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:34px"><i class="form-icon icon-calendar"></i></span>
+								<span class="input-group-addon bg-primary p-absolute z-1" style="right:0" @click="transaction.filter.dateFrom=null"><i class="form-icon icon-trash" style="translate:rotate(45deg)"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4">To</div>
+						<div class="column col-8">
+							<div class="input-group p-relative">
+								<input class="form-input rounded-right" type="date" v-model="transaction.filter.dateTo" style="width:calc(100% - 34px); flex:none;">
+								<span class="input-group-addon bg-primary no-events p-absolute z-1" style="right:34px"><i class="form-icon icon-calendar"></i></span>
+								<span class="input-group-addon bg-primary p-absolute z-1" style="right:0" @click="transaction.filter.dateTo=null"><i class="form-icon icon-trash" style="translate:rotate(45deg)"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4"></div>
+						<div class="column col-8">
+							<button class="btn btn-primary w-100" @click="transaction.filter.search = transaction.filter.category = ''; transaction.filter.dateFrom = transaction.filter.dateTo = null;"><i class="icon-trash"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 		</div>
 
 		<script>

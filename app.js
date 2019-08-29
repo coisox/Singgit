@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190828',
+		version: 'v20190829',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -77,9 +77,17 @@ app = new Vue({
 			show: false,
 			actual: [],
 		},
+		modalFilter: {
+			show: false,
+		},
         transaction: {
             data: null,
-            filter: '',
+            filter: {
+				search: '',
+				category: '',
+				dateFrom: null,
+				dateTo: null
+			},
             limit: 50,
             pageSize: 50,
             more: false,
@@ -158,34 +166,54 @@ app = new Vue({
         },
         byValue: function(val) {
             return JSON.parse(JSON.stringify(val))
-        }
+        },
     },
     computed: {
         formDateFormatted: function() {
             return moment(this.form.date).format('DD/MM/YYYY')
         },
         filteredTransactions: function() {
-			this.transaction.filter = this.transaction.filter.replace(/,/gi, '')
+			this.transaction.filter.search = this.transaction.filter.search.replace(/,/gi, '')
             this.transaction.forceUpdate
-
-            //=========================================================== maintenance mode
-            // return this.transaction.data({description:"Groceries", category:{'!is':'Food'}}).get()			// find groceries that's not food
-            // return this.transaction.data({description:{right:' '}}).get()                                	// find all description end with space
 
             //=========================================================== actual mode
             var match = this.transaction.data(
                 [
-                    {amountInString:{likenocase:this.transaction.filter}},
-                    {description:   {likenocase:this.transaction.filter}},
-                    {account:       {likenocase:this.transaction.filter}},
-                    {category:      {likenocase:this.transaction.filter}},
-                    {transferto:    {likenocase:this.transaction.filter}},
-                ]
+                    {amountInString:	{'likenocase': this.transaction.filter.search}},
+                    {description:   	{'likenocase': this.transaction.filter.search}},
+                    {account:       	{'likenocase': this.transaction.filter.search}},
+                    {category:      	{'likenocase': this.transaction.filter.search}},
+                    {transferto:    	{'likenocase': this.transaction.filter.search}},
+                ],
+				{category:		{'likenocase':	this.transaction.filter.category}},
+				{date:			{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
+				{date:			{'<=':			this.transaction.filter.dateTo || '5000-00-00'}},
             ).order('date desc')
-            
+
             this.transaction.more = match.count() > this.transaction.limit
 
-            return match.limit(this.transaction.limit).get()
+            match = match.limit(this.transaction.limit).get()
+									
+			for(a=0; a<match.length; a++) {
+				//========================================= reset temporary properties
+				delete match[a].redundant
+				delete match[a].classes				
+			}
+			
+			for(a=0; a<match.length; a++) {
+				//========================================= highlight redundant
+				for(b=a+1; b<match.length; b++) {
+					if(match[a].date==match[b].date && match[a].amountInString==match[b].amountInString) {
+						match[a].redundant = true
+						match[b].redundant = true
+					}
+				}
+				
+				//========================================= assign classes
+				match[a].classes = (match[a].negative?'text-negative':'text-positive')+(match[a].redundant?' bg-warning':'')
+			}
+			
+			return match
         },
         autoCompleteItems: function() {
             if(this.transaction.data==null) {
@@ -246,11 +274,24 @@ app = new Vue({
 				// app.transaction.data(record.___id).update({negative:false})
 			// }
         // })
+		
+		// app.transaction.data({description:"Groceries", category:{'!is':'Food'}}).get()			// find groceries that's not food
+		
+		// app.transaction.data({description:{right:' '}}).get()                                	// find all description end with space
         
         // app.transaction.data({category:'Fixed', date:{gt:'2019-07-00'}}).order('date desc').get().map(function(item){ return item.date + " " + item.description + ' ' + item.amount })
     },
     watch: {
-        'transaction.filter': function(newVal) {
+        'transaction.filter.search': function(newVal) {
+            this.transaction.limit = this.transaction.pageSize
+        },
+		'transaction.filter.category': function(newVal) {
+            this.transaction.limit = this.transaction.pageSize
+        },
+		'transaction.filter.dateFrom': function(newVal) {
+            this.transaction.limit = this.transaction.pageSize
+        },
+		'transaction.filter.dateTo': function(newVal) {
             this.transaction.limit = this.transaction.pageSize
         },
         page: function(newVal) {
