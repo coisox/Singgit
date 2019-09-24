@@ -6,19 +6,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "app.js",
-    "revision": "5e32492b95bd38f6b962bb9b67293fa2"
-  },
-  {
-    "url": "font/fonts/icomoon.svg",
-    "revision": "5551c2ebe30d93c7d158679a2c5a01e0"
+    "revision": "fab7853fffd5896969bff7a9192e5200"
   },
   {
     "url": "font/fonts/icomoon.ttf",
     "revision": "ad2bb15d413f63159d5704353bba9f34"
-  },
-  {
-    "url": "font/fonts/icomoon.woff",
-    "revision": "12bdc45a4cbf7a2ae83e497c0463b086"
   },
   {
     "url": "font/selection.json",
@@ -26,7 +18,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "font/style.css",
-    "revision": "e8626ff64d9a79432c7e51980ca97a18"
+    "revision": "bc6a9c6c3ba1fc58732bf5656c871b34"
   },
   {
     "url": "img/favicon.png",
