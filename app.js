@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190925C',
+		version: 'v20190925D',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -195,7 +195,7 @@ app = new Vue({
                 ],
 				{category:		{'likenocase':	this.transaction.filter.category}},
 				{date:			{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
-				{date:			{'<=':			this.transaction.filter.dateTo || '5000-00-00'}},
+				{date:			{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
             ).order('date desc')
 
             this.transaction.more = match.count() > this.transaction.limit
