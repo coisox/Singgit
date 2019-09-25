@@ -61,11 +61,12 @@
 						</div>
 						<div class="col-8 d-flex">
 							<select class="form-select" v-model="form.account">
-								<option v-for="item in lov.account" :value="item">{{item}}</option>,
+								<option v-for="item in lov.account" :value="item">{{item}}</option>
 							</select>
 							<i class="icon-arrow-right p-2"></i>
 							<select class="form-select" v-model="form.transferto">
-								<option v-for="item in lov.account" :value="item">{{item}}</option>,
+								<option value=""></option>
+								<option v-for="item in lov.account" :value="item">{{item}}</option>
 							</select>
 						</div>
 					</div>
@@ -75,6 +76,7 @@
 						</div>
 						<div class="col-8">
 							<select class="form-select" v-model="form.category">
+									<option value=""></option>
 								<option v-for="(item, index) in lov.category" :value="item">{{item}}</option>,
 							</select>
 						</div>
@@ -133,19 +135,21 @@
 			</template>
 
 			<template v-else-if="page=='statistic'">
+
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
 						Statistic
 					</section>
 					<section class="navbar-section">
 						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-left mr-2"></i></label>
-						{{moment(statisticDate).format('MMM YYYY')}}
-						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-right ml-2"></i></label>
+						<span class="d-inline-block text-right" style="width:70px">{{moment(statisticDate).format('MMM YYYY')}}</span>
+						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(1, 'months')"><i class="icon-arrow-right ml-2"></i></label>
 					</section>
 				</header>
+
 				<table class="table" @click="modalDifferent.show=true">
 					<tr>
-						<td class="bg-gray">Overall</td>
+						<td class="bg-gray">Current Balance</td>
 						<td class="bg-gray text-right" :class="statistic.balance.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance.Overall)}}</td>
 					</tr>
 					<tr v-for="item in lov.account">
@@ -156,6 +160,20 @@
 						</td>
 					</tr>
 				</table>
+
+				<table class="table mt-2">
+					<tr>
+						<td class="bg-gray">{{moment(statisticDate).format('MMM YYYY')}} Performance</td>
+						<td class="bg-gray text-right" :class="statistic.expenses.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.expenses.Overall)}}</td>
+					</tr>
+					<tr v-for="item in lov.category" v-if="item!='Transfer'" @click="filterByStatistic(item)">
+						<td>{{item}}</td>
+						<td class="text-right" :class="statistic.expenses[item]<0?'text-negative':'text-positive'">
+							{{toCurrency(statistic.expenses[item])}}
+						</td>
+					</tr>
+				</table>
+
 			</template>
 
 			<template v-else-if="page=='cloud'">

@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190925',
+		version: 'v20190925B',
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
@@ -71,7 +71,7 @@ app = new Vue({
         form_reset: {},
         lov: {
             account: ['Wallet', 'Credit Card', 'BIS', 'MBB', 'RHB', 'THJ', 'Loan'],
-            category: ['Other', 'Food', 'Big', 'Transport', 'Service', 'Fixed', 'Asjustment', 'Income', 'Transfer', 'Exclude Stat'],
+            category: ['Income', 'Other', 'Food', 'Big', 'Transport', 'Service', 'Fixed', 'Transfer', 'Property'],
         },
 		modalDifferent: {
 			show: false,
@@ -107,7 +107,7 @@ app = new Vue({
 				if(!app.form.amount && !app.form.description) {
 					app.form.amount = 0
 					app.form.description = 'Reconcile'
-					app.form.category = 'Food'
+					app.form.category = ''
 					app.form.account = 'Wallet'
 				}
 				if(app.form.amount && !app.form.description) {
@@ -167,6 +167,14 @@ app = new Vue({
         byValue: function(val) {
             return JSON.parse(JSON.stringify(val))
         },
+        filterByStatistic: function(item) {
+            this.transaction.filter.search = ''
+            this.transaction.filter.category = item
+            this.transaction.filter.dateFrom = moment(this.statisticDate).startOf('month').format('YYYY-MM-DD')
+            this.transaction.filter.dateTo = moment(this.statisticDate).endOf('month').format('YYYY-MM-DD')
+
+            this.page = 'transactions'
+        }
     },
     computed: {
         formDateFormatted: function() {
@@ -234,8 +242,12 @@ app = new Vue({
             var start = moment()
 
             this.transaction.forceUpdate
-
-            var result = { balance:{ Overall:0 }, different:{} }
+            
+            var result = {
+                balance: { Overall:0 },
+                different: {},
+                expenses: { Overall:0 },
+            }
 
             this.lov.account.forEach(function(account){
                 result.balance[account] =
@@ -249,10 +261,22 @@ app = new Vue({
                 if(account!='THJ') result.balance.Overall += result.balance[account]
             })
 
-            console.log('Statistic timelapse in milliseconds: ', moment().diff(start))
+            this.lov.category.forEach(function(category){
+                if(category!='Transfer') {
+                    result.expenses[category] = app.transaction.data(
+                        {category: category},
+                        {date: {'>=': moment(app.statisticDate).startOf('month').format('YYYY-MM-DD')}},
+                        {date: {'<=': moment(app.statisticDate).endOf('month').format('YYYY-MM-DD')}}
+                    ).sum('amount')
+    
+                    result.expenses.Overall += result.expenses[category]
+                }
+            })
+
+            console.log('Statistic timelapse in milliseconds: ', moment().diff(start), moment(this.statisticDate).format('YYYY-MM-01'))
 
             return result
-        }
+        },
     },
     mounted: function() {
         this.transaction.data = TAFFY()
