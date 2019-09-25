@@ -114,7 +114,7 @@
 						</div>
 					</section>
 				</header>
-				<table class="table" v-if="filteredTransactions.length">
+				<table class="table mb-2" v-if="filteredTransactions.length">
 					<tr v-for="item in filteredTransactions" @click="transaction.edit(item)">
 						<td width="1" class="text-primary text-bold">{{moment(item.date).format('DDMM')}}<br>{{moment(item.date).format('YYYY')}}</td>
 						<td class="pl-0">
@@ -161,7 +161,7 @@
 					</tr>
 				</table>
 
-				<table class="table mt-2">
+				<table class="table mt-2 mb-2">
 					<tr>
 						<td class="bg-gray">{{moment(statisticDate).format('MMM YYYY')}} Performance</td>
 						<td class="bg-gray text-right" :class="statistic.expenses.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.expenses.Overall)}}</td>
