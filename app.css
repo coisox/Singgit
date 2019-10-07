@@ -68,6 +68,9 @@
     overflow-x: hidden;
     width: 100%;
 }
+.btn {
+    box-shadow: none !important;
+}
 .btn:not(.btn-primary) {
     border: .05rem solid #7B68A8;
 	color: #7B68A8;
@@ -170,4 +173,10 @@
 {
     transform: translateY(1px);
     display: inline-block;
+}
+progress.progress {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    background: #eef0f3 linear-gradient(to right,#E91D62 30%,#EEF0F3 30%) top left/150% 150% no-repeat !important;
 }

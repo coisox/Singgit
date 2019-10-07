@@ -13,6 +13,8 @@
 
 	<body>
 		<div id="app">
+			<progress class="progress" max="100" :class="{'d-none': !progress}"></progress>
+
 			<template v-if="page=='new' || page=='edit'">
 				<header class="navbar bg-primary">
 					<section class="navbar-section text-capitalize">
@@ -197,8 +199,8 @@
 					<div v-if="cloud.error">{{cloud.error}}</div>
 				</form>
 				<div class="pt-5 btn-group btn-group-block column">
-					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0"><i class="icon-upload-cloud"></i> Push</button>
-					<button class="btn btn-primary" @click="cloud.overwrite()"><i class="icon-download-cloud"></i> Pull</button>
+					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0 || progress"><i class="icon-upload-cloud"></i> Push</button>
+					<button class="btn btn-primary" @click="cloud.overwrite()" :disabled="progress"><i class="icon-download-cloud"></i> Pull</button>
 					<!--<button class="btn btn-primary" @click="cloud.merge()"><i class="icon-git-merge"></i> Merge</button>-->
 				</div>
 			</template>

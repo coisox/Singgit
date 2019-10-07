@@ -1,12 +1,14 @@
 app = new Vue({
     el: '#app',
     data: {
-		version: 'v20190925D',
+        version: 'v20191007',
+        progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
             error: null,
             lastAction: JSON.parse(localStorage.getItem('SINGGIT_LastAction') || '{"time":"No action", "size":"No action", "type":"No action", "duration":"No action"}'),
             backup: function() {
+                app.progress = true
                 app.cloud.error = null
                 var start = moment()
 
@@ -22,12 +24,15 @@ app = new Vue({
                         app.cloud.lastAction.size = app.bytesToSize(response.size)
                         app.cloud.lastAction.duration = moment().diff(start)+' milliseconds'
                         localStorage.setItem('SINGGIT_LastAction', JSON.stringify(app.cloud.lastAction))
+                        
+                        app.progress = false
                     })
                     .catch(function(error) {
                         app.cloud.error = error
                     })
             },
             overwrite: function() {
+                app.progress = true
                 app.cloud.error = null
                 var start = moment()
 
@@ -43,8 +48,10 @@ app = new Vue({
                             localStorage.setItem('SINGGIT_LastAction', JSON.stringify(app.cloud.lastAction))
 
                             app.transaction.data().remove()
-                            app.transaction.data.merge(reader.result)
+                            app.transaction.data.insert(reader.result)
                             app.transaction.forceUpdate++
+
+                            app.progress = false
                         });
                         reader.readAsText(blob);
                     })

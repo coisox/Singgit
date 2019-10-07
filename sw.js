@@ -2,11 +2,11 @@ importScripts('lib/workbox.4.0.0/workbox-sw.js');
 workbox.precaching.precacheAndRoute([
   {
     "url": "app.css",
-    "revision": "a7588ca939632a92b69eec9c1963e3c8"
+    "revision": "e9ec42c107de1bd97a6954f86f6308cc"
   },
   {
     "url": "app.js",
-    "revision": "8007929e58aaf66969425896578ce137"
+    "revision": "b9773fe69565e2c770b18d783732ce04"
   },
   {
     "url": "font/fonts/icomoon.ttf",
@@ -34,7 +34,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "ff04555f9e6830d1646724a587bb98ce"
+    "revision": "26d30634a2ad8901bfb1900b4bc17890"
   },
   {
     "url": "lib/dropbox/Dropbox-sdk.min.js",
