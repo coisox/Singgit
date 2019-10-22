@@ -6,7 +6,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "app.js",
-    "revision": "b9773fe69565e2c770b18d783732ce04"
+    "revision": "396f6b794d92db72f54a716685eec337"
   },
   {
     "url": "font/fonts/icomoon.ttf",

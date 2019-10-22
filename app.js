@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20191007',
+        version: 'v20191022',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -194,7 +194,7 @@ app = new Vue({
             //=========================================================== actual mode
             var match = this.transaction.data(
                 [
-                    {amountInString:	{'likenocase': this.transaction.filter.search}},
+                    {amountInString:	{'likenocase': this.transaction.filter.search.replace(/RM|rm/,'')}},
                     {description:   	{'likenocase': this.transaction.filter.search}},
                     {account:       	{'likenocase': this.transaction.filter.search}},
                     {category:      	{'likenocase': this.transaction.filter.search}},
