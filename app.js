@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20191022',
+        version: 'v20191104',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -181,6 +181,9 @@ app = new Vue({
             this.transaction.filter.dateTo = moment(this.statisticDate).endOf('month').format('YYYY-MM-DD')
 
             this.page = 'transactions'
+        },
+        trimBoth: function(str, chars) {
+            return str.split(chars).filter(Boolean).join(chars)
         }
     },
     computed: {
@@ -191,18 +194,33 @@ app = new Vue({
 			this.transaction.filter.search = this.transaction.filter.search.replace(/,/gi, '')
             this.transaction.forceUpdate
 
+            var search = this.transaction.filter.search
+            var showHidden = search[0]=="!"
+            var exactMatch = search[0]=="'" && search[search.length-1]=="'"
+            if(showHidden) search = search.replace("!", "")
+            if(exactMatch) search = this.trimBoth(search, "'")
+
             //=========================================================== actual mode
             var match = this.transaction.data(
+                exactMatch?
                 [
-                    {amountInString:	{'likenocase': this.transaction.filter.search.replace(/RM|rm/,'')}},
-                    {description:   	{'likenocase': this.transaction.filter.search}},
-                    {account:       	{'likenocase': this.transaction.filter.search}},
-                    {category:      	{'likenocase': this.transaction.filter.search}},
-                    {transferto:    	{'likenocase': this.transaction.filter.search}},
+                    {amountInString:	{'isnocase': search.replace(/RM|rm/,'')}},
+                    {description:   	{'isnocase': search}},
+                    {account:       	{'isnocase': search}},
+                    {category:      	{'isnocase': search}},
+                    {transferto:    	{'isnocase': search}},
+                ]:
+                [
+                    {amountInString:	{'likenocase': search.replace(/RM|rm/,'')}},
+                    {description:   	{'likenocase': search}},
+                    {account:       	{'likenocase': search}},
+                    {category:      	{'likenocase': search}},
+                    {transferto:    	{'likenocase': search}},
                 ],
-				{category:		{'likenocase':	this.transaction.filter.category}},
-				{date:			{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
-				{date:			{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
+                {category:		{'likenocase':	this.transaction.filter.category}},
+                {date:			{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
+                {date:			{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
+                (showHidden?{description: {'left': '!'}}:{description: {'!left': '!'}}),
             ).order('date desc')
 
             this.transaction.more = match.count() > this.transaction.limit
