@@ -33,7 +33,7 @@
 							<input class="form-input" type="text" v-model="form.amount">
 						</div> -->
 						<div class="col-8 input-group">
-							<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/,/gi, '')">
+							<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/[^0-9.+-]/g, '')">
 							<span class="input-group-addon" :class="form.negative?'bg-negative':'bg-positive'" @click="form.negative=!form.negative"><i :class="form.negative?'icon-minus':'icon-plus'"></i></span>
 						</div>
 					</div>

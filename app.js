@@ -280,7 +280,7 @@ app = new Vue({
                     app.transaction.data({account:account, transferto:{'!is':''}}).sum('amount') +
                     app.transaction.data({transferto:account}).sum('amount')
 				
-				if(app.modalDifferent.actual[account]) app.modalDifferent.actual[account] = app.modalDifferent.actual[account].replace(/,/gi, '')
+				if(app.modalDifferent.actual[account]) app.modalDifferent.actual[account] = app.modalDifferent.actual[account].replace(/[^0-9.+-]/g, '')
 				result.different[account] = (result.balance[account] - (Number(app.modalDifferent.actual[account]) || 0)).toFixed(2)
 
                 if(account!='THJ') result.balance.Overall += result.balance[account]
