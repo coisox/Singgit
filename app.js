@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20191104',
+        version: 'v20191104B',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -49,11 +49,9 @@ app = new Vue({
 
                             app.transaction.data().remove()
                             app.transaction.data.insert(reader.result)
-                            app.transaction.forceUpdate++
-
-                            app.progress = false
-                        });
-                        reader.readAsText(blob);
+                            location.reload()
+                        })
+                        reader.readAsText(blob)
                     })
                     .catch(function(error) {
                         app.cloud.error = error
