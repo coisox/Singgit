@@ -6,19 +6,19 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "app.js",
-    "revision": "38c909ce51215835402c90d9def30558"
+    "revision": "67b025f363d149a2a3c5df6803dd97fb"
   },
   {
-    "url": "font/fonts/icomoon.ttf",
-    "revision": "ad2bb15d413f63159d5704353bba9f34"
+    "url": "font/fonts/icomoon.woff",
+    "revision": "87cb9d184f1c400f1876d76f55e20452"
   },
   {
     "url": "font/selection.json",
-    "revision": "8d817555ae9896d983b23c9db27f3d77"
+    "revision": "ca6fb2579a7d427a41d1ecffc0746799"
   },
   {
     "url": "font/style.css",
-    "revision": "bc6a9c6c3ba1fc58732bf5656c871b34"
+    "revision": "358ee30312f0730b5bb59c9931c741cf"
   },
   {
     "url": "img/favicon.png",
@@ -34,7 +34,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "efde633a293ac472a579b1ff277c9ea1"
+    "revision": "f7f65fdf53c4bc0f550aeb0816c40e6f"
   },
   {
     "url": "lib/dropbox/Dropbox-sdk.min.js",

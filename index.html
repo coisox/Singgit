@@ -128,7 +128,7 @@
 							</div>
 							<div v-if="item.description!='Reconcile'">{{item.category+': '+item.account+(item.transferto?' ➔ '+item.transferto:'')}}</div>
 						</td>
-						<td width="1" class="text-right pl-0" :class="item.classes"><template v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</template><div v-else class="reconcile">✓</div></td>
+						<td width="1" class="text-right pl-0" :class="item.classes"><template v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</template><div v-else class="reconcile"><i class="icon-check"></i></div></td>
 					</tr>
 					<tr v-if="transaction.more" @click="transaction.limit+=transaction.pageSize">
 						<td colspan="3" class="text-center">more</td>
