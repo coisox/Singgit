@@ -111,7 +111,7 @@
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
 						<div class="input-group w-100">
-							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="search">
+							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="wildcard or 'exact'">
 							<span class="input-group-addon bg-negative" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
 						</div>
 					</section>
@@ -227,7 +227,16 @@
 				<div class="modal-container pt-3 pb-3">
 					<div class="columns pt-1 pb-1">
 						<div class="column col-4">Search</div>
-						<div class="column col-8"><input class="form-input" type="text" v-model="transaction.filter.search"></div>
+						<div class="column col-8"><input class="form-input" type="text" v-model="transaction.filter.search" placeholder="wildcard or 'exact'"></div>
+					</div>
+					<div class="columns pt-1 pb-1">
+						<div class="column col-4">Account</div>
+						<div class="column col-8">
+							<select class="form-select" v-model="transaction.filter.account">
+								<option value=""></option>,
+								<option v-for="(item, index) in lov.account" :value="item">{{item}}</option>,
+							</select>
+						</div>
 					</div>
 					<div class="columns pt-1 pb-1">
 						<div class="column col-4">Category</div>

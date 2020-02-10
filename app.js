@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200101',
+        version: 'v20200210',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -89,6 +89,7 @@ app = new Vue({
             data: null,
             filter: {
 				search: '',
+				account: '',
 				category: '',
 				dateFrom: null,
 				dateTo: null
@@ -174,6 +175,7 @@ app = new Vue({
         },
         filterByStatistic: function(item) {
             this.transaction.filter.search = ''
+            this.transaction.filter.account = ''
             this.transaction.filter.category = item
             this.transaction.filter.dateFrom = moment(this.statisticDate).startOf('month').format('YYYY-MM-DD')
             this.transaction.filter.dateTo = moment(this.statisticDate).endOf('month').format('YYYY-MM-DD')
@@ -199,25 +201,19 @@ app = new Vue({
             if(exactMatch) search = this.trimBoth(search, "'")
 
             //=========================================================== actual mode
+			var typeMatch = exactMatch?'isnocase':'likenocase'
             var match = this.transaction.data(
-                exactMatch?
                 [
-                    {amountInString:	{'isnocase': search.replace(/RM|rm/,'')}},
-                    {description:   	{'isnocase': search}},
-                    {account:       	{'isnocase': search}},
-                    {category:      	{'isnocase': search}},
-                    {transferto:    	{'isnocase': search}},
-                ]:
-                [
-                    {amountInString:	{'likenocase': search.replace(/RM|rm/,'')}},
-                    {description:   	{'likenocase': search}},
-                    {account:       	{'likenocase': search}},
-                    {category:      	{'likenocase': search}},
-                    {transferto:    	{'likenocase': search}},
+                    {amountInString:	{[typeMatch]: search.replace(/RM|rm/,'')}},
+                    {description:   	{[typeMatch]: search}},
+                    {account:       	{[typeMatch]: search}},
+                    {category:      	{[typeMatch]: search}},
+                    {transferto:    	{[typeMatch]: search}},
                 ],
-                {category:		{'likenocase':	this.transaction.filter.category}},
-                {date:			{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
-                {date:			{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
+                {account:	{'likenocase':	this.transaction.filter.account}},
+                {category:	{'likenocase':	this.transaction.filter.category}},
+                {date:		{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
+                {date:		{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
                 (showHidden?{description: {'left': '!'}}:{description: {'!left': '!'}}),
             ).order('date desc')
 
@@ -330,6 +326,9 @@ app = new Vue({
     },
     watch: {
         'transaction.filter.search': function(newVal) {
+            this.transaction.limit = this.transaction.pageSize
+        },
+		'transaction.filter.account': function(newVal) {
             this.transaction.limit = this.transaction.pageSize
         },
 		'transaction.filter.category': function(newVal) {
