@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200211',
+        version: 'v20200211B',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -156,7 +156,7 @@ app = new Vue({
                 app.form.negative = item[3]
                 app.form.transferto = item[4]
             }
-        },
+        }
     },
     methods: {
         toCurrency: function(n) {
@@ -184,7 +184,7 @@ app = new Vue({
         },
         trimBoth: function(str, chars) {
             return str.split(chars).filter(Boolean).join(chars)
-        },
+        }
     },
     computed: {
         formDateFormatted: function() {
@@ -203,7 +203,8 @@ app = new Vue({
             //=========================================================== actual mode
 			var key1 = exactMatch?'isnocase':'likenocase'
 			var key2 = showHidden?'left':'!left'
-            match = TAFFY(this.transaction.data(
+			var latestReconcileID = this.transaction.data({description: {'is': 'Reconcile'}}).order('date desc').get()[0].___id
+            var match = this.transaction.data(
                 [
                     {amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
                     {description:   	{[key1]: search}},
@@ -216,16 +217,15 @@ app = new Vue({
                 {date: {'>=': this.transaction.filter.dateFrom || '2000-00-00'}},
                 {date: {'<=': this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
                 {description: {[key2]: '!'}},
-				{description: {'!is':'Reconcile'}}
-            ).get())
-			
-			//============================================= reconcile start
-			match.insert(this.transaction.data({description: {'is': 'Reconcile'}}).order('date desc').get()[0])
-			match.sort('date desc')
+				[
+					{description: {'!is':'Reconcile'}},
+					{___id: {'==':latestReconcileID}}
+				]
+            ).order('date desc')
 			
 			//============================================= limit data
-            this.transaction.more = match().count() > this.transaction.limit
-            match = match().limit(this.transaction.limit).get()
+            this.transaction.more = match.count() > this.transaction.limit
+            match = match.limit(this.transaction.limit).get()
 									
 			//============================================= reset temporary properties
 			for(a=0; a<match.length; a++) {
