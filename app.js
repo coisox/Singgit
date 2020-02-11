@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200210',
+        version: 'v20200211',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -156,7 +156,7 @@ app = new Vue({
                 app.form.negative = item[3]
                 app.form.transferto = item[4]
             }
-        }
+        },
     },
     methods: {
         toCurrency: function(n) {
@@ -184,7 +184,7 @@ app = new Vue({
         },
         trimBoth: function(str, chars) {
             return str.split(chars).filter(Boolean).join(chars)
-        }
+        },
     },
     computed: {
         formDateFormatted: function() {
@@ -201,28 +201,34 @@ app = new Vue({
             if(exactMatch) search = this.trimBoth(search, "'")
 
             //=========================================================== actual mode
-			var typeMatch = exactMatch?'isnocase':'likenocase'
-            var match = this.transaction.data(
+			var key1 = exactMatch?'isnocase':'likenocase'
+			var key2 = showHidden?'left':'!left'
+            match = TAFFY(this.transaction.data(
                 [
-                    {amountInString:	{[typeMatch]: search.replace(/RM|rm/,'')}},
-                    {description:   	{[typeMatch]: search}},
-                    {account:       	{[typeMatch]: search}},
-                    {category:      	{[typeMatch]: search}},
-                    {transferto:    	{[typeMatch]: search}},
+                    {amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
+                    {description:   	{[key1]: search}},
+                    {account:       	{[key1]: search}},
+                    {category:      	{[key1]: search}},
+                    {transferto:    	{[key1]: search}}
                 ],
-                {account:	{'likenocase':	this.transaction.filter.account}},
-                {category:	{'likenocase':	this.transaction.filter.category}},
-                {date:		{'>=':			this.transaction.filter.dateFrom || '2000-00-00'}},
-                {date:		{'<=':			this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
-                (showHidden?{description: {'left': '!'}}:{description: {'!left': '!'}}),
-            ).order('date desc')
-
-            this.transaction.more = match.count() > this.transaction.limit
-
-            match = match.limit(this.transaction.limit).get()
+                {account: {'likenocase': this.transaction.filter.account}},
+				{category: {'likenocase': this.transaction.filter.category}},
+                {date: {'>=': this.transaction.filter.dateFrom || '2000-00-00'}},
+                {date: {'<=': this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
+                {description: {[key2]: '!'}},
+				{description: {'!is':'Reconcile'}}
+            ).get())
+			
+			//============================================= reconcile start
+			match.insert(this.transaction.data({description: {'is': 'Reconcile'}}).order('date desc').get()[0])
+			match.sort('date desc')
+			
+			//============================================= limit data
+            this.transaction.more = match().count() > this.transaction.limit
+            match = match().limit(this.transaction.limit).get()
 									
+			//============================================= reset temporary properties
 			for(a=0; a<match.length; a++) {
-				//========================================= reset temporary properties
 				delete match[a].redundant
 				delete match[a].classes				
 			}
@@ -323,6 +329,8 @@ app = new Vue({
 		// app.transaction.data({description:{right:' '}}).get()                                	// find all description end with space
         
         // app.transaction.data({category:'Fixed', date:{gt:'2019-07-00'}}).order('date desc').get().map(function(item){ return item.date + " " + item.description + ' ' + item.amount })
+		
+		// console.log(JSON.stringify(app.transaction.data([{'account': {'is': 'Loan'}}, {'transferto': {'is': 'Loan'}}]).order('date desc').get().map(function(item){ return {amount:item.amount, description:item.description, account:item.account+' > '+item.transferto} })))
     },
     watch: {
         'transaction.filter.search': function(newVal) {

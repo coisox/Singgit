@@ -51,7 +51,8 @@
 										</div>
 										<div class="invi no-events">x</div>
 									</div>
-									<div>{{item[1]+': '+item[0]+(item[4]?' ➔ '+item[4]:'')}}</div>
+									<div v-if="item[4]">{{item[1]}}: {{item[0]}}<i class="icon-arrow-right"></i>{{item[4]}}</div>
+									<div v-else>{{item[1]}}: {{item[0]}}</div>
 									<div class="divider" v-if="index!=4"></div>
 								</li>
 							</ul>
@@ -126,7 +127,8 @@
 								</div>
 								<div class="invi no-events">x</div>
 							</div>
-							<div v-if="item.description!='Reconcile'">{{item.category+': '+item.account+(item.transferto?' ➔ '+item.transferto:'')}}</div>
+							<div v-if="item.description!='Reconcile' && item.transferto">{{item.category}}: {{item.account}}<i class="icon-arrow-right"></i>{{item.transferto}}</div>
+							<div v-else-if="item.description!='Reconcile'">{{item.category}}: {{item.account}}</div>
 						</td>
 						<td width="1" class="text-right pl-0" :class="item.classes"><template v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</template><div v-else class="reconcile"><i class="icon-check"></i></div></td>
 					</tr>
@@ -270,7 +272,7 @@
 					<div class="columns pt-1 pb-1">
 						<div class="column col-4"></div>
 						<div class="column col-8">
-							<button class="btn btn-primary w-100" @click="transaction.filter.search = transaction.filter.category = ''; transaction.filter.dateFrom = transaction.filter.dateTo = null;"><i class="icon-trash"></i></button>
+							<button class="btn btn-primary w-100" @click="transaction.filter.search = transaction.filter.account = transaction.filter.category = ''; transaction.filter.dateFrom = transaction.filter.dateTo = null;"><i class="icon-trash"></i></button>
 						</div>
 					</div>
 				</div>
