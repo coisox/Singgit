@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200222',
+        version: 'v20200227',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -76,7 +76,7 @@ app = new Vue({
         form_reset: {},
         lov: {
             account: ['Wallet', 'Credit Card', 'BIS', 'MBB', 'RHB', 'THJ', 'Loan'],
-            category: ['Income', 'Other', 'Food', 'Big', 'Transport', 'Service', 'Fixed', 'Transfer', 'Property'],
+            category: ['Income', 'Other', 'Food', 'Rare', 'Transport', 'Service', 'Fixed', 'Transfer', 'Property'],
         },
 		modalDifferent: {
 			show: false,
