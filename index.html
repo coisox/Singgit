@@ -29,12 +29,12 @@
 						<div class="col-4">
 							<label class="form-label">Amount</label>
 						</div>
-						<div class="col-5 input-group">
-							<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/[^0-9.+-]/g, '')">
-							<span class="input-group-addon" :class="form.negative?'bg-negative':'bg-positive'" @click="form.negative=!form.negative"><i :class="form.negative?'icon-minus':'icon-plus'"></i></span>
-						</div>
-						<div class="col-3" style="margin-left:.4rem; width:calc(25% + .6rem);">
-							<input class="form-input" type="text" v-model="form.amountGroup" @input="form.amountGroup=form.amountGroup.replace(/[^0-9.+-]/g, '')">
+						<div class="col-8 d-flex">
+							<div class="input-group" style="width:60%;">
+								<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/[^0-9.+-]/g, '')">
+								<span class="input-group-addon" :class="form.negative?'bg-negative':'bg-positive'" @click="form.negative=!form.negative"><i :class="form.negative?'icon-minus':'icon-plus'"></i></span>
+							</div>
+							<input class="form-input" type="text" v-model="form.amountGroup" @input="form.amountGroup=form.amountGroup.replace(/[^0-9.+-]/g, '')" style="margin-left:.4rem; width:40%;">
 						</div>
 					</div>
 					<div class="form-group">
