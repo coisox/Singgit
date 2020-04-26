@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200326B',
+        version: 'v20200427',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -66,6 +66,7 @@ app = new Vue({
         form: {
             ___id: null,
             amount: null,
+            amountGroup: null,
             negative: true,
             description: '',
             account: 'Wallet',
@@ -191,6 +192,8 @@ app = new Vue({
             return moment(this.form.date).format('DD/MM/YYYY')
         },
         filteredTransactions: function() {
+			if(app.transaction.data().count()==0) return []
+			
 			this.transaction.filter.search = this.transaction.filter.search.replace(/,/gi, '')
             this.transaction.forceUpdate
 
@@ -207,6 +210,7 @@ app = new Vue({
             var match = this.transaction.data(
                 [
                     {amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
+                    {amountGroup:		{[key1]: search.replace(/RM|rm/,'')}},
                     {description:   	{[key1]: search}},
                     {account:       	{[key1]: search}},
                     {category:      	{[key1]: search}},
@@ -229,20 +233,37 @@ app = new Vue({
 			//============================================= limit data
             this.transaction.more = match.count() > this.transaction.limit
             match = match.limit(this.transaction.limit).get()
-									
-			//============================================= reset temporary properties
+			
+			//========================================= reset temporary properties
 			for(a=0; a<match.length; a++) {
 				delete match[a].redundant
-				delete match[a].classes				
+				delete match[a].classes
+				// delete match[a].groupId
+				// delete match[a].groupSum
+				// delete match[a].groupHeight			
 			}
 			
+			//============================================= grouping processing
 			for(a=0; a<match.length; a++) {
-				//========================================= highlight redundant
 				for(b=a+1; b<match.length; b++) {
+					
+					//===================================== highlight redundant
 					if(match[a].date==match[b].date && match[a].amountInString==match[b].amountInString) {
 						match[a].redundant = true
 						match[b].redundant = true
 					}
+
+					//===================================== group same transaction different category
+					// if(match[a].description.indexOf('#')>-1 && !match[a].groupSum && match[b].description.indexOf('#')>-1 && moment(match[a].date).diff(moment(match[b].date), 'minutes')<2) {
+						// match[a].groupId = match[b].groupId = match[a]['___id']
+						
+						// if(!match[a].groupSum) match[a].groupSum = match[a].amount + match[b].amount
+						// else match[a].groupSum += match[b].amount
+						// for(p=b; p>a; p--) match[p].groupSum = match[a].groupSum //update child groupSum = parent groupSum
+						
+						// if(!match[a].groupHeight) match[a].groupHeight = 65*2
+						// else match[a].groupHeight += 65
+					// }
 				}
 				
 				//========================================= assign classes

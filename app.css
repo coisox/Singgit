@@ -183,3 +183,22 @@ progress.progress {
     left: 0;
     background: #eef0f3 linear-gradient(to right,#E91D62 30%,#EEF0F3 30%) top left/150% 150% no-repeat !important;
 }
+
+.amount-group {
+	position: absolute;
+    top: 0;
+    right: 0;
+	background: #BEACE7;
+	color: white;
+    padding-right: 8px;
+    min-width: 60px;
+    font-size: .6rem;
+}
+.amount-group:after {
+	content: '';
+    border: 10px solid transparent;
+    position: absolute;
+    border-top: 18px solid #BEACE7;
+    top: 0;
+    left: -10px;
+}
