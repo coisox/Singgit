@@ -1,7 +1,7 @@
 app = new Vue({
     el: '#app',
     data: {
-        version: 'v20200427',
+        version: 'v20200428',
         progress: false,
         dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
         cloud: {
@@ -69,14 +69,14 @@ app = new Vue({
             amountGroup: null,
             negative: true,
             description: '',
-            account: 'Wallet',
             category: 'Other',
-            transferto: '',
+            accountFrom: 'Wallet',
+            accountTo: '',
             date: moment().format('YYYY-MM-DDTHH:mm'),
         },
         form_reset: {},
         lov: {
-            account: ['Wallet', 'Credit Card', 'BIS', 'MBB', 'RHB', 'Loan', 'THJ'],
+            accountFrom: ['Wallet', 'Credit Card', 'BIS', 'MBB', 'RHB', 'Loan', 'THJ'],
             category: ['Income', 'Other', 'Food', 'Rare', 'Transport', 'Service', 'Fixed', 'Transfer', 'Property'],
         },
 		modalDifferent: {
@@ -90,7 +90,7 @@ app = new Vue({
             data: null,
             filter: {
 				search: '',
-				account: '',
+				accountFrom: '',
 				category: '',
 				dateFrom: null,
 				dateTo: null
@@ -115,7 +115,7 @@ app = new Vue({
 					app.form.amount = 0
 					app.form.description = 'Reconcile'
 					app.form.category = ''
-					app.form.account = 'Wallet'
+					app.form.accountFrom = 'Wallet'
 				}
 				if(app.form.amount && !app.form.description) {
 					app.form.description = 'Food'
@@ -126,12 +126,17 @@ app = new Vue({
 				}
 				//====================================================== auto AI end
 				
+				
+				//====================================================== save amount in string for easier search
 				if(app.form.negative) app.form.amount *= -1
+				app.form.amount = app.form.amount.toFixed(2)
+				app.form.amountGroup = (app.form.amountGroup)?Number(app.form.amountGroup).toFixed(2):""
 				
-                app.form.amountInString = app.form.amount.toFixed(2)
 				
+				//====================================================== save into DB
                 if(app.form.___id && isUpdate) app.transaction.data(app.form.___id).update(JSON.parse(JSON.stringify(app.form)))
                 else app.form.___id = app.transaction.data.insert(JSON.parse(JSON.stringify(app.form))).first().___id
+				
 				
                 app.transaction.forceUpdate++
 								
@@ -151,11 +156,11 @@ app = new Vue({
         autoComplete: {
             show: false,
             select: function(item) {
-                app.form.account = item[0]
+                app.form.accountFrom = item[0]
                 app.form.category = item[1]
                 app.form.description = item[2]
                 app.form.negative = item[3]
-                app.form.transferto = item[4]
+                app.form.accountTo = item[4]
             }
         }
     },
@@ -176,7 +181,7 @@ app = new Vue({
         },
         filterByStatistic: function(item) {
             this.transaction.filter.search = ''
-            this.transaction.filter.account = ''
+            this.transaction.filter.accountFrom = ''
             this.transaction.filter.category = item
             this.transaction.filter.dateFrom = moment(this.statisticDate).startOf('month').format('YYYY-MM-DD')
             this.transaction.filter.dateTo = moment(this.statisticDate).endOf('month').format('YYYY-MM-DD')
@@ -209,16 +214,16 @@ app = new Vue({
 			var latestReconcileID = this.transaction.data({description: {'is': 'Reconcile'}}).order('date desc').get()[0].___id
             var match = this.transaction.data(
                 [
-                    {amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
+                    {amount:			{[key1]: search.replace(/RM|rm/,'')}},
                     {amountGroup:		{[key1]: search.replace(/RM|rm/,'')}},
                     {description:   	{[key1]: search}},
-                    {account:       	{[key1]: search}},
+                    {accountFrom:       	{[key1]: search}},
                     {category:      	{[key1]: search}},
-                    {transferto:    	{[key1]: search}}
+                    {accountTo:    	{[key1]: search}}
                 ],
                 [
-					{account: {'likenocase': this.transaction.filter.account}},
-					{transferto: {'likenocase': this.transaction.filter.account}}
+					{accountFrom: {'likenocase': this.transaction.filter.accountFrom}},
+					{accountTo: {'likenocase': this.transaction.filter.accountFrom}}
 				],
 				{category: {'likenocase': this.transaction.filter.category}},
                 {date: {'>=': this.transaction.filter.dateFrom || '2000-00-00'}},
@@ -237,10 +242,7 @@ app = new Vue({
 			//========================================= reset temporary properties
 			for(a=0; a<match.length; a++) {
 				delete match[a].redundant
-				delete match[a].classes
-				// delete match[a].groupId
-				// delete match[a].groupSum
-				// delete match[a].groupHeight			
+				delete match[a].classes		
 			}
 			
 			//============================================= grouping processing
@@ -248,22 +250,10 @@ app = new Vue({
 				for(b=a+1; b<match.length; b++) {
 					
 					//===================================== highlight redundant
-					if(match[a].date==match[b].date && match[a].amountInString==match[b].amountInString) {
+					if(match[a].date==match[b].date && match[a].amount==match[b].amount) {
 						match[a].redundant = true
 						match[b].redundant = true
 					}
-
-					//===================================== group same transaction different category
-					// if(match[a].description.indexOf('#')>-1 && !match[a].groupSum && match[b].description.indexOf('#')>-1 && moment(match[a].date).diff(moment(match[b].date), 'minutes')<2) {
-						// match[a].groupId = match[b].groupId = match[a]['___id']
-						
-						// if(!match[a].groupSum) match[a].groupSum = match[a].amount + match[b].amount
-						// else match[a].groupSum += match[b].amount
-						// for(p=b; p>a; p--) match[p].groupSum = match[a].groupSum //update child groupSum = parent groupSum
-						
-						// if(!match[a].groupHeight) match[a].groupHeight = 65*2
-						// else match[a].groupHeight += 65
-					// }
 				}
 				
 				//========================================= assign classes
@@ -281,7 +271,7 @@ app = new Vue({
                     {description:{likenocase:this.form.description}}
                 )
                 .order('date desc')
-                .distinct('account', 'category', 'description', 'negative', 'transferto') //even change the order, it will always return in alphabetical order (a > d > t)
+                .distinct('accountFrom', 'category', 'description', 'negative', 'accountTo') //even change the order, it will always return in alphabetical order (a > d > t)
     
 				console.log(match.slice(0, 5))
                 return match.slice(0, 5)
@@ -298,16 +288,16 @@ app = new Vue({
                 expenses: { Overall:0 },
             }
 
-            this.lov.account.forEach(function(account){
-                result.balance[account] =
-                    app.transaction.data({account:account, transferto:''}).sum('amount') -
-                    app.transaction.data({account:account, transferto:{'!is':''}}).sum('amount') +
-                    app.transaction.data({transferto:account}).sum('amount')
+            this.lov.accountFrom.forEach(function(accountFrom){
+                result.balance[accountFrom] =
+                    app.transaction.data({accountFrom:accountFrom, accountTo:''}).sum('amount') -
+                    app.transaction.data({accountFrom:accountFrom, accountTo:{'!is':''}}).sum('amount') +
+                    app.transaction.data({accountTo:accountFrom}).sum('amount')
 				
-				if(app.modalDifferent.actual[account]) app.modalDifferent.actual[account] = app.modalDifferent.actual[account].replace(/[^0-9.+-]/g, '')
-				result.different[account] = (result.balance[account] - (Number(app.modalDifferent.actual[account]) || 0)).toFixed(2)
+				if(app.modalDifferent.actual[accountFrom]) app.modalDifferent.actual[accountFrom] = app.modalDifferent.actual[accountFrom].replace(/[^0-9.+-]/g, '')
+				result.different[accountFrom] = (result.balance[accountFrom] - (Number(app.modalDifferent.actual[accountFrom]) || 0)).toFixed(2)
 
-                if(account!='THJ') result.balance.Overall += result.balance[account]
+                if(accountFrom!='THJ') result.balance.Overall += result.balance[accountFrom]
             })
 
             this.lov.category.forEach(function(category){
@@ -354,13 +344,13 @@ app = new Vue({
         
         // app.transaction.data({category:'Fixed', date:{gt:'2019-07-00'}}).order('date desc').get().map(function(item){ return item.date + " " + item.description + ' ' + item.amount })
 		
-		// console.log(JSON.stringify(app.transaction.data([{'account': {'is': 'Loan'}}, {'transferto': {'is': 'Loan'}}]).order('date desc').get().map(function(item){ return {amount:item.amount, description:item.description, account:item.account+' > '+item.transferto} })))
+		// console.log(JSON.stringify(app.transaction.data([{'accountFrom': {'is': 'Loan'}}, {'accountTo': {'is': 'Loan'}}]).order('date desc').get().map(function(item){ return {amount:item.amount, description:item.description, accountFrom:item.accountFrom+' > '+item.accountTo} })))
     },
     watch: {
         'transaction.filter.search': function(newVal) {
             this.transaction.limit = this.transaction.pageSize
         },
-		'transaction.filter.account': function(newVal) {
+		'transaction.filter.accountFrom': function(newVal) {
             this.transaction.limit = this.transaction.pageSize
         },
 		'transaction.filter.category': function(newVal) {

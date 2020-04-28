@@ -75,13 +75,13 @@
 							<label class="form-label">Account</label>
 						</div>
 						<div class="col-8 d-flex">
-							<select class="form-select" v-model="form.account">
-								<option v-for="item in lov.account" :value="item">{{item}}</option>
+							<select class="form-select" v-model="form.accountFrom">
+								<option v-for="item in lov.accountFrom" :value="item">{{item}}</option>
 							</select>
 							<i class="icon-arrow-right p-2"></i>
-							<select class="form-select" v-model="form.transferto">
+							<select class="form-select" v-model="form.accountTo">
 								<option value=""></option>
-								<option v-for="item in lov.account" :value="item">{{item}}</option>
+								<option v-for="item in lov.accountFrom" :value="item">{{item}}</option>
 							</select>
 						</div>
 					</div>
@@ -128,8 +128,8 @@
 								</div>
 								<div class="invi no-events">x</div>
 							</div>
-							<div v-if="item.description!='Reconcile' && item.transferto">{{item.category}}: {{item.account}}<i class="icon-arrow-right"></i>{{item.transferto}}</div>
-							<div v-else-if="item.description!='Reconcile'">{{item.category}}: {{item.account}}</div>
+							<div v-if="item.description!='Reconcile' && item.accountTo">{{item.category}}: {{item.accountFrom}}<i class="icon-arrow-right"></i>{{item.accountTo}}</div>
+							<div v-else-if="item.description!='Reconcile'">{{item.category}}: {{item.accountFrom}}</div>
 						</td>
 						<td width="1" class="text-right pl-0 p-relative" :class="item.classes" style="white-space:nowrap">
 							<div v-if="item.amountGroup" class="amount-group">{{toCurrency(item.amountGroup)}}</div>
@@ -161,7 +161,7 @@
 						<td class="bg-gray">Current Balance</td>
 						<td class="bg-gray text-right" :class="statistic.balance.Overall<0?'text-negative':'text-positive'">{{toCurrency(statistic.balance.Overall)}}</td>
 					</tr>
-					<tr v-for="item in lov.account">
+					<tr v-for="item in lov.accountFrom">
 						<td>{{item}}</td>
 						<td class="text-right" :class="statistic.balance[item]<0?'text-negative':'text-positive'">
 							{{toCurrency(statistic.balance[item])}}
@@ -222,7 +222,7 @@
 			<div class="modal" :class="{'active':modalDifferent.show}" id="modalDifferent">
 				<a class="modal-overlay" @click="modalDifferent.show=false"></a>
 				<div class="modal-container pt-3 pb-3">
-					<div class="columns pt-1 pb-1" v-for="item in lov.account">
+					<div class="columns pt-1 pb-1" v-for="item in lov.accountFrom">
 						<div class="column col-6">{{item}}</div>
 						<div class="column col-6"><input class="form-input" type="text" v-model="modalDifferent.actual[item]"></div>
 					</div>
@@ -239,9 +239,9 @@
 					<div class="columns pt-1 pb-1">
 						<div class="column col-4">Account</div>
 						<div class="column col-8">
-							<select class="form-select" v-model="transaction.filter.account">
+							<select class="form-select" v-model="transaction.filter.accountFrom">
 								<option value=""></option>,
-								<option v-for="(item, index) in lov.account" :value="item">{{item}}</option>,
+								<option v-for="(item, index) in lov.accountFrom" :value="item">{{item}}</option>,
 							</select>
 						</div>
 					</div>
@@ -277,7 +277,7 @@
 					<div class="columns pt-1 pb-1">
 						<div class="column col-4"></div>
 						<div class="column col-8">
-							<button class="btn btn-primary w-100" @click="transaction.filter.search = transaction.filter.account = transaction.filter.category = ''; transaction.filter.dateFrom = transaction.filter.dateTo = null;"><i class="icon-trash"></i></button>
+							<button class="btn btn-primary w-100" @click="transaction.filter.search = transaction.filter.accountFrom = transaction.filter.category = ''; transaction.filter.dateFrom = transaction.filter.dateTo = null;"><i class="icon-trash"></i></button>
 						</div>
 					</div>
 				</div>
