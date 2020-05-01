@@ -47,12 +47,12 @@
 								<li class="menu-item" v-for="(item, index) in autoCompleteItems" @click="autoComplete.select(item)">
 									<div class="p-relative">
 										<div class="text-ellipsis">
-											{{item[2]}}
+											{{item.description}}
 										</div>
 										<div class="invi no-events">x</div>
 									</div>
-									<div v-if="item[4]">{{item[1]}}: {{item[0]}}<i class="icon-arrow-right"></i>{{item[4]}}</div>
-									<div v-else>{{item[1]}}: {{item[0]}}</div>
+									<div v-if="item.accountTo">{{item.category}}: {{item.accountFrom}}<i class="icon-arrow-right"></i>{{item.accountTo}}</div>
+									<div v-else>{{item.category}}: {{item.accountFrom}}</div>
 									<div class="divider" v-if="index!=4"></div>
 								</li>
 							</ul>
