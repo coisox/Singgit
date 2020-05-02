@@ -62,12 +62,11 @@
 						<div class="col-4">
 							<label class="form-label">Category</label>
 						</div>
-						<div class="col-8 input-group">
+						<div class="col-8">
 							<select class="form-select" v-model="form.category">
-									<option value=""></option>
+								<option value=""></option>
 								<option v-for="(item, index) in lov.category" :value="item">{{item}}</option>,
 							</select>
-							<span class="input-group-addon bg-primary" @click=""><i class="icon-plus"></i></span>
 						</div>
 					</div>
 					<div class="form-group">
