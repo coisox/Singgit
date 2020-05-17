@@ -1,7 +1,7 @@
 app = new Vue({
 	el: '#app',
 	data: {
-		version: 'v20200502',
+		version: 'v20200517',
 		progress: false,
 		dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
 		cloud: {
@@ -164,7 +164,8 @@ app = new Vue({
 				app.form.description = item.description
 				app.form.negative = item.negative
 			}
-		}
+		},
+		filteredSum: '0.00'
 	},
 	methods: {
 		toCurrency: function(n) {
@@ -263,6 +264,9 @@ app = new Vue({
 				match[a].classes = (match[a].negative?'text-negative':'text-positive')+(match[a].redundant?' bg-warning':'')
 			}
 			
+			//========================================= sum amount in current list
+			this.filteredSum = this.toCurrency(match.reduce(function(sum, item){ return sum + item.amount }, 0))
+			
 			return match
 		},
 		autoCompleteItems: function() {
@@ -306,9 +310,7 @@ app = new Vue({
 					app.transaction.data({accountFrom:accountFrom, accountTo:''}).sum('amount') -
 					app.transaction.data({accountFrom:accountFrom, accountTo:{'!is':''}}).sum('amount') +
 					app.transaction.data({accountTo:accountFrom}).sum('amount')
-					
-				console.log('1: '+accountFrom+': ', result.balance[accountFrom])
-				
+									
 				if(app.modalDifferent.actual[accountFrom]) app.modalDifferent.actual[accountFrom] = app.modalDifferent.actual[accountFrom].replace(/[^0-9.+-]/g, '')
 				result.different[accountFrom] = (result.balance[accountFrom] - (Number(app.modalDifferent.actual[accountFrom]) || 0)).toFixed(2)
 
@@ -326,8 +328,6 @@ app = new Vue({
 					result.expenses.Overall += result.expenses[category]
 				}
 			})
-
-			console.log('Statistic timelapse in milliseconds: ', moment().diff(start), moment(this.statisticDate).format('YYYY-MM-01'))
 
 			return result
 		},
@@ -359,7 +359,7 @@ app = new Vue({
 		
 		// app.transaction.data({category:'Fixed', date:{gt:'2019-07-00'}}).order('date desc').get().map(function(item){ return item.date + " " + item.description + ' ' + item.amount })
 		
-		// console.log(JSON.stringify(app.transaction.data([{'accountFrom': {'is': 'Loan'}}, {'accountTo': {'is': 'Loan'}}]).order('date desc').get().map(function(item){ return {amount:item.amount, description:item.description, accountFrom:item.accountFrom+' > '+item.accountTo} })))
+		// app.transaction.data([{'accountFrom': {'is': 'Loan'}}, {'accountTo': {'is': 'Loan'}}]).order('date desc').get().map(function(item){ return {amount:item.amount, description:item.description, accountFrom:item.accountFrom+' > '+item.accountTo} })
 	},
 	watch: {
 		'transaction.filter.search': function(newVal) {

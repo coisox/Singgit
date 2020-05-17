@@ -65,11 +65,13 @@
 	color: #F0756C !important;
 }
 .text-ellipsis {
-	zzzmax-width: 200px;
 	position: absolute;
 	white-space: nowrap;
 	overflow-x: hidden;
 	width: 100%;
+}
+.text-nowrap {
+	white-space: nowrap;
 }
 .btn {
 	box-shadow: none !important;
@@ -159,6 +161,8 @@
 .invi {
 	opacity: 0;
 }
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
 .input-group .form-input:first-child:not(:last-child),
 .input-group .form-select:first-child:not(:last-child),
 .input-group .input-group-addon:first-child:not(:last-child),

@@ -115,6 +115,7 @@
 							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="wildcard or 'exact'">
 							<span class="input-group-addon bg-negative" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
 						</div>
+						<span class="ml-2">{{filteredSum}}</span>
 					</section>
 				</header>
 				<table class="table mb-2" v-if="filteredTransactions.length">
