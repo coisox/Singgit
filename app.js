@@ -1,7 +1,7 @@
 app = new Vue({
 	el: '#app',
 	data: {
-		version: 'v20200517',
+		version: 'v20200608',
 		progress: false,
 		dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
 		cloud: {
