@@ -1,7 +1,7 @@
 app = new Vue({
 	el: '#app',
 	data: {
-		version: 'v20200608',
+		version: 'v20200826',
 		progress: false,
 		dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
 		cloud: {
@@ -94,7 +94,8 @@ app = new Vue({
 				accountFrom: '',
 				category: '',
 				dateFrom: null,
-				dateTo: null
+				dateTo: null,
+				outstandingLoan: false
 			},
 			limit: 50,
 			pageSize: 50,
@@ -125,16 +126,22 @@ app = new Vue({
 				if(app.form.category=='Transfer') {
 					app.form.negative = false
 				}
+				if((app.form.accountFrom=='Loan' || app.form.accountTo=='Loan') && !app.form.amountGroup) {
+					app.form.amountGroup = app.randomString(6)
+					console.log("Hashtag: ", app.form.amountGroup)
+				}
 				//====================================================== auto AI end
 				
 				
 				//====================================================== save amount in string for easier search
 				if(app.form.negative) app.form.amount *= -1
 				app.form.amountInString = app.form.amount.toFixed(2) || ""
-				app.form.amountGroup = (app.form.amountGroup)?Number(app.form.amountGroup).toFixed(2):""
-				
-																	
-				
+
+				if(!app.form.amountGroup) app.form.amountGroup = ''
+				else if(!isNaN(Number(app.form.amountGroup))) app.form.amountGroup = app.form.amountGroup.toFixed(2)
+				else { /*dont touch for hashtag*/ }
+
+
 				//====================================================== save into DB
 				if(app.form.___id && isUpdate) app.transaction.data(app.form.___id).update(JSON.parse(JSON.stringify(app.form)))
 				else app.form.___id = app.transaction.data.insert(JSON.parse(JSON.stringify(app.form))).first().___id
@@ -165,7 +172,7 @@ app = new Vue({
 				app.form.negative = item.negative
 			}
 		},
-		filteredSum: '0.00'
+		filteredSum: '0.00',
 	},
 	methods: {
 		toCurrency: function(n) {
@@ -193,6 +200,29 @@ app = new Vue({
 		},
 		trimBoth: function(str, chars) {
 			return str.split(chars).filter(Boolean).join(chars)
+		},
+		randomString: function(length) {
+			var result = ''
+			var characters = 'ABCDEFGHIJKLNOPQSTUVWXYZ0123456789'
+			for(i=0; i<length; i++ ) result += characters.charAt(Math.floor(Math.random() * characters.length))
+			return result
+		},
+		clipboard: function() {
+			this.transaction.limit = 99999
+			this.transaction.forceUpdate++
+			Vue.nextTick().then(function () {
+				var data = "DATE	DESCRIPTION	CATEGORY	FROM	TO	AMOUNT	GROUP"
+				app.filteredTransactions.forEach(function(item){
+					data += "\n"+item.date.replace('T', ' ')+"	"+item.description+"	"+item.category+"	"+item.accountFrom+"	"+item.accountTo+"	"+(item.accountTo=='Loan'?-item.amount:item.amount)+"	"+item.amountGroup
+				})
+
+				var copyText = document.getElementById("clipboard")
+				copyText.value = data
+				copyText.select()
+				copyText.setSelectionRange(0, 99999)
+				document.execCommand("copy")
+				console.log('Copied to clipboard!')
+			})
 		}
 	},
 	computed: {
@@ -201,56 +231,90 @@ app = new Vue({
 		},
 		filteredTransactions: function() {
 			if(app.transaction.data().count()==0) return []
-			
-			this.transaction.filter.search = this.transaction.filter.search.replace(/,/gi, '')
 			this.transaction.forceUpdate
 
+			//============================================= massage filter value
+			this.transaction.filter.search = this.transaction.filter.search.replace(/,/gi, '')
 			var search = this.transaction.filter.search
 			var showHidden = search[0]=="!"
 			var exactMatch = search[0]=="'" && search[search.length-1]=="'"
 			if(showHidden) search = search.replace("!", "")
 			if(exactMatch) search = this.trimBoth(search, "'")
 
-			//=========================================================== actual mode
 			var key1 = exactMatch?'isnocase':'likenocase'
 			var key2 = showHidden?'left':'!left'
 			var latestReconcileID = this.transaction.data({description: {'is': 'Reconcile'}}).order('date desc').get()[0].___id
-			var match = this.transaction.data(
-				[
-					{amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
-					{amountGroup:		{[key1]: search.replace(/RM|rm/,'')}},
-					{description:   	{[key1]: search}},
-					{accountFrom:	   {[key1]: search}},
-					{accountTo:			{[key1]: search}},
-					{category:	  	{[key1]: search}}
-				],
-				[
-					{accountFrom: {'likenocase': this.transaction.filter.accountFrom}},
-					{accountTo: {'likenocase': this.transaction.filter.accountFrom}}
-				],
-				{category: {'likenocase': this.transaction.filter.category}},
-				{date: {'>=': this.transaction.filter.dateFrom || '2000-00-00'}},
-				{date: {'<=': this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
-				{description: {[key2]: '!'}},
-				[
-					{description: {'!is':'Reconcile'}},
-					{___id: {'==':latestReconcileID}}
-				]
-			).order('date desc')
-			
-			//============================================= limit data
-			this.transaction.more = match.count() > this.transaction.limit
-			match = match.limit(this.transaction.limit).get()
-			
-			//========================================= reset temporary properties
-			for(a=0; a<match.length; a++) {
-				delete match[a].redundant
-				delete match[a].classes
+
+
+			//============================================= list of outstanding loan
+			if(this.transaction.filter.outstandingLoan) {
+				var match = this.transaction.data(
+					[
+						{description:   	{[key1]: search}}
+					],
+					[
+						{accountFrom: {'isnocase': 'Loan'}},
+						{accountTo: {'isnocase': 'Loan'}}
+					]
+				).order('date desc').get()
+
+				var hashtag = {}
+				match.forEach(function(item){
+					if(!item.amountGroup) item.amountGroup = 'No tag'
+
+					if(!hashtag[item.amountGroup]) hashtag[item.amountGroup] = {value:0, items: []}
+
+					if(item.accountFrom=='Loan') hashtag[item.amountGroup].value -= item.amount
+					else if(item.accountTo=='Loan') hashtag[item.amountGroup].value += item.amount
+					hashtag[item.amountGroup].value = Number(hashtag[item.amountGroup].value.toFixed(2))
+
+					hashtag[item.amountGroup].items.push(item)
+				})
+
+				match = []
+				for(key in hashtag) if(hashtag[key].value) match.push(...hashtag[key].items)
+
+				this.transaction.more = 0
+			}
+
+			//============================================= list of everything
+			else {
+				var match = this.transaction.data(
+					[
+						{amountInString:	{[key1]: search.replace(/RM|rm/,'')}},
+						{amountGroup:		{[key1]: search.replace(/RM|rm/,'')}},
+						{description:   	{[key1]: search}},
+						{accountFrom:	   {[key1]: search}},
+						{accountTo:			{[key1]: search}},
+						{category:	  	{[key1]: search}}
+					],
+					[
+						{accountFrom: {'likenocase': this.transaction.filter.accountFrom}},
+						{accountTo: {'likenocase': this.transaction.filter.accountFrom}}
+					],
+					{category: {'likenocase': this.transaction.filter.category}},
+					{date: {'>=': this.transaction.filter.dateFrom || '2000-00-00'}},
+					{date: {'<=': this.transaction.filter.dateTo+'T24:00' || '5000-00-00'}},
+					{description: {[key2]: '!'}},
+					[
+						{description: {'!is':'Reconcile'}},
+						{___id: {'==':latestReconcileID}}
+					]
+				).order('date desc')
+				
+				//============================================= limit data
+				this.transaction.more = match.count() > this.transaction.limit
+				match = match.limit(this.transaction.limit).get()
 			}
 			
+
 			//============================================= grouping processing
 			for(a=0; a<match.length; a++) {
-																   
+
+				//========================================= reset temporary properties
+				delete match[a].redundant
+				delete match[a].classes
+																
 				for(b=a+1; b<match.length; b++) {
 					
 					//===================================== highlight redundant
@@ -263,7 +327,8 @@ app = new Vue({
 				//========================================= assign classes
 				match[a].classes = (match[a].negative?'text-negative':'text-positive')+(match[a].redundant?' bg-warning':'')
 			}
-			
+		
+
 			//========================================= sum amount in current list
 			this.filteredSum = this.toCurrency(match.reduce(function(sum, item){ return sum + item.amount }, 0))
 			

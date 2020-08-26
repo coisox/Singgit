@@ -13,6 +13,7 @@
 
 	<body>
 		<div id="app">
+			<textarea id="clipboard"></textarea>
 			<progress class="progress" max="100" :class="{'d-none': !progress}"></progress>
 
 			<template v-if="page=='new' || page=='edit'">
@@ -34,7 +35,7 @@
 								<input class="form-input" type="text" v-model="form.amount" @input="form.amount=form.amount.replace(/[^0-9.+-]/g, '')">
 								<span class="input-group-addon" :class="form.negative?'bg-negative':'bg-positive'" @click="form.negative=!form.negative"><i :class="form.negative?'icon-minus':'icon-plus'"></i></span>
 							</div>
-							<input class="form-input" type="text" v-model="form.amountGroup" @input="form.amountGroup=form.amountGroup.replace(/[^0-9.+-]/g, '')" style="margin-left:.4rem; width:40%;">
+							<input class="form-input" type="text" v-model="form.amountGroup" @input="form.amountGroup=form.amountGroup.replace(/[RM, ]/g, '')" style="margin-left:.4rem; width:40%;">
 						</div>
 					</div>
 					<div class="form-group">
@@ -113,6 +114,8 @@
 					<section class="navbar-section">
 						<div class="input-group w-100">
 							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="wildcard or 'exact'">
+							<span class="input-group-addon bg-negative" @click="clipboard()"><i class="icon-clipboard"></i></span>
+							<span class="input-group-addon bg-negative" @click="transaction.filter.outstandingLoan = !transaction.filter.outstandingLoan"><i class="icon-handshake-o"></i></span>
 							<span class="input-group-addon bg-negative" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
 						</div>
 						<span class="ml-2">{{filteredSum}}</span>
@@ -132,7 +135,7 @@
 							<div v-else-if="item.description!='Reconcile'">{{item.category}}: {{item.accountFrom}}</div>
 						</td>
 						<td width="1" class="text-right pl-0 p-relative" :class="item.classes" style="white-space:nowrap">
-							<div v-if="item.amountGroup" class="amount-group">{{toCurrency(item.amountGroup)}}</div>
+							<div v-if="item.amountGroup" class="amount-group">{{item.amountGroup}}</div>
 							<span v-if="item.description!='Reconcile'">{{toCurrency(item.amount)}}</span>
 							<div v-else class="reconcile"><i class="icon-check"></i></div>
 						</td>
@@ -147,7 +150,7 @@
 
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
-						Statistic
+						Statistic <i class="icon-help-circle tooltip" data-tooltip="Credit Card positive means overpaid"></i>
 					</section>
 					<section class="navbar-section">
 						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-left mr-2"></i></label>
@@ -193,7 +196,7 @@
 				</header>
 				<form class="column">
 					<div class="pt-4">
-						Backup data to Dropbox, or Overwrite local data from cloud, or Merge local data with cloud while display conflicts for further actions.
+						Backup or load data from to Dropbox
 					</div>
 
 					<div class="columns pt-5">
@@ -208,7 +211,6 @@
 				<div class="pt-5 btn-group btn-group-block column">
 					<button class="btn btn-primary" @click="cloud.backup()" :disabled="filteredTransactions.length==0 || progress"><i class="icon-upload-cloud"></i> Save</button>
 					<button class="btn btn-primary" @click="cloud.overwrite()" :disabled="progress"><i class="icon-download-cloud"></i> Load</button>
-					<!--<button class="btn btn-primary" @click="cloud.merge()"><i class="icon-git-merge"></i> Merge</button>-->
 				</div>
 			</template>
 
@@ -218,7 +220,7 @@
 				<div class="tab-item text-primary" :class="{'active': page=='statistic'}" @click="page='statistic'"><i class="icon-trending-up"></i></div>
 				<div class="tab-item text-primary" :class="{'active': page=='cloud'}" @click="page='cloud'"><i class="icon-cloud"></i></div>
 			</div>
-			
+
 			<div class="modal" :class="{'active':modalDifferent.show}" id="modalDifferent">
 				<a class="modal-overlay" @click="modalDifferent.show=false"></a>
 				<div class="modal-container pt-3 pb-3">

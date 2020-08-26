@@ -1,6 +1,9 @@
 @font-face {
   font-family: 'icomoon';
-  src: url('fonts/icomoon.woff') format('woff');
+  src:
+    url('fonts/icomoon.ttf?kjiuhb') format('truetype'),
+    url('fonts/icomoon.woff?kjiuhb') format('woff'),
+    url('fonts/icomoon.svg?kjiuhb#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -8,8 +11,8 @@
 
 i {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon';
-  speak: none;
+  font-family: 'icomoon' !important;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -21,6 +24,15 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-handshake-o:before {
+  content: "\e906";
+}
+.icon-clipboard:before {
+  content: "\e90a";
+}
+.icon-help-circle:before {
+  content: "\e902";
+}
 .icon-check:before {
   content: "\e913";
 }
@@ -60,9 +72,6 @@ i {
 .icon-trending-up:before {
   content: "\e90c";
 }
-.icon-git-merge:before {
-  content: "\e90a";
-}
 .icon-cloud:before {
   content: "\e90d";
 }
@@ -74,10 +83,4 @@ i {
 }
 .icon-save:before {
   content: "\e907";
-}
-.icon-copy:before {
-  content: "\e906";
-}
-.icon-printer:before {
-  content: "\e902";
 }

@@ -47,6 +47,14 @@
 	background-color: #7B68A8 !important;
 	color: white !important;
 }
+.bg-warning {
+	background-color: #FEC107 !important;
+	color: white !important;
+}
+.bg-grey {
+	background-color: #9E9E9E !important;
+	color: white !important;
+}
 .bg-positive {
 	background-color: #48a57a !important;
 	color: white !important;
@@ -205,4 +213,8 @@ progress.progress {
 	border-top: 18px solid #BEACE7;
 	top: 0;
 	left: -10px;
+}
+#clipboard {
+	position: absolute;
+	top: -200px;
 }
