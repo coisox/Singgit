@@ -1,7 +1,7 @@
 app = new Vue({
 	el: '#app',
 	data: {
-		version: 'v20200826',
+		version: 'v20201005',
 		progress: false,
 		dbx: new Dropbox.Dropbox({accessToken: 'gLb9sbW8xDgAAAAAAAADyIxcjH6QBxbYI7o6qWl31VQweZV2b1U7MEcrq9X-hh6c'}),
 		cloud: {
@@ -138,7 +138,7 @@ app = new Vue({
 				app.form.amountInString = app.form.amount.toFixed(2) || ""
 
 				if(!app.form.amountGroup) app.form.amountGroup = ''
-				else if(!isNaN(Number(app.form.amountGroup))) app.form.amountGroup = app.form.amountGroup.toFixed(2)
+				else if(!isNaN(Number(app.form.amountGroup))) app.form.amountGroup = Number(app.form.amountGroup).toFixed(2)
 				else { /*dont touch for hashtag*/ }
 
 
