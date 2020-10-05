@@ -114,9 +114,9 @@
 					<section class="navbar-section">
 						<div class="input-group w-100">
 							<input class="form-input" type="text" v-model="transaction.filter.search" placeholder="wildcard or 'exact'">
-							<span class="input-group-addon bg-negative" @click="clipboard()"><i class="icon-clipboard"></i></span>
-							<span class="input-group-addon bg-negative" @click="transaction.filter.outstandingLoan = !transaction.filter.outstandingLoan"><i class="icon-handshake-o"></i></span>
-							<span class="input-group-addon bg-negative" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
+							<span class="input-group-addon bg-negative tooltip tooltip-bottom" data-tooltip="Copy to clipboard" @click="clipboard()"><i class="icon-clipboard"></i></span>
+							<span class="input-group-addon bg-negative tooltip tooltip-bottom" data-tooltip="Show outstanding loan" @click="transaction.filter.outstandingLoan = !transaction.filter.outstandingLoan"><i class="icon-handshake-o"></i></span>
+							<span class="input-group-addon bg-negative tooltip tooltip-bottom" data-tooltip="Filter" @click="modalFilter.show=true"><i class="icon-filter"></i></span>
 						</div>
 						<span class="ml-2">{{filteredSum}}</span>
 					</section>
@@ -150,7 +150,7 @@
 
 				<header class="navbar bg-primary">
 					<section class="navbar-section">
-						Statistic <i class="icon-help-circle tooltip" data-tooltip="Credit Card positive means overpaid"></i>
+						Statistic <span class="tooltip tooltip-bottom mx-1" data-tooltip="Credit Card positive means overpaid"><i class="icon-help-circle"></i></span>
 					</section>
 					<section class="navbar-section">
 						<label class="form-label bg-primary" @click="statisticDate=moment(statisticDate).add(-1, 'months')"><i class="icon-arrow-left mr-2"></i></label>
